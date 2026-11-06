@@ -1,0 +1,68 @@
+{
+ "source": "tests/fixtures/sample.vtt",
+ "duration": 90.0,
+ "cuts": [
+  {
+   "kind": "FILLER",
+   "start": 6.9,
+   "end": 7.4,
+   "why": "um"
+  },
+  {
+   "kind": "DEAD",
+   "start": 15.125,
+   "end": 16.175,
+   "why": "1.50s gap"
+  },
+  {
+   "kind": "FILLER",
+   "start": 19.9,
+   "end": 20.3,
+   "why": "so yeah"
+  },
+  {
+   "kind": "REPEAT",
+   "start": 20.5,
+   "end": 24.1,
+   "why": "restart of \"read the hook out loud\""
+  },
+  {
+   "kind": "DEAD",
+   "start": 28.825,
+   "end": 31.175,
+   "why": "2.80s gap"
+  },
+  {
+   "kind": "FILLER",
+   "start": 38.8,
+   "end": 39.3,
+   "why": "basically"
+  },
+  {
+   "kind": "DEAD",
+   "start": 51.625,
+   "end": 52.975,
+   "why": "1.80s gap"
+  },
+  {
+   "kind": "DEAD",
+   "start": 57.125,
+   "end": 59.875,
+   "why": "3.20s gap"
+  },
+  {
+   "kind": "FILLER",
+   "start": 71.4,
+   "end": 72.0,
+   "why": "you know"
+  },
+  {
+   "kind": "DEAD",
+   "start": 80.225,
+   "end": 81.675,
+   "why": "1.90s gap"
+  }
+ ],
+ "removed": 14.55,
+ "out": 75.45
+}

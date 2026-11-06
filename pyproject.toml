@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "youtube-intelligence-engine"
+version = "0.1.0"
+description = "AI-assisted YouTube intelligence and creator workflow engine: hooks, packaging, edit decision lists, chapters, retention, outliers and Shorts."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "ICOFCUCAM" }, { name = "Jake Schincariol (upstream youtube-agent-skill)" }]
+keywords = ["youtube", "creator", "retention", "shorts", "chapters", "edl", "claude-skills"]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Topic :: Multimedia :: Video",
+]
+# Runtime has no third-party dependencies: the standard library only, as upstream.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.urls]
+Homepage = "https://github.com/ICOFCUCAM/youtube-intelligence-engine"
+Upstream = "https://github.com/Jakeschincariol/youtube-agent-skill"
+
+[project.scripts]
+yt-hookscore = "youtube_intelligence.creative.hookscore:main"
+yt-title = "youtube_intelligence.packaging.title:main"
+yt-deadair = "youtube_intelligence.editing.deadair:main"
+yt-chapters = "youtube_intelligence.editing.chapters:main"
+yt-retention = "youtube_intelligence.analytics.retention:main"
+yt-swipe = "youtube_intelligence.research.outliers:main"
+yt-shorts = "youtube_intelligence.shorts.candidates:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+youtube_intelligence = ["data/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

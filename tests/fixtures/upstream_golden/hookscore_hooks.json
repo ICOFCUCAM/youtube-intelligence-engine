@@ -1,0 +1,41 @@
+[
+ {
+  "hook": "Your first 30 seconds are why nobody finishes your videos.",
+  "properties": {
+   "SPECIFICITY": 56,
+   "ADDRESS": 96,
+   "STAKES": 36,
+   "CURIOSITY": 58,
+   "BREVITY": 100
+  },
+  "verdict": 56,
+  "band": "WORKABLE",
+  "formula": "Unclassified"
+ },
+ {
+  "hook": "Everyone says post daily. I posted once a week for a year and tripled the channel.",
+  "properties": {
+   "SPECIFICITY": 40,
+   "ADDRESS": 26,
+   "STAKES": 22,
+   "CURIOSITY": 24,
+   "BREVITY": 100
+  },
+  "verdict": 34,
+  "band": "WEAK",
+  "formula": "Contrarian Flip"
+ },
+ {
+  "hook": "Hey guys welcome back to the channel, today we are talking about hooks.",
+  "properties": {
+   "SPECIFICITY": 9,
+   "ADDRESS": 26,
+   "STAKES": 22,
+   "CURIOSITY": 24,
+   "BREVITY": 100
+  },
+  "verdict": 25,
+  "band": "WEAK",
+  "formula": "Unclassified"
+ }
+]

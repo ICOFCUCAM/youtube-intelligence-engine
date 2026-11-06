@@ -1,0 +1,62 @@
+[
+ {
+  "title": "Why your channel is not growing",
+  "chars": 31,
+  "score": 94,
+  "issues": [
+   [
+    "no-number",
+    "no number, date or name - the most reliable single fix"
+   ]
+  ],
+  "good": [
+   "31 characters, inside the 60-character desktop cut",
+   "thumbnail and title carry different words"
+  ]
+ },
+ {
+  "title": "I posted once a week for a year",
+  "chars": 31,
+  "score": 94,
+  "issues": [
+   [
+    "no-number",
+    "no number, date or name - the most reliable single fix"
+   ]
+  ],
+  "good": [
+   "31 characters, inside the 60-character desktop cut",
+   "thumbnail and title carry different words"
+  ]
+ },
+ {
+  "title": "The ULTIMATE INSANE GUIDE TO EVERYTHING about YouTube growth and more",
+  "chars": 69,
+  "score": 34,
+  "issues": [
+   [
+    "length",
+    "69 characters - desktop search cuts near 60"
+   ],
+   [
+    "mobile",
+    "a mobile feed shows about \"The ULTIMATE INSANE GUIDE TO EVERYTHING...\" - check the subject survives"
+   ],
+   [
+    "shouting",
+    "4 all-caps words - two is the ceiling before it reads as spam"
+   ],
+   [
+    "vague",
+    "everything, insane, ultimate - swap for a number, a name or a date"
+   ],
+   [
+    "no-number",
+    "no number, date or name - the most reliable single fix"
+   ]
+  ],
+  "good": [
+   "thumbnail and title carry different words"
+  ]
+ }
+]
