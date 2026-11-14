@@ -1,0 +1,222 @@
+{
+ "note": "Pinned yt-eval output with default settings. If a deliberate tool change moves these numbers, regenerate with: python -m youtube_intelligence.evaluation.runner datasets/synthetic-v1/dataset.json --json, update docs/EVALUATION.md, and record it in CHANGELOG.md.",
+ "summary": {
+  "cuts_time": {
+   "precision": 0.8901,
+   "recall": 0.745,
+   "f1": 0.8111
+  },
+  "cuts_events": {
+   "precision": 0.76,
+   "recall": 0.6786,
+   "f1": 0.717
+  },
+  "cuts_recall_by_kind": {
+   "DEAD": 1.0,
+   "FILLER": 0.4167,
+   "REPEAT": 0.5
+  },
+  "keep_seconds_cut": 3.65,
+  "keep_seconds_total": 6.8,
+  "chapters": {
+   "precision": 0.4211,
+   "recall": 1.0,
+   "f1": 0.5926
+  },
+  "shorts": {
+   "precision": 0.6,
+   "recall": 1.0,
+   "f1": 0.75
+  }
+ },
+ "cases": [
+  {
+   "id": "tutorial-clean",
+   "cues": 21,
+   "cuts": {
+    "time": {
+     "tp": 9.39,
+     "pred": 10.59,
+     "gold": 9.54
+    },
+    "events": {
+     "tp": 7,
+     "pred": 9,
+     "gold": 7
+    },
+    "by_kind": {
+     "DEAD": {
+      "tp": 3,
+      "pred": 9,
+      "gold": 3
+     },
+     "FILLER": {
+      "tp": 3,
+      "pred": 9,
+      "gold": 3
+     },
+     "REPEAT": {
+      "tp": 1,
+      "pred": 9,
+      "gold": 1
+     }
+    },
+    "keep_seconds_cut": 1.2,
+    "keep_seconds": 2.1
+   },
+   "chapters": {
+    "tp": 2,
+    "pred": 5,
+    "gold": 2,
+    "valid": true
+   },
+   "shorts": {
+    "tp": 2,
+    "gold_hit": 2,
+    "pred": 3,
+    "gold": 2
+   }
+  },
+  {
+   "id": "tutorial-auto",
+   "cues": 33,
+   "cuts": {
+    "time": {
+     "tp": 5.1,
+     "pred": 6.0,
+     "gold": 9.54
+    },
+    "events": {
+     "tp": 3,
+     "pred": 5,
+     "gold": 7
+    },
+    "by_kind": {
+     "DEAD": {
+      "tp": 3,
+      "pred": 5,
+      "gold": 3
+     },
+     "FILLER": {
+      "tp": 0,
+      "pred": 5,
+      "gold": 3
+     },
+     "REPEAT": {
+      "tp": 0,
+      "pred": 5,
+      "gold": 1
+     }
+    },
+    "keep_seconds_cut": 0.9,
+    "keep_seconds": 2.1
+   },
+   "chapters": {
+    "tp": 2,
+    "pred": 6,
+    "gold": 2,
+    "valid": true
+   },
+   "shorts": {
+    "tp": 2,
+    "gold_hit": 2,
+    "pred": 3,
+    "gold": 2
+   }
+  },
+  {
+   "id": "essay-clean",
+   "cues": 16,
+   "cuts": {
+    "time": {
+     "tp": 9.77,
+     "pred": 10.62,
+     "gold": 10.3
+    },
+    "events": {
+     "tp": 6,
+     "pred": 7,
+     "gold": 7
+    },
+    "by_kind": {
+     "DEAD": {
+      "tp": 3,
+      "pred": 7,
+      "gold": 3
+     },
+     "FILLER": {
+      "tp": 2,
+      "pred": 7,
+      "gold": 3
+     },
+     "REPEAT": {
+      "tp": 1,
+      "pred": 7,
+      "gold": 1
+     }
+    },
+    "keep_seconds_cut": 0.85,
+    "keep_seconds": 1.3
+   },
+   "chapters": {
+    "tp": 2,
+    "pred": 4,
+    "gold": 2,
+    "valid": true
+   },
+   "shorts": {
+    "tp": 1,
+    "gold_hit": 1,
+    "pred": 2,
+    "gold": 1
+   }
+  },
+  {
+   "id": "essay-auto",
+   "cues": 26,
+   "cuts": {
+    "time": {
+     "tp": 5.3,
+     "pred": 6.0,
+     "gold": 10.3
+    },
+    "events": {
+     "tp": 3,
+     "pred": 4,
+     "gold": 7
+    },
+    "by_kind": {
+     "DEAD": {
+      "tp": 3,
+      "pred": 4,
+      "gold": 3
+     },
+     "FILLER": {
+      "tp": 0,
+      "pred": 4,
+      "gold": 3
+     },
+     "REPEAT": {
+      "tp": 0,
+      "pred": 4,
+      "gold": 1
+     }
+    },
+    "keep_seconds_cut": 0.7,
+    "keep_seconds": 1.3
+   },
+   "chapters": {
+    "tp": 2,
+    "pred": 4,
+    "gold": 2,
+    "valid": true
+   },
+   "shorts": {
+    "tp": 1,
+    "gold_hit": 1,
+    "pred": 2,
+    "gold": 1
+   }
+  }
+ ]
+}

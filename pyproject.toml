@@ -35,6 +35,7 @@ yt-chapters = "youtube_intelligence.editing.chapters:main"
 yt-retention = "youtube_intelligence.analytics.retention:main"
 yt-swipe = "youtube_intelligence.research.outliers:main"
 yt-shorts = "youtube_intelligence.shorts.candidates:main"
+yt-eval = "youtube_intelligence.evaluation.runner:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

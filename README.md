@@ -24,6 +24,7 @@ The creator decides and acts. See [SECURITY.md](SECURITY.md).
 | Analytics | `/yt-retention` | `yt-retention` | A Studio retention export read as hook leak, cliffs and slide, optionally quoting what was said at each cliff. |
 | Research | `/yt-viral` | `yt-swipe` | Collected videos ranked by multiple over their own channel's median, with the title's formula named. |
 | Shorts | `/yt-shorts` | `yt-shorts` *(new)* | Candidate 20-55 s spans inside a long video, scored on opening, turn and ending signals. |
+| Evaluation | - | `yt-eval` *(new)* | Scores the edit, chapter and Shorts tools against labelled transcripts. See [docs/EVALUATION.md](docs/EVALUATION.md). |
 | SEO | `/yt-seo` | - | Description, tags worth having, and the three queries the video should win. |
 | Planning | `/yt-plan` | - | A week sized to real capacity: one anchor, one cheap one, Shorts from the anchor. |
 | Community | `/yt-comment` | - | Comments triaged into four piles, replies drafted in the creator's voice. |
@@ -77,6 +78,7 @@ yt-chapters transcript.srt --target 8          # validated chapters
 yt-retention retention.csv --duration 600      # hook leak, cliffs, slide
 yt-swipe collected.json --min 2.0              # outliers by own-channel multiple
 yt-shorts transcript.srt --top 5               # Shorts candidates
+yt-eval datasets/synthetic-v1/dataset.json     # measure the tools against labels
 ```
 
 Every tool takes `--json`. Every tool exits `1` with a one-line `error:` message on unusable
@@ -93,7 +95,9 @@ skill folder (`python3 deadair.py transcript.srt`). See [examples/](examples/).
   shows it. Guarantee, income and "overnight" language is flagged.
 - **`yt-retention` is descriptive.** Small samples, video age, format (Shorts vs long-form) and
   traffic mix all change the curve. Its thresholds are long-form rules of thumb.
-- **`yt-deadair` measures speech.** Its runtime estimate ignores silent demos and B-roll.
+- **`yt-deadair` measures speech.** Its runtime estimate ignores silent demos and B-roll. On
+  the synthetic evaluation set it finds all dead air but also cuts pauses kept for emphasis, and
+  misses most fillers in auto-generated captions. Review its cuts; do not apply them blind.
 - **Formula names are about the words**, not about why a video worked.
 
 Details: [docs/TOOL_REVIEW.md](docs/TOOL_REVIEW.md).
@@ -110,8 +114,10 @@ src/youtube_intelligence/
   analytics/       retention
   research/        outliers (upstream swipe.py)
   shorts/          Shorts candidates (new)
+  evaluation/      metrics, dataset loader, yt-eval (new)
   data/hooks.json  the 21-formula library (upstream, unmodified)
 templates/         voice.md (upstream, unmodified)
+datasets/          labelled evaluation sets (synthetic-v1: generated, with pinned baseline)
 tests/             pytest suite, fixtures, upstream golden outputs
 docs/              architecture, security, API design, integrations, roadmap, reviews
 examples/          runnable examples

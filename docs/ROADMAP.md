@@ -11,12 +11,15 @@
 
 ## Phase 1: harden and measure
 
-- Evaluation sets: real (consented or public) transcripts and retention exports with human
-  labels, to measure deadair precision and recall, chapter boundary accuracy, and Shorts
-  shortlist quality. Today the only evidence is upstream's 74-hook study and our unit tests.
+- Done: evaluation harness `yt-eval`, the synthetic-v1 set and its pinned baseline
+  ([EVALUATION.md](EVALUATION.md)); `yt-retention --views`.
+- Next: a **real** labelled set (consented transcripts, labelled by an editor), so that
+  accuracy claims rest on real recordings rather than the synthetic set.
+- Act on what the baseline found: word-level filler cuts when word timings exist (Whisper
+  `words`), a "review" flag for long pauses that may be intentional, and a chapter target derived
+  from the video's length.
 - Improve the hook-formula patterns, which misclassify 8 of 21 of their own examples, as a
   documented, tested change to the data with a version bump.
-- Optional `--views` on retention to warn about low-sample curves.
 - Comment triage helper (questions, corrections, praise, possible bait) for `/yt-comment`, if a
   labelled sample shows a heuristic beats letting the model do it.
 

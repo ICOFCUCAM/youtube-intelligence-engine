@@ -37,7 +37,9 @@ Adapted from upstream skills/yt-retention/retention.py (youtube-agent-skill,
     with --axis; upstream guessed "percent" whenever every position was <= 100.5, which misreads
     a seconds-axis export of any video up to 100 seconds long;
   * --transcript accepts JSON-array transcripts (inherited loader bug);
-  * the limitations above are printed and included in --json output.
+  * the limitations above are printed and included in --json output;
+  * optional --views: the export carries no view count, so pass it to get a small-sample warning
+    (below 1,000 views - a rule of thumb, not a statistical bound).
 """
 from __future__ import annotations
 
@@ -52,6 +54,7 @@ from ..core.errors import InputError
 from ..core.transcript import load_cues
 
 MIN_POINTS = 8
+LOW_VIEWS = 1000  # rule of thumb, not a statistical bound: below this, single cliffs are a few people
 LIMITATIONS = [
     "low view counts make the curve noisy - a cliff can be a handful of people",
     "compare videos at the same age - early viewers are mostly subscribers",
@@ -91,11 +94,13 @@ def load_csv(path: str) -> Tuple[List[Tuple[float, float]], Optional[str]]:
 
 
 def analyse(rows: List[Tuple[float, float]], duration: Optional[float] = None,
-            axis: str = "auto", hint: Optional[str] = None) -> Dict:
+            axis: str = "auto", hint: Optional[str] = None, views: Optional[int] = None) -> Dict:
     if len(rows) < MIN_POINTS:
         raise InputError(f"could not read at least {MIN_POINTS} data points from that csv")
     if duration is not None and duration <= 0:
         raise InputError("--duration must be positive")
+    if views is not None and views < 0:
+        raise InputError("--views must be zero or more")
     xs = [r[0] for r in rows]
     ys = [r[1] for r in rows]
     if axis == "auto":
@@ -122,9 +127,17 @@ def analyse(rows: List[Tuple[float, float]], duration: Optional[float] = None,
               for _, a1, b1, d in drops[:5] if d > 0.8]
     mid = [rate for rate, x0, _, _ in drops if x0 > cutoff]
     slide = sum(mid) / len(mid) if mid else 0
-    return {"points": len(rows), "axis": axis, "start": start, "hook_leak": round(hook_leak, 2),
-            "end": ys[-1], "cliffs": cliffs, "slide_per_unit": round(slide, 3), "said": {},
-            "limitations": LIMITATIONS}
+    warnings = []
+    if views is not None and views < LOW_VIEWS:
+        warnings.append(f"only {views:,} views - below {LOW_VIEWS:,} this curve is mostly noise; "
+                        "treat every cliff as a hypothesis, not a finding")
+    out = {"points": len(rows), "axis": axis, "start": start, "hook_leak": round(hook_leak, 2),
+           "end": ys[-1], "cliffs": cliffs, "slide_per_unit": round(slide, 3), "said": {},
+           "limitations": LIMITATIONS}
+    if views is not None:
+        out["views"] = views
+        out["warnings"] = warnings
+    return out
 
 
 def attach_transcript(report: Dict, transcript: str, window: float = 4.0) -> None:
@@ -153,6 +166,8 @@ def render(r: Dict, source: str) -> str:
     unit = "second" if r["axis"] == "seconds" else "1% of the video"
     out.append(f"\n  SLIDE       {r['slide_per_unit']:.3f}% per {unit} across the middle")
     out.append("              a flat slide is pacing, not content. Cut the middle, do not rewrite it.\n")
+    for w in r.get("warnings", []):
+        out.append(f"  WARNING     {w}\n")
     out.append("  LIMITS      " + "\n              ".join(r["limitations"]) + "\n")
     return "\n".join(out)
 
@@ -164,10 +179,11 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("--duration", type=float, help="video length in seconds (maps a percent axis to time)")
     p.add_argument("--transcript", help=".srt/.vtt/.json transcript to quote at each cliff")
     p.add_argument("--axis", choices=["auto", "percent", "seconds"], default="auto")
+    p.add_argument("--views", type=int, help="the video's view count (from Studio); warns when the sample is small")
     p.add_argument("--json", action="store_true")
     a = p.parse_args(argv)
     rows, hint = load_csv(a.csv)
-    r = analyse(rows, a.duration, a.axis, hint)
+    r = analyse(rows, a.duration, a.axis, hint, a.views)
     if a.transcript:
         attach_transcript(r, a.transcript)
     print(json.dumps(r, indent=1) if a.json else render(r, a.csv))
