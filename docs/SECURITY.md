@@ -5,10 +5,12 @@ rules the code and skills follow.
 
 ## Current attack surface (0.1.0)
 
-- **Inputs:** local transcript, CSV and JSON files, and text pasted into a Claude session.
-- **Outputs:** text and JSON on stdout. Skills produce drafts in chat.
-- **No** network calls, credential storage, subprocesses, `eval`/`exec`, pickle or YAML loading.
-  JSON is parsed with `json`, CSV with `csv`.
+- **Inputs:** local transcript, CSV and JSON files, text pasted into a Claude session, and, only
+  when `yt-youtube` is run, read-only responses from the YouTube Data and Analytics APIs.
+- **Outputs:** text and JSON on stdout or files the user names. Skills produce drafts in chat.
+- **No** credential storage, subprocesses, `eval`/`exec`, pickle or YAML loading. JSON is parsed
+  with `json`, CSV with `csv`. The analysis packages make no network calls; only
+  `integrations/youtube/transport.py` does.
 
 ### Controls in the tools
 
@@ -18,6 +20,10 @@ rules the code and skills follow.
 | Huge files exhaust memory | Transcript loader refuses files over 50 MB |
 | Regex denial of service on crafted captions | The filler pattern is anchored with word boundaries; a test bounds its run time on adversarial input |
 | Code in imported content being executed | Nothing is evaluated. URLs and titles in collected data are printed, never fetched |
+| YouTube connector writing to a channel | No write methods (exact allowlist test); GET-only to two allowlisted API hosts; refresh tokens with any non-read-only scope are refused |
+| API keys and tokens leaking | Read from environment only; redacted from request logs and error messages; masked in `repr`; `.env*` ignored by git; a test scans tracked files for key-shaped strings |
+| Runaway API usage | Pagination capped (100 pages); bounded retries with backoff; quota errors never retried |
+| Evaluation dataset paths escaping the dataset folder | Rejected by the loader (`..` and absolute paths) |
 
 ## Prompt injection (the main risk)
 
@@ -37,9 +43,10 @@ Residual risk: these are instructions to a model, not a sandbox. The real mitiga
 **nothing in this repository can take an external action**. Keep it that way until the approval
 gate below exists.
 
-## Rules for any future YouTube integration
+## Rules for the YouTube integration
 
-These are requirements, not implemented features. See [YOUTUBE_API_INTEGRATION.md](YOUTUBE_API_INTEGRATION.md).
+Rules 1, 2 (read-only part) and 5 are implemented for the read-only connector. Rules 3 and 4
+apply as soon as any write is added; no write exists today. See [YOUTUBE_API_INTEGRATION.md](YOUTUBE_API_INTEGRATION.md).
 
 1. **Secrets** come from environment variables or a secrets manager, never the repo. OAuth refresh
    tokens are stored encrypted at rest, per channel, and are revocable. `.gitignore` and

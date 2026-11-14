@@ -15,11 +15,16 @@ acknowledge within 7 days.
 
 ## Scope today
 
-The current release is offline: the tools read local files and print results. They make no
-network calls, store no credentials, and cannot publish, reply, delete or change anything on
-YouTube. The skills instruct Claude to draft only. The threat model, including prompt injection
-through transcripts and comments, and the rules any future YouTube API integration must follow,
-are in [docs/SECURITY.md](docs/SECURITY.md).
+The analysis tools read local files and print results; they make no network calls. The optional
+`yt-youtube` connector reads from the YouTube Data and Analytics APIs with credentials taken from
+environment variables. It is read-only by construction: GET requests only, read-only OAuth scopes
+only, no write methods. Nothing in this repository stores credentials or can publish, reply,
+delete or change anything on YouTube. The skills instruct Claude to draft only. The threat model,
+including prompt injection through transcripts and comments, and the rules for the YouTube
+integration, are in [docs/SECURITY.md](docs/SECURITY.md).
+
+Report a vulnerability in the connector (for example a way to make it write, or to leak a key)
+with the same private process above.
 
 Never commit API keys, OAuth client secrets or tokens. `.gitignore` blocks the common file names,
 and a test fails if a tracked file contains a key-shaped string.

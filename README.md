@@ -24,6 +24,7 @@ The creator decides and acts. See [SECURITY.md](SECURITY.md).
 | Analytics | `/yt-retention` | `yt-retention` | A Studio retention export read as hook leak, cliffs and slide, optionally quoting what was said at each cliff. |
 | Research | `/yt-viral` | `yt-swipe` | Collected videos ranked by multiple over their own channel's median, with the title's formula named. |
 | Shorts | `/yt-shorts` | `yt-shorts` *(new)* | Candidate 20-55 s spans inside a long video, scored on opening, turn and ending signals. |
+| YouTube data | - | `yt-youtube` *(new, read-only)* | Fetches channel uploads (API key) and retention curves (OAuth) into the files `yt-swipe` and `yt-retention` read. Tested offline; not yet verified against the live API with real credentials. |
 | Evaluation | - | `yt-eval` *(new)* | Scores the edit, chapter and Shorts tools against labelled transcripts. See [docs/EVALUATION.md](docs/EVALUATION.md). |
 | SEO | `/yt-seo` | - | Description, tags worth having, and the three queries the video should win. |
 | Planning | `/yt-plan` | - | A week sized to real capacity: one anchor, one cheap one, Shorts from the anchor. |
@@ -31,7 +32,8 @@ The creator decides and acts. See [SECURITY.md](SECURITY.md).
 | Channel | `/yt-audit` | - | A channel audit that ends in ONE fix. |
 
 Skills are prompt workflows for Claude. Tools are deterministic Python on the standard library
-only, with no network access and no API keys.
+only. The analysis tools never touch the network. Only the optional `yt-youtube` connector
+does, read-only, with credentials from environment variables (see [`.env.example`](.env.example)).
 
 ## Install
 
@@ -79,6 +81,7 @@ yt-retention retention.csv --duration 600      # hook leak, cliffs, slide
 yt-swipe collected.json --min 2.0              # outliers by own-channel multiple
 yt-shorts transcript.srt --top 5               # Shorts candidates
 yt-eval datasets/synthetic-v1/dataset.json     # measure the tools against labels
+yt-youtube channel-videos --handle @Chan --out collected.json   # read-only fetch (YOUTUBE_API_KEY)
 ```
 
 Every tool takes `--json`. Every tool exits `1` with a one-line `error:` message on unusable
@@ -115,6 +118,7 @@ src/youtube_intelligence/
   research/        outliers (upstream swipe.py)
   shorts/          Shorts candidates (new)
   evaluation/      metrics, dataset loader, yt-eval (new)
+  integrations/    youtube/: read-only Data + Analytics API connector, yt-youtube (new)
   data/hooks.json  the 21-formula library (upstream, unmodified)
 templates/         voice.md (upstream, unmodified)
 datasets/          labelled evaluation sets (synthetic-v1: generated, with pinned baseline)
@@ -138,8 +142,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## Roadmap and integrations
 
 Not implemented yet, and designed for later: multiple channels and teams, voice profiles as
-data, research workspaces, YouTube Data/Analytics API (read-only first), provider-independent AI
-adapters, and stable interfaces to **CineForge** (media processing) and **TAKE** (creator studio).
+data, research workspaces, an OAuth login command and any YouTube write action (behind human
+approval), provider-independent AI adapters, and stable interfaces to **CineForge** (media processing) and **TAKE** (creator studio).
 This repository depends on neither. See [docs/ROADMAP.md](docs/ROADMAP.md),
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md),
 [docs/YOUTUBE_API_INTEGRATION.md](docs/YOUTUBE_API_INTEGRATION.md) and

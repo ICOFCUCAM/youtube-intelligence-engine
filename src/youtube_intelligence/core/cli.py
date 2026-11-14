@@ -8,13 +8,13 @@ from typing import Callable, List, Optional
 from .errors import InputError
 
 
-def guarded(main: Callable[[Optional[List[str]]], int]) -> Callable[[Optional[List[str]]], int]:
+def guarded(main: Callable[..., int]) -> Callable[..., int]:
     """Turn :class:`InputError` into ``error: ...`` on stderr and exit status 1."""
 
     @functools.wraps(main)
-    def run(argv: Optional[List[str]] = None) -> int:
+    def run(argv: Optional[List[str]] = None, **kw) -> int:
         try:
-            return main(argv)
+            return main(argv, **kw)
         except InputError as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 1

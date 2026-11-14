@@ -13,6 +13,7 @@ TOOLS = {
     "swipe": "youtube_intelligence.research.outliers",
     "shorts": "youtube_intelligence.shorts.candidates",
     "eval": "youtube_intelligence.evaluation.runner",
+    "youtube": "youtube_intelligence.integrations.youtube.cli",
 }
 
 

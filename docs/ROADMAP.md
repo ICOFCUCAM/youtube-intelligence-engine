@@ -31,8 +31,11 @@
 
 ## Phase 3: YouTube read-only
 
-- OAuth with `youtube.readonly` and `yt-analytics.readonly`, metadata, analytics reports and
-  comment ingestion ([YOUTUBE_API_INTEGRATION.md](YOUTUBE_API_INTEGRATION.md)).
+- Done (offline-tested, live success path unverified): `yt-youtube` read-only connector:
+  uploads and metadata via API key, retention curve via OAuth, mapped into the existing tools.
+- Next: verify against the live API with real read-only credentials; `yt-youtube login`
+  (loopback + PKCE consent, token to a secrets store); performance metrics beyond retention;
+  comment ingestion for `/yt-comment` ([YOUTUBE_API_INTEGRATION.md](YOUTUBE_API_INTEGRATION.md)).
 - Multiple channels, workspaces and teams, research workspaces, and editorial calendar storage.
 
 ## Phase 4: approved actions
