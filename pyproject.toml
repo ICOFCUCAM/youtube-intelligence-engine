@@ -36,6 +36,7 @@ yt-retention = "youtube_intelligence.analytics.retention:main"
 yt-swipe = "youtube_intelligence.research.outliers:main"
 yt-shorts = "youtube_intelligence.shorts.candidates:main"
 yt-eval = "youtube_intelligence.evaluation.runner:main"
+yt-youtube = "youtube_intelligence.integrations.youtube.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -32,7 +32,11 @@ and Claude skills.
    |--------------------------------------------------------------------------------|
    | core/transcript  core/intervals  core/formulas (data/hooks.json)  core/cli+errors |
    +--------------------------------------------------------------------------------+
-                  inputs: local files only     outputs: stdout text / JSON
+                  inputs: local files          outputs: stdout text / JSON
+   +--------------------------------------------------------------------------------+
+   | evaluation/ (yt-eval)            integrations/youtube/ (yt-youtube, read-only) |
+   +--------------------------------------------------------------------------------+
+     labelled datasets -> metrics        YouTube APIs -> the same files the tools read
 ```
 
 Properties that hold today and should be kept:
@@ -45,7 +49,8 @@ Properties that hold today and should be kept:
    lands everywhere. That shared loader is how the upstream JSON-array bug spread to three tools.
 3. **Typed failure.** Bad input raises `InputError`, which the CLI maps to exit 1.
 4. **Deterministic.** Same input, same output, regardless of hash seed or platform.
-5. **No network, no secrets, no side effects.**
+5. **No network, no secrets, no side effects** in the analysis packages. Network access exists
+   only in `integrations/youtube/transport.py`, read-only.
 
 ## Where the skills fit
 

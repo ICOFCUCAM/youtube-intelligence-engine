@@ -15,6 +15,13 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
   Results and their limits: [docs/EVALUATION.md](docs/EVALUATION.md).
 - `yt-retention --views N`: small-sample warning below 1,000 views (rule of thumb). Output is
   unchanged when `--views` is not given.
+- **Read-only YouTube connector** (`youtube_intelligence.integrations.youtube`, `yt-youtube`):
+  channel uploads with metadata and views (Data API v3, API key, or OAuth for `--mine`) and
+  retention curves (Analytics API v2, OAuth), written as `yt-swipe` / `yt-retention` input. GET-only
+  to allowlisted hosts, read-only scopes enforced, secrets from the environment and redacted,
+  bounded retries, quota errors surfaced. Tested with a fake transport; against the live API only
+  the error path has been exercised (invalid key). `.env.example` lists the variable names.
+- `core.cli.guarded` forwards keyword arguments (lets tests inject a client).
 
 ### Found by the evaluation (documented, not yet changed)
 - deadair cuts deliberate emphasis pauses (3.65 s of 6.8 s labelled "keep").
