@@ -61,3 +61,9 @@ def test_documented_gaming_behaviour_is_real():
 def test_empty_hook_scores_zero_without_crash():
     parts, verdict, name, hits = hookscore.score("")
     assert verdict >= 0 and name == "Unclassified"
+
+
+def test_formula_self_classification_rate_is_as_documented():
+    # docs/TOOL_REVIEW.md states 13 of 21 library examples classify as their own formula.
+    ok = sum(classify(f["example"])[0] == f["name"] for f in formulas())
+    assert ok == 13

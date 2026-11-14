@@ -12,8 +12,8 @@ Boundaries come from the gaps - the pauses you actually took between sections - 
 the pause was and how much the vocabulary changes across it. It is a first draft you retitle, not a
 summariser.
 
-Adapted from upstream skills/yt-chapters/chapters.py (youtube-agent-skill, (c) 2026 Jake
-Schincariol, MIT). Boundary selection is unchanged. ICOFCUCAM changes: it inherited the
+Adapted from upstream skills/yt-chapters/chapters.py (youtube-agent-skill,
+(c) 2026 Jake Schincariol, MIT). Boundary selection is unchanged. ICOFCUCAM changes: it inherited the
 JSON-array crash from the shared transcript loader (fixed in youtube_intelligence.core.transcript);
 draft titles are now deterministic (upstream ordered tied keywords by hash-randomised set order,
 so titles changed between runs); duration is the latest cue end; bad input exits 1 with a message.

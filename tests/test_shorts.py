@@ -22,7 +22,13 @@ def test_connective_opening_is_penalised():
             Cue(20.5, 30, "But the problem is timing."), Cue(32, 40, "Done.")]
     alt = list(base)
     alt[1] = Cue(7, 20, "and hooks decide everything.")
-    good, bad = find(base, 20, 40, 1)[0], find(alt, 20, 40, 1)[0]
+    from youtube_intelligence.shorts.candidates import windows
+
+    def at7(cues):
+        # compare the SAME span (7.0-30.0 s) in both transcripts, before non-overlap selection
+        return next(c for c in windows(cues, 20, 40) if c["start"] == 7.0 and c["end"] == 30.0)
+
+    good, bad = at7(base), at7(alt)
     assert good["score"] > bad["score"]
     assert any('opens on "and"' in n for n in bad["notes"])
 

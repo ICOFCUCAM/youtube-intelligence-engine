@@ -20,8 +20,8 @@ silently invalidate the upstream calibration): every number adds to SPECIFICITY,
 hook with figures raises the score; every "you" adds to ADDRESS; STAKES rewards fear words. A
 number that is not true is worse than no number - the skill instructions forbid inventing one.
 
-Adapted from upstream skills/yt-script/hookscore.py (youtube-agent-skill, (c) 2026 Jake
-Schincariol, MIT). Scores are byte-for-byte identical to upstream (golden test). ICOFCUCAM
+Adapted from upstream skills/yt-script/hookscore.py (youtube-agent-skill,
+(c) 2026 Jake Schincariol, MIT). Scores are byte-for-byte identical to upstream (golden test). ICOFCUCAM
 changes: a missing input file now exits 1 (upstream exited 0), files are read as UTF-8, and the
 text report ends with the heuristic disclaimer.
 """

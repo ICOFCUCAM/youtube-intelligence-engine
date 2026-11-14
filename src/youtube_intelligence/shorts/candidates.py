@@ -42,11 +42,10 @@ def _first_word(t: str) -> str:
     return m.group(0) if m else ""
 
 
-def find(cues: Sequence[Cue], min_len: float = 20.0, max_len: float = 55.0, top: int = 5) -> List[Dict]:
+def windows(cues: Sequence[Cue], min_len: float = 20.0, max_len: float = 55.0) -> List[Dict]:
+    """Every span inside the length window, scored, best first (may overlap)."""
     if min_len <= 0 or max_len < min_len:
         raise InputError("need 0 < --min <= --max")
-    if top < 1:
-        raise InputError("--top must be at least 1")
     n = len(cues)
     ends_before = []
     latest = None
@@ -96,8 +95,15 @@ def find(cues: Sequence[Cue], min_len: float = 20.0, max_len: float = 55.0, top:
                            "score": round(score, 2), "first_line": t0, "last_line": cues[j].text,
                            "words": len(body.split()), "notes": why})
     scored.sort(key=lambda c: (-c["score"], c["start"], c["end"]))
+    return scored
+
+
+def find(cues: Sequence[Cue], min_len: float = 20.0, max_len: float = 55.0, top: int = 5) -> List[Dict]:
+    """The ``top`` best non-overlapping spans."""
+    if top < 1:
+        raise InputError("--top must be at least 1")
     picked: List[Dict] = []
-    for c in scored:
+    for c in windows(cues, min_len, max_len):
         if all(c["end"] <= p["start"] or c["start"] >= p["end"] for p in picked):
             picked.append(c)
             if len(picked) >= top:

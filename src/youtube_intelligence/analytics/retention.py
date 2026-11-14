@@ -29,8 +29,8 @@ LIMITATIONS - the numbers are descriptive, not diagnostic:
   * Rewatches and skips make absolute retention exceed 100% or jump upward; upward moves are
     ignored as cliffs and averaged into the slide.
 
-Adapted from upstream skills/yt-retention/retention.py (youtube-agent-skill, (c) 2026 Jake
-Schincariol, MIT). The analysis is unchanged. ICOFCUCAM changes:
+Adapted from upstream skills/yt-retention/retention.py (youtube-agent-skill,
+(c) 2026 Jake Schincariol, MIT). The analysis is unchanged. ICOFCUCAM changes:
   * arguments are parsed properly - upstream treated the value of --duration as the CSV path when
     --duration came first, and printed usage instead of reading the file;
   * the position axis is read from the CSV header when it says "%" or "second", and can be forced
