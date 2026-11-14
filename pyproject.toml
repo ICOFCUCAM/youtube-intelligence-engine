@@ -7,7 +7,7 @@ name = "youtube-intelligence-engine"
 version = "0.1.0"
 description = "AI-assisted YouTube intelligence and creator workflow engine: hooks, packaging, edit decision lists, chapters, retention, outliers and Shorts."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [{ name = "ICOFCUCAM" }, { name = "Jake Schincariol (upstream youtube-agent-skill)" }]
 keywords = ["youtube", "creator", "retention", "shorts", "chapters", "edl", "claude-skills"]
