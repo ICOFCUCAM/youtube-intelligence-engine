@@ -29,6 +29,14 @@ python3 -m venv .venv && .venv/bin/pip install -e '.[dev]'
 .venv/bin/python -m compileall -q src skills tests
 ```
 
+## Evaluation baseline
+
+If a change moves the numbers in `datasets/synthetic-v1/baseline.json`, the test suite fails.
+That is intended. Regenerate the baseline with
+`python -m youtube_intelligence.evaluation.runner datasets/synthetic-v1/dataset.json --json`
+(keep its `note` field), update [docs/EVALUATION.md](docs/EVALUATION.md), and say in the PR and
+CHANGELOG which numbers moved and why. Never edit labels to make a tool look better.
+
 ## Adding a tool
 
 - Put the logic in the right package under `src/youtube_intelligence/`, as pure functions plus a

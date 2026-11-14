@@ -3,6 +3,25 @@
 All notable changes are recorded here. Upstream baseline: youtube-agent-skill
 `a2feb2104981a375ffd4f87ee04f4f5344ac43c6` by Jake Schincariol (MIT).
 
+## Unreleased
+
+### Added
+- **Evaluation harness** (`youtube_intelligence.evaluation`, `yt-eval`): seconds-weighted and
+  event-level precision/recall for edit cuts, recall by cut kind, a "keep regions cut" harm metric,
+  chapter-boundary and Shorts-span scoring. Dataset format with validation (paths confined to the
+  dataset folder, a mandatory `synthetic` flag).
+- **`datasets/synthetic-v1`**: four scripted transcripts (clean and auto-caption renderings of two
+  talks) with labels generated from the script, a deterministic generator, and a pinned baseline.
+  Results and their limits: [docs/EVALUATION.md](docs/EVALUATION.md).
+- `yt-retention --views N`: small-sample warning below 1,000 views (rule of thumb). Output is
+  unchanged when `--views` is not given.
+
+### Found by the evaluation (documented, not yet changed)
+- deadair cuts deliberate emphasis pauses (3.65 s of 6.8 s labelled "keep").
+- On auto-caption transcripts, filler and retake detection mostly fails (chunked, overlapping cues).
+- Fillers inside a sentence are never cut.
+- chapters at the default `--target 7` over-proposes boundaries on short talks (precision 0.42).
+
 ## 0.1.0 - 2026-11
 
 First ICOFCUCAM release. Every fix below was reproduced against the unmodified upstream tool

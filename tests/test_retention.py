@@ -88,3 +88,15 @@ def test_upward_spikes_are_not_cliffs(write):
     p = write("s.csv", "\n".join(f"{x},{110 if x == 50 else 100 - x * 0.1}" for x in range(0, 100, 5)))
     r = analyse(load_csv(p)[0])
     assert all(c["lost"] > 0 for c in r["cliffs"])
+
+
+def test_views_warning_only_when_given_and_low():
+    rows, hint = load_csv(fixture("retention_percent.csv"))
+    assert "warnings" not in analyse(rows, hint=hint)                 # unchanged without --views
+    assert analyse(rows, hint=hint, views=5000)["warnings"] == []
+    w = analyse(rows, hint=hint, views=312)["warnings"]
+    assert len(w) == 1 and "312 views" in w[0]
+    with pytest.raises(InputError):
+        analyse(rows, hint=hint, views=-1)
+    p = run_cli(M, fixture("retention_percent.csv"), "--views", "312")
+    assert p.returncode == 0 and "WARNING" in p.stdout
