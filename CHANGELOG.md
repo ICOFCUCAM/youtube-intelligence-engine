@@ -94,4 +94,6 @@ before it was changed, and has a regression test (test names in brackets).
 - 183-test pytest suite, including golden outputs from the unmodified upstream tools.
 - Untrusted-input and approval sections appended to every SKILL.md.
 - Documentation: architecture, security model, API design, YouTube API plan, TAKE/CineForge
-  integration, roadmap, tool review. CI workflow.
+  integration, roadmap, tool review.
+- CI on Python 3.10-3.14. Python 3.9 (end of life since October 2025) is not supported:
+  GitHub's `ubuntu-latest` runners no longer provide it, so support could not be checked.
