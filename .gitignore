@@ -1,3 +1,25 @@
+# upstream
 __pycache__/
 *.pyc
 .DS_Store
+
+# ICOFCUCAM additions
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# never commit credentials or local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+client_secret*.json
+token*.json
+credentials*.json
+oauth*.json

@@ -1,109 +1,147 @@
-# The YouTube agent skill
+# YouTube Intelligence Engine
 
-Eleven Claude skills that run a YouTube channel. Free, MIT, no signup, no API key, nothing to
-connect.
+An independent, AI-assisted YouTube intelligence and creator-workflow engine from **ICOFCUCAM**:
+research, scripting, content packaging, editing intelligence, retention analysis, Shorts
+repurposing, SEO, channel planning and creator operations.
 
-One of them writes your script off 21 hook formulas and scores the hook before you waste a take on
-it. One lints the title and the thumbnail as a single pairing, because writing them separately is
-why half of your click surface says the same thing twice. One reads your audience-retention export
-and tells you the exact second people left and what you were saying when they did. One turns a
-transcript into an edit decision list. One finds the Shorts already hiding inside a long video. One
-goes and finds what is working in your niche and ranks it by how far each video beat its own
-channel, not by how big the channel is.
+It is built from **[youtube-agent-skill](https://github.com/Jakeschincariol/youtube-agent-skill)
+by Jake Schincariol** (MIT), at upstream commit `a2feb2104981a375ffd4f87ee04f4f5344ac43c6`. The
+original eleven Claude skills and six tools are preserved. The tools are now one tested Python
+package, with known defects fixed and documented. See [UPSTREAM.md](UPSTREAM.md) for exactly what
+came from where.
 
-**Nothing gets published until you do it.** These skills write. You upload.
+**Nothing here publishes, uploads, replies or deletes.** Every skill and tool drafts or analyses.
+The creator decides and acts. See [SECURITY.md](SECURITY.md).
+
+## What it is, today
+
+| Area | Skill | Tool (CLI) | What it does |
+| --- | --- | --- | --- |
+| Creative | `/yt-script` | `yt-hookscore` | Five hooks off [21 formulas](skills/yt-script/hooks.json), scored by a **heuristic** five-property panel, then the spoken script with retention beats. |
+| Packaging | `/yt-package` | `yt-title` | Title and thumbnail text linted as one pairing: truncation, duplication, vagueness, shouting, unverifiable claims. |
+| Editing | `/yt-edit` | `yt-deadair` | Transcript to edit decision list: dead air, filler cues and retakes, with timecodes and a merged runtime estimate. |
+| Editing | `/yt-chapters` | `yt-chapters` | Chapters from a transcript, checked against YouTube's rules (0:00 first, 3+ entries, 10 s minimum). |
+| Analytics | `/yt-retention` | `yt-retention` | A Studio retention export read as hook leak, cliffs and slide, optionally quoting what was said at each cliff. |
+| Research | `/yt-viral` | `yt-swipe` | Collected videos ranked by multiple over their own channel's median, with the title's formula named. |
+| Shorts | `/yt-shorts` | `yt-shorts` *(new)* | Candidate 20-55 s spans inside a long video, scored on opening, turn and ending signals. |
+| SEO | `/yt-seo` | - | Description, tags worth having, and the three queries the video should win. |
+| Planning | `/yt-plan` | - | A week sized to real capacity: one anchor, one cheap one, Shorts from the anchor. |
+| Community | `/yt-comment` | - | Comments triaged into four piles, replies drafted in the creator's voice. |
+| Channel | `/yt-audit` | - | A channel audit that ends in ONE fix. |
+
+Skills are prompt workflows for Claude. Tools are deterministic Python on the standard library
+only, with no network access and no API keys.
 
 ## Install
 
-Paste this into Claude:
+### As a Claude Code plugin
 
 ```
-https://github.com/Jakeschincariol/youtube-agent-skill
-
-Install this skill, then confirm /yt-script works.
+/plugin marketplace add ICOFCUCAM/youtube-intelligence-engine
+/plugin install youtube-intelligence
 ```
 
-Or do it yourself, in Claude Code:
+### As Python tools
 
 ```bash
-git clone https://github.com/Jakeschincariol/youtube-agent-skill.git
-cp -r youtube-agent-skill/skills/yt-* ~/.claude/skills/
+pip install git+https://github.com/ICOFCUCAM/youtube-intelligence-engine
 ```
-
-Or as a plugin:
-
-```
-/plugin marketplace add Jakeschincariol/youtube-agent-skill
-/plugin install youtube-agent
-```
-
-Project-local instead of global: copy the same folders into your repo's `.claude/skills/`. No Claude
-Code at all? Paste any single `SKILL.md` at the top of a chat and it runs as a mode. You lose the six
-Python tools, which is most of the point of `/yt-script`, `/yt-retention` and `/yt-edit`, but the
-rest works.
-
-Then spend ten minutes on [`templates/voice.md`](templates/voice.md). Copy it to
-`~/.claude/youtube/voice.md` and fill it in, or send Claude three of your own videos and say "write
-my voice.md from these". Every skill reads that file. It matters more here than anywhere else,
-because you have to say the words out loud.
-
-## The eleven
-
-| command | what it does |
-| --- | --- |
-| `/yt-script` | One idea into a script. Five hooks off [21 formulas](skills/yt-script/hooks.json), scored, then the spoken script with the retention beats marked. |
-| `/yt-package` | Title and thumbnail as one pairing, linted for truncation, duplication and vagueness. |
-| `/yt-edit` | A transcript into an edit decision list: dead air, filler cues, retakes, with timecodes. |
-| `/yt-comment` | The comment section triaged into four piles, then replies in your voice. Says which one to pin. |
-| `/yt-plan` | A week that fits the hours you actually have. One anchor, one cheap one, three Shorts. |
-| `/yt-viral` | What is working in your niche, ranked by multiple over each channel's own median. |
-| `/yt-retention` | Your retention export read properly: hook leak, the cliffs, the slide, and what to change. |
-| `/yt-shorts` | The Shorts already inside a long video, with a new first line written for each. |
-| `/yt-seo` | The description, the tags that are worth having, and the three queries this should win. |
-| `/yt-chapters` | Chapters from a transcript, validated against YouTube's own rules so they render. |
-| `/yt-audit` | The whole channel, ending in ONE fix rather than twenty. |
-
-## The six tools
-
-Every one of these runs on a clean Python 3 with no dependencies. They are the reason the skills are
-not just prompts.
 
 ```bash
-python3 skills/yt-script/hookscore.py --hook "one line"        # 5-property hook panel
-python3 skills/yt-package/title.py --title "..." --thumb "..." # title + thumbnail linter
-python3 skills/yt-edit/deadair.py transcript.srt               # edit decision list
-python3 skills/yt-chapters/chapters.py transcript.srt          # validated chapters
-python3 skills/yt-retention/retention.py retention.csv         # where they left, and why
-python3 skills/yt-viral/swipe.py collected.json --min 2.0      # outliers by own-channel multiple
+yt-deadair transcript.srt --json
 ```
 
-## The fine print
+### As copied skills
 
-The part most packs leave out.
+```bash
+git clone https://github.com/ICOFCUCAM/youtube-intelligence-engine.git
+```
 
-**It does not publish.** YouTube's Data API would allow it with your own OAuth, which makes this
-pack different from the LinkedIn and Instagram ones, where posting is not available at all. It is
-still not built here: every skill ends in a block you copy and a question — ship it, or change it?
-Anything that claims to run your channel unattended should be read with that distinction in mind.
+```bash
+cp -r youtube-intelligence-engine/skills/yt-* ~/.claude/skills/
+```
 
-**`hookscore.py` is a heuristic, not a predictor.** The panel was built and calibrated against 74
-real short-form hooks (the first 15 seconds of auto-captions, top-8 and bottom-8 by views across
-five channels). It separates deliberately bad hooks from real ones well. It separates a given
-creator's hits from their own misses barely at all. A low score is a reason to look again; a high
-score is not a promise.
+Skill folders copied on their own need the package installed (`pip install` above) for their
+scripts to run. Each script says so if it is missing.
 
-**The formula classifier is about the words, not the result.** When `/yt-viral` says a title used
-The Statistic, that is a judgement about the title you can see, not a claim about why the video got
-its views.
+Then fill in [`templates/voice.md`](templates/voice.md) and copy it to
+`~/.claude/youtube/voice.md`. Every skill reads it.
 
-**`/yt-viral` reads, it does not scrape.** Public listings only. It never logs in as you and never
-touches your credentials.
+## The tools
 
-**Tags barely matter** and this pack says so instead of selling you a tag generator.
+```bash
+yt-hookscore --hook "one line"                 # heuristic 5-property hook panel
+yt-title --title "..." --thumb "..."           # title + thumbnail linter
+yt-deadair transcript.srt                      # edit decision list (.srt / .vtt / whisper .json)
+yt-chapters transcript.srt --target 8          # validated chapters
+yt-retention retention.csv --duration 600      # hook leak, cliffs, slide
+yt-swipe collected.json --min 2.0              # outliers by own-channel multiple
+yt-shorts transcript.srt --top 5               # Shorts candidates
+```
 
-**Nothing invents a number.** If a skill wants a figure it does not have, it asks you for it or
-writes the line without it.
+Every tool takes `--json`. Every tool exits `1` with a one-line `error:` message on unusable
+input; none prints a traceback for bad input. The upstream commands still work from inside a
+skill folder (`python3 deadair.py transcript.srt`). See [examples/](examples/).
 
-## Licence
+## What the numbers mean, and do not
 
-MIT. Use it, change it, ship it.
+- **`yt-hookscore` is a heuristic.** It is word lists and regular expressions, not a model of
+  viewers. It does not predict views or virality, and it can be gamed (every number raises
+  SPECIFICITY). Upstream's calibration found it separates bad hooks from real ones, but barely
+  separates a creator's hits from their misses.
+- **`yt-title` does not reward numbers.** A figure helps a title only if it is true and the video
+  shows it. Guarantee, income and "overnight" language is flagged.
+- **`yt-retention` is descriptive.** Small samples, video age, format (Shorts vs long-form) and
+  traffic mix all change the curve. Its thresholds are long-form rules of thumb.
+- **`yt-deadair` measures speech.** Its runtime estimate ignores silent demos and B-roll.
+- **Formula names are about the words**, not about why a video worked.
+
+Details: [docs/TOOL_REVIEW.md](docs/TOOL_REVIEW.md).
+
+## Repository layout
+
+```
+skills/            the eleven Claude skills (upstream instructions + ICOFCUCAM additions)
+src/youtube_intelligence/
+  core/            transcript parsing, interval maths, hook-formula library, CLI helpers
+  creative/        hookscore
+  packaging/       title
+  editing/         deadair (EDL), chapters
+  analytics/       retention
+  research/        outliers (upstream swipe.py)
+  shorts/          Shorts candidates (new)
+  data/hooks.json  the 21-formula library (upstream, unmodified)
+templates/         voice.md (upstream, unmodified)
+tests/             pytest suite, fixtures, upstream golden outputs
+docs/              architecture, security, API design, integrations, roadmap, reviews
+examples/          runnable examples
+```
+
+## Development
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install -e '.[dev]'
+```
+
+```bash
+.venv/bin/pytest
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Roadmap and integrations
+
+Not implemented yet, and designed for later: multiple channels and teams, voice profiles as
+data, research workspaces, YouTube Data/Analytics API (read-only first), provider-independent AI
+adapters, and stable interfaces to **CineForge** (media processing) and **TAKE** (creator studio).
+This repository depends on neither. See [docs/ROADMAP.md](docs/ROADMAP.md),
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md),
+[docs/YOUTUBE_API_INTEGRATION.md](docs/YOUTUBE_API_INTEGRATION.md) and
+[docs/TAKE_CINEFORGE_INTEGRATION.md](docs/TAKE_CINEFORGE_INTEGRATION.md).
+
+## Licence and credit
+
+MIT. See [LICENSE](LICENSE). The original work, including the skill instructions, the 21-formula
+hook library, the voice template and the six tools' designs, is by **Jake Schincariol**:
+https://github.com/Jakeschincariol/youtube-agent-skill. ICOFCUCAM's modifications and additions
+are also MIT. The original README is kept at [docs/upstream/README.md](docs/upstream/README.md).

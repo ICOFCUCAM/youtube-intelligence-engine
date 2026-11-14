@@ -1,0 +1,230 @@
+{
+ "upstream_repository": "https://github.com/Jakeschincariol/youtube-agent-skill",
+ "upstream_commit": "a2feb2104981a375ffd4f87ee04f4f5344ac43c6",
+ "upstream_author": "Jake Schincariol",
+ "upstream_license": "MIT",
+ "skill_marker": "<!-- ICOFCUCAM additions below. Everything above this line is upstream text by Jake Schincariol (MIT), unmodified. -->",
+ "files": [
+  {
+   "upstream_path": ".claude-plugin/marketplace.json",
+   "upstream_sha256": "185532595947124a689c6b3f789ee53db8704ef7ae5dc3e98a02b43e28205311",
+   "status": "adapted",
+   "destinations": [
+    ".claude-plugin/marketplace.json"
+   ]
+  },
+  {
+   "upstream_path": ".claude-plugin/plugin.json",
+   "upstream_sha256": "7fd18e94d8c63a1fe933743900f114fc9b228a7c9d37b43f8cd663cb589a9142",
+   "status": "adapted",
+   "destinations": [
+    ".claude-plugin/plugin.json"
+   ]
+  },
+  {
+   "upstream_path": ".gitignore",
+   "upstream_sha256": "60c9bdd905fcf45ac485c680d32e9773962cf061b6f041dcddd033911558a672",
+   "status": "adapted",
+   "destinations": [
+    ".gitignore"
+   ]
+  },
+  {
+   "upstream_path": "LICENSE",
+   "upstream_sha256": "857c8d5276809c8196b3cd7cb3300324768bfc562b2b6281b06d6865058e186c",
+   "status": "adapted",
+   "destinations": [
+    "LICENSE"
+   ],
+   "note": "Upstream MIT text and copyright line kept verbatim; one ICOFCUCAM copyright line added."
+  },
+  {
+   "upstream_path": "README.md",
+   "upstream_sha256": "6ca16ff2c83405ea859093168bbe31552f56a8b59a191962067b6c732781cfd8",
+   "status": "imported-verbatim",
+   "destinations": [
+    "docs/upstream/README.md"
+   ],
+   "note": "Root README.md is a new ICOFCUCAM document."
+  },
+  {
+   "upstream_path": "skills/yt-audit/SKILL.md",
+   "upstream_sha256": "a4d6583d9d8ef274bb589abd3c222330bcd5d731b1a05d921dd0d25b8b1ecb98",
+   "status": "adapted-append-only",
+   "destinations": [
+    "skills/yt-audit/SKILL.md"
+   ],
+   "note": "Upstream text is preserved byte-for-byte above the ICOFCUCAM marker line; additions are appended below it."
+  },
+  {
+   "upstream_path": "skills/yt-chapters/SKILL.md",
+   "upstream_sha256": "06d2fc094d59ec6da73d812bd7b21590f8099352922ea2e3151b45922bf315b3",
+   "status": "adapted-append-only",
+   "destinations": [
+    "skills/yt-chapters/SKILL.md"
+   ],
+   "note": "Upstream text is preserved byte-for-byte above the ICOFCUCAM marker line; additions are appended below it."
+  },
+  {
+   "upstream_path": "skills/yt-chapters/chapters.py",
+   "upstream_sha256": "f21f17a74f0b2b6719bbf45b16bf404acb4fa639fc765df46b2aec442ab2dcbe",
+   "status": "adapted",
+   "destinations": [
+    "skills/yt-chapters/chapters.py",
+    "src/youtube_intelligence/editing/chapters.py"
+   ],
+   "note": "Skill-folder script is now an entry point; logic moved into the package with documented fixes (CHANGELOG.md)."
+  },
+  {
+   "upstream_path": "skills/yt-comment/SKILL.md",
+   "upstream_sha256": "5b569ef7564d9ca271fd158f0cdbd835073eacc887139c7d6d15899142d46892",
+   "status": "adapted-append-only",
+   "destinations": [
+    "skills/yt-comment/SKILL.md"
+   ],
+   "note": "Upstream text is preserved byte-for-byte above the ICOFCUCAM marker line; additions are appended below it."
+  },
+  {
+   "upstream_path": "skills/yt-edit/SKILL.md",
+   "upstream_sha256": "b9f83e8b972e91a4abb5e0f4f9fc4b5cde9e8727609ce1213b0e583718cd8aeb",
+   "status": "adapted-append-only",
+   "destinations": [
+    "skills/yt-edit/SKILL.md"
+   ],
+   "note": "Upstream text is preserved byte-for-byte above the ICOFCUCAM marker line; additions are appended below it."
+  },
+  {
+   "upstream_path": "skills/yt-edit/deadair.py",
+   "upstream_sha256": "61d13cd77e7c31e5e12b6e9e016c7d1ffb92d4a5ec5597dd69b98545c81eb9c3",
+   "status": "adapted",
+   "destinations": [
+    "skills/yt-edit/deadair.py",
+    "src/youtube_intelligence/editing/deadair.py",
+    "src/youtube_intelligence/core/transcript.py"
+   ],
+   "note": "Skill-folder script is now an entry point; logic moved into the package with documented fixes (CHANGELOG.md)."
+  },
+  {
+   "upstream_path": "skills/yt-package/SKILL.md",
+   "upstream_sha256": "0347a791664ff5d05eda87b2535e34ef8177c9e9b5e5c077c2f8113942108506",
+   "status": "adapted-append-only",
+   "destinations": [
+    "skills/yt-package/SKILL.md"
+   ],
+   "note": "Upstream text is preserved byte-for-byte above the ICOFCUCAM marker line; additions are appended below it."
+  },
+  {
+   "upstream_path": "skills/yt-package/title.py",
+   "upstream_sha256": "e5f2ba4e205cc5d4bca9c8c0dd92890ea964158ee8266759e2c75c3958cef723",
+   "status": "adapted",
+   "destinations": [
+    "skills/yt-package/title.py",
+    "src/youtube_intelligence/packaging/title.py"
+   ],
+   "note": "Skill-folder script is now an entry point; logic moved into the package with documented fixes (CHANGELOG.md)."
+  },
+  {
+   "upstream_path": "skills/yt-plan/SKILL.md",
+   "upstream_sha256": "c82983c91e69b1d816a978157dd1b3c37241611ad2a22463ad2c9291ca1b94cd",
+   "status": "adapted-append-only",
+   "destinations": [
+    "skills/yt-plan/SKILL.md"
+   ],
+   "note": "Upstream text is preserved byte-for-byte above the ICOFCUCAM marker line; additions are appended below it."
+  },
+  {
+   "upstream_path": "skills/yt-retention/SKILL.md",
+   "upstream_sha256": "2777dd1f8f9ea04174bf13c9dc0132be907fb3852380376db359bcf786ba4f8e",
+   "status": "adapted-append-only",
+   "destinations": [
+    "skills/yt-retention/SKILL.md"
+   ],
+   "note": "Upstream text is preserved byte-for-byte above the ICOFCUCAM marker line; additions are appended below it."
+  },
+  {
+   "upstream_path": "skills/yt-retention/retention.py",
+   "upstream_sha256": "2ed29f0bc24e7b65e9661a879692fe954b4f29e486ebf19f3c2c672e21b0a906",
+   "status": "adapted",
+   "destinations": [
+    "skills/yt-retention/retention.py",
+    "src/youtube_intelligence/analytics/retention.py"
+   ],
+   "note": "Skill-folder script is now an entry point; logic moved into the package with documented fixes (CHANGELOG.md)."
+  },
+  {
+   "upstream_path": "skills/yt-script/SKILL.md",
+   "upstream_sha256": "23fe2c4c52b4dbdae03295d71a8bdede254a94b3d6b0da83b025e8b622020366",
+   "status": "adapted-append-only",
+   "destinations": [
+    "skills/yt-script/SKILL.md"
+   ],
+   "note": "Upstream text is preserved byte-for-byte above the ICOFCUCAM marker line; additions are appended below it."
+  },
+  {
+   "upstream_path": "skills/yt-script/hooks.json",
+   "upstream_sha256": "76c47b4ad410a8856c9d27aa489d7c447b3ebe30a9024f03e2d59fefe267f5cb",
+   "status": "imported-verbatim",
+   "destinations": [
+    "skills/yt-script/hooks.json",
+    "src/youtube_intelligence/data/hooks.json"
+   ]
+  },
+  {
+   "upstream_path": "skills/yt-script/hookscore.py",
+   "upstream_sha256": "8205dca03de1d5d8e25614e7c0d8d40fd756a99b838320462195b342d5eb0545",
+   "status": "adapted",
+   "destinations": [
+    "skills/yt-script/hookscore.py",
+    "src/youtube_intelligence/creative/hookscore.py",
+    "src/youtube_intelligence/core/formulas.py"
+   ],
+   "note": "Skill-folder script is now an entry point; logic moved into the package with documented fixes (CHANGELOG.md)."
+  },
+  {
+   "upstream_path": "skills/yt-seo/SKILL.md",
+   "upstream_sha256": "7ce49d03104f4f94698ba57a3ef7aa826b697cd01cbc95d7d18dca912287c046",
+   "status": "adapted-append-only",
+   "destinations": [
+    "skills/yt-seo/SKILL.md"
+   ],
+   "note": "Upstream text is preserved byte-for-byte above the ICOFCUCAM marker line; additions are appended below it."
+  },
+  {
+   "upstream_path": "skills/yt-shorts/SKILL.md",
+   "upstream_sha256": "cbaaaf907bb14491baba0ea23e3415f268f7fff21897c6eb487e7cb1113b32c8",
+   "status": "adapted-append-only",
+   "destinations": [
+    "skills/yt-shorts/SKILL.md"
+   ],
+   "note": "Upstream text is preserved byte-for-byte above the ICOFCUCAM marker line; additions are appended below it."
+  },
+  {
+   "upstream_path": "skills/yt-viral/SKILL.md",
+   "upstream_sha256": "2dae2b23919464450e66dde15eaa0fd6d82dac4ca5c6c553d8bf2d604d38bdb4",
+   "status": "adapted-append-only",
+   "destinations": [
+    "skills/yt-viral/SKILL.md"
+   ],
+   "note": "Upstream text is preserved byte-for-byte above the ICOFCUCAM marker line; additions are appended below it."
+  },
+  {
+   "upstream_path": "skills/yt-viral/swipe.py",
+   "upstream_sha256": "8035c0868f66929d8b63dfa4997c8b1abc3ac29a19165ba17487242616cb0d96",
+   "status": "adapted",
+   "destinations": [
+    "skills/yt-viral/swipe.py",
+    "src/youtube_intelligence/research/outliers.py",
+    "src/youtube_intelligence/core/formulas.py"
+   ],
+   "note": "Skill-folder script is now an entry point; logic moved into the package with documented fixes (CHANGELOG.md)."
+  },
+  {
+   "upstream_path": "templates/voice.md",
+   "upstream_sha256": "b24b25e5692e1ae27d00889e3fdda9d528d434b4a1a893f9cdd58b369c62d17d",
+   "status": "imported-verbatim",
+   "destinations": [
+    "templates/voice.md"
+   ]
+  }
+ ]
+}

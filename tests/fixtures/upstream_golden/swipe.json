@@ -1,0 +1,28 @@
+{
+ "outliers": [
+  {
+   "channel": "Alpha Studio",
+   "title": "97% of channels quit before video 30",
+   "views": 260000,
+   "median": 33000,
+   "multiple": 7.88,
+   "formula": "The Statistic",
+   "url": "https://example.invalid/x"
+  },
+  {
+   "channel": "Beta Builds",
+   "title": "I tried posting daily for 30 days",
+   "views": 480000,
+   "median": 123000,
+   "multiple": 3.9,
+   "formula": "I Tried It",
+   "url": "https://example.invalid/x"
+  }
+ ],
+ "skipped_thin_channels": [
+  [
+   "Gamma Tiny",
+   3
+  ]
+ ]
+}

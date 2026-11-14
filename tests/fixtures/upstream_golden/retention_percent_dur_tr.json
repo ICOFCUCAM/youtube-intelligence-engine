@@ -1,0 +1,32 @@
+{
+ "points": 101,
+ "start": 100.0,
+ "hook_leak": 23.25,
+ "end": 46.0,
+ "cliffs": [
+  {
+   "from": 0.0,
+   "to": 1.0,
+   "lost": 12.25,
+   "at_seconds": 0.0
+  },
+  {
+   "from": 2.0,
+   "to": 3.0,
+   "lost": 10.25,
+   "at_seconds": 12.0
+  },
+  {
+   "from": 40.0,
+   "to": 41.0,
+   "lost": 7.25,
+   "at_seconds": 240.0
+  }
+ ],
+ "slide_per_unit": 0.324,
+ "said": {
+  "0.0": "Your first fifteen seconds decide whether anyone stays. Most hooks fail because they summarise instead of opening a question.",
+  "2.0": "Here is the structure I use for every opening line now. Confirm the title, open a gap, then prove the payoff exists.",
+  "40.0": ""
+ }
+}

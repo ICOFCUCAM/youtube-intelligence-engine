@@ -1,0 +1,28 @@
+{
+ "points": 101,
+ "start": 100.0,
+ "hook_leak": 24.5,
+ "end": 46.0,
+ "cliffs": [
+  {
+   "from": 0.0,
+   "to": 1.0,
+   "lost": 12.25,
+   "at_seconds": null
+  },
+  {
+   "from": 2.0,
+   "to": 3.0,
+   "lost": 10.25,
+   "at_seconds": null
+  },
+  {
+   "from": 40.0,
+   "to": 41.0,
+   "lost": 7.25,
+   "at_seconds": null
+  }
+ ],
+ "slide_per_unit": 0.329,
+ "said": {}
+}

@@ -1,0 +1,41 @@
+{
+ "valid": true,
+ "chapters": [
+  {
+   "start": 0.0,
+   "label": "0:00",
+   "draft_title": "Open Opening Whether",
+   "seconds": 16.4
+  },
+  {
+   "start": 16.4,
+   "label": "0:16",
+   "draft_title": "Read Stop Loud",
+   "seconds": 15.0
+  },
+  {
+   "start": 31.4,
+   "label": "0:31",
+   "draft_title": "Thumbnail Word Work",
+   "seconds": 15.8
+  },
+  {
+   "start": 47.2,
+   "label": "0:47",
+   "draft_title": "Crowded Image Expression",
+   "seconds": 12.9
+  },
+  {
+   "start": 60.1,
+   "label": "1:00",
+   "draft_title": "Retention Pacing Viewers",
+   "seconds": 12.2
+  },
+  {
+   "start": 72.3,
+   "label": "1:12",
+   "draft_title": "Every Cliff Viewers",
+   "seconds": 17.7
+  }
+ ]
+}

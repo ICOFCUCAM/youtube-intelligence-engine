@@ -1,0 +1,121 @@
+[
+ {
+  "channel": "Alpha Studio",
+  "title": "Alpha Studio weekly update 0",
+  "views": 30000,
+  "url": "https://example.invalid/A0",
+  "duration": 600
+ },
+ {
+  "channel": "Alpha Studio",
+  "title": "Alpha Studio weekly update 1",
+  "views": 31000,
+  "url": "https://example.invalid/A1",
+  "duration": 600
+ },
+ {
+  "channel": "Alpha Studio",
+  "title": "Alpha Studio weekly update 2",
+  "views": 32000,
+  "url": "https://example.invalid/A2",
+  "duration": 600
+ },
+ {
+  "channel": "Alpha Studio",
+  "title": "Alpha Studio weekly update 3",
+  "views": 33000,
+  "url": "https://example.invalid/A3",
+  "duration": 600
+ },
+ {
+  "channel": "Alpha Studio",
+  "title": "Alpha Studio weekly update 4",
+  "views": 34000,
+  "url": "https://example.invalid/A4",
+  "duration": 600
+ },
+ {
+  "channel": "Alpha Studio",
+  "title": "Alpha Studio weekly update 5",
+  "views": 35000,
+  "url": "https://example.invalid/A5",
+  "duration": 600
+ },
+ {
+  "channel": "Alpha Studio",
+  "title": "97% of channels quit before video 30",
+  "views": 260000,
+  "url": "https://example.invalid/x",
+  "duration": 600
+ },
+ {
+  "channel": "Beta Builds",
+  "title": "Beta Builds weekly update 0",
+  "views": 120000,
+  "url": "https://example.invalid/B0",
+  "duration": 600
+ },
+ {
+  "channel": "Beta Builds",
+  "title": "Beta Builds weekly update 1",
+  "views": 121000,
+  "url": "https://example.invalid/B1",
+  "duration": 600
+ },
+ {
+  "channel": "Beta Builds",
+  "title": "Beta Builds weekly update 2",
+  "views": 122000,
+  "url": "https://example.invalid/B2",
+  "duration": 600
+ },
+ {
+  "channel": "Beta Builds",
+  "title": "Beta Builds weekly update 3",
+  "views": 123000,
+  "url": "https://example.invalid/B3",
+  "duration": 600
+ },
+ {
+  "channel": "Beta Builds",
+  "title": "Beta Builds weekly update 4",
+  "views": 124000,
+  "url": "https://example.invalid/B4",
+  "duration": 600
+ },
+ {
+  "channel": "Beta Builds",
+  "title": "Beta Builds weekly update 5",
+  "views": 125000,
+  "url": "https://example.invalid/B5",
+  "duration": 600
+ },
+ {
+  "channel": "Beta Builds",
+  "title": "I tried posting daily for 30 days",
+  "views": 480000,
+  "url": "https://example.invalid/x",
+  "duration": 600
+ },
+ {
+  "channel": "Gamma Tiny",
+  "title": "Gamma Tiny weekly update 0",
+  "views": 5000,
+  "url": "https://example.invalid/G0",
+  "duration": 600
+ },
+ {
+  "channel": "Gamma Tiny",
+  "title": "Gamma Tiny weekly update 1",
+  "views": 6000,
+  "url": "https://example.invalid/G1",
+  "duration": 600
+ },
+ {
+  "channel": "Gamma Tiny",
+  "title": "Gamma Tiny weekly update 2",
+  "views": 7000,
+  "url": "https://example.invalid/G2",
+  "duration": 600
+ }
+]
