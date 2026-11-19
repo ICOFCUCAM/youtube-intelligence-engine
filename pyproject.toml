@@ -42,6 +42,7 @@ yt-handoff = "youtube_intelligence.handoff.cli:main"
 yt-report = "youtube_intelligence.reports.channel:main"
 yt-check = "youtube_intelligence.preflight.check:main"
 yt-moments = "youtube_intelligence.analytics.moments:main"
+yt-localize = "youtube_intelligence.localize.pack:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

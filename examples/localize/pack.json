@@ -1,0 +1,361 @@
+{
+ "schema": "youtube-intelligence/localization-pack@1",
+ "source_lang": "en",
+ "targets": [
+  "es"
+ ],
+ "instructions": "Fill each unit's translations. Keep every 'keep' item exactly as written. Do not translate chapter timestamps (they are stored separately). Keep captions short enough to read in their time. Have a fluent speaker review before publishing.",
+ "units": [
+  {
+   "id": "title",
+   "kind": "title",
+   "source": "Why your first 15 seconds lose viewers",
+   "keep": [],
+   "translations": {
+    "es": "Por qué tus primeros 15 segundos pierden espectadores"
+   }
+  },
+  {
+   "id": "desc-001",
+   "kind": "description",
+   "source": "Why your first fifteen seconds decide whether anyone stays, and how to fix your hook.",
+   "keep": [],
+   "translations": {
+    "es": "Por qué tus primeros quince segundos deciden si alguien se queda, y cómo arreglar tu gancho."
+   }
+  },
+  {
+   "id": "desc-002",
+   "kind": "description",
+   "source": "Free template: https://example.org/hook-template - use code HOOKS20 for the course.",
+   "keep": [
+    "HOOKS20",
+    "https://example.org/hook-template"
+   ],
+   "translations": {
+    "es": "Plantilla gratis: https://example.org/hook-template - usa el código HOOKS20 para el curso."
+   }
+  },
+  {
+   "id": "desc-003",
+   "kind": "blank",
+   "source": "",
+   "keep": [],
+   "translations": {}
+  },
+  {
+   "id": "desc-004",
+   "kind": "chapter",
+   "timestamp": "0:00",
+   "source": "The first fifteen seconds",
+   "keep": [],
+   "translations": {
+    "es": "Los primeros quince segundos"
+   }
+  },
+  {
+   "id": "desc-005",
+   "kind": "chapter",
+   "timestamp": "0:31",
+   "source": "Thumbnails at feed size",
+   "keep": [],
+   "translations": {
+    "es": "Miniaturas al tamaño del feed"
+   }
+  },
+  {
+   "id": "desc-006",
+   "kind": "chapter",
+   "timestamp": "1:00",
+   "source": "Reading retention",
+   "keep": [],
+   "translations": {
+    "es": "Cómo leer la retención"
+   }
+  },
+  {
+   "id": "desc-007",
+   "kind": "blank",
+   "source": "",
+   "keep": [],
+   "translations": {}
+  },
+  {
+   "id": "desc-008",
+   "kind": "description",
+   "source": "Follow @samplechannel for weekly tips. #youtubetips",
+   "keep": [
+    "#youtubetips",
+    "@samplechannel"
+   ],
+   "translations": {
+    "es": "Sigue a @samplechannel para consejos semanales. #youtubetips"
+   }
+  },
+  {
+   "id": "cue-0001",
+   "kind": "caption",
+   "start": 0.0,
+   "end": 3.2,
+   "source": "Your first fifteen seconds decide whether anyone stays.",
+   "keep": [],
+   "translations": {
+    "es": "Tus primeros quince segundos deciden si alguien se queda."
+   }
+  },
+  {
+   "id": "cue-0002",
+   "kind": "caption",
+   "start": 3.4,
+   "end": 6.8,
+   "source": "Most hooks fail because they summarise instead of opening a question.",
+   "keep": [],
+   "translations": {
+    "es": "Casi todos los ganchos fallan: resumen en vez de abrir una pregunta."
+   }
+  },
+  {
+   "id": "cue-0003",
+   "kind": "caption",
+   "start": 6.9,
+   "end": 7.4,
+   "source": "um",
+   "keep": [],
+   "translations": {
+    "es": "eh"
+   }
+  },
+  {
+   "id": "cue-0004",
+   "kind": "caption",
+   "start": 7.6,
+   "end": 11.2,
+   "source": "Here is the structure I use for every opening line now.",
+   "keep": [],
+   "translations": {
+    "es": "Esta es la estructura que uso ahora en cada inicio."
+   }
+  },
+  {
+   "id": "cue-0005",
+   "kind": "caption",
+   "start": 11.3,
+   "end": 14.9,
+   "source": "Confirm the title, open a gap, then prove the payoff exists.",
+   "keep": [],
+   "translations": {
+    "es": "Confirma el título, abre una duda y demuestra que hay recompensa."
+   }
+  },
+  {
+   "id": "cue-0006",
+   "kind": "caption",
+   "start": 16.4,
+   "end": 19.8,
+   "source": "If the opening line needs context it is not working yet.",
+   "keep": [],
+   "translations": {
+    "es": "Si la primera frase necesita contexto, aún no funciona."
+   }
+  },
+  {
+   "id": "cue-0007",
+   "kind": "caption",
+   "start": 19.9,
+   "end": 20.3,
+   "source": "so yeah",
+   "keep": [],
+   "translations": {
+    "es": "así que sí"
+   }
+  },
+  {
+   "id": "cue-0008",
+   "kind": "caption",
+   "start": 20.5,
+   "end": 24.1,
+   "source": "Read the hook out loud and stop where you run out of breath.",
+   "keep": [],
+   "translations": {
+    "es": "Lee el gancho en voz alta y para donde te falte el aire."
+   }
+  },
+  {
+   "id": "cue-0009",
+   "kind": "caption",
+   "start": 24.2,
+   "end": 28.6,
+   "source": "Read the hook out loud and stop where your breath runs out.",
+   "keep": [],
+   "translations": {
+    "es": "Lee el gancho en voz alta y para cuando se acabe el aire."
+   }
+  },
+  {
+   "id": "cue-0010",
+   "kind": "caption",
+   "start": 31.4,
+   "end": 35.0,
+   "source": "Thumbnails work at feed size or they do not work at all.",
+   "keep": [],
+   "translations": {
+    "es": "Las miniaturas funcionan en el feed o no funcionan."
+   }
+  },
+  {
+   "id": "cue-0011",
+   "kind": "caption",
+   "start": 35.1,
+   "end": 38.7,
+   "source": "Shrink every thumbnail down to a postage stamp before choosing.",
+   "keep": [],
+   "translations": {
+    "es": "Reduce cada miniatura a un sello antes de elegir."
+   }
+  },
+  {
+   "id": "cue-0012",
+   "kind": "caption",
+   "start": 38.8,
+   "end": 39.3,
+   "source": "basically",
+   "keep": [],
+   "translations": {
+    "es": "básicamente"
+   }
+  },
+  {
+   "id": "cue-0013",
+   "kind": "caption",
+   "start": 39.5,
+   "end": 43.2,
+   "source": "Three words maximum because a fourth word becomes a grey smear.",
+   "keep": [],
+   "translations": {
+    "es": "Tres palabras como máximo: la cuarta es una mancha gris."
+   }
+  },
+  {
+   "id": "cue-0014",
+   "kind": "caption",
+   "start": 43.3,
+   "end": 47.1,
+   "source": "The thumbnail should never repeat the words already in the title.",
+   "keep": [],
+   "translations": {
+    "es": "La miniatura nunca debe repetir las palabras del título."
+   }
+  },
+  {
+   "id": "cue-0015",
+   "kind": "caption",
+   "start": 47.2,
+   "end": 51.4,
+   "source": "Contrast matters more than colour when the image is that small.",
+   "keep": [],
+   "translations": {
+    "es": "El contraste importa más que el color en algo tan pequeño."
+   }
+  },
+  {
+   "id": "cue-0016",
+   "kind": "caption",
+   "start": 53.2,
+   "end": 56.9,
+   "source": "Faces with one clear expression outperform crowded collages.",
+   "keep": [],
+   "translations": {
+    "es": "Una cara con una expresión clara gana a un collage lleno."
+   }
+  },
+  {
+   "id": "cue-0017",
+   "kind": "caption",
+   "start": 60.1,
+   "end": 63.7,
+   "source": "Retention graphs show exactly where viewers abandon the video.",
+   "keep": [],
+   "translations": {
+    "es": "La gráfica de retención muestra dónde abandonan el vídeo."
+   }
+  },
+  {
+   "id": "cue-0018",
+   "kind": "caption",
+   "start": 63.8,
+   "end": 67.4,
+   "source": "Export the audience retention chart from studio analytics.",
+   "keep": [],
+   "translations": {
+    "es": "Exporta la gráfica de retención desde Studio."
+   }
+  },
+  {
+   "id": "cue-0019",
+   "kind": "caption",
+   "start": 67.5,
+   "end": 71.3,
+   "source": "Steep cliffs mark moments, while slow slides mean pacing problems.",
+   "keep": [],
+   "translations": {
+    "es": "Las caídas marcan momentos; los descensos lentos, ritmo."
+   }
+  },
+  {
+   "id": "cue-0020",
+   "kind": "caption",
+   "start": 71.4,
+   "end": 72.0,
+   "source": "you know",
+   "keep": [],
+   "translations": {
+    "es": "ya sabes"
+   }
+  },
+  {
+   "id": "cue-0021",
+   "kind": "caption",
+   "start": 72.3,
+   "end": 76.1,
+   "source": "Cut the middle instead of rewriting it when the slide is flat.",
+   "keep": [],
+   "translations": {
+    "es": "Si el descenso es plano, recorta el centro en vez de reescribir."
+   }
+  },
+  {
+   "id": "cue-0022",
+   "kind": "caption",
+   "start": 76.2,
+   "end": 80.0,
+   "source": "Signpost every topic change so viewers know a payoff remains.",
+   "keep": [],
+   "translations": {
+    "es": "Anuncia cada cambio de tema para que sepan que aún hay premio."
+   }
+  },
+  {
+   "id": "cue-0023",
+   "kind": "caption",
+   "start": 81.9,
+   "end": 85.6,
+   "source": "Sponsor reads placed early create the deepest cliffs of all.",
+   "keep": [],
+   "translations": {
+    "es": "Los patrocinios al principio crean las caídas más profundas."
+   }
+  },
+  {
+   "id": "cue-0024",
+   "kind": "caption",
+   "start": 85.7,
+   "end": 90.0,
+   "source": "Fix the biggest cliff first and ignore everything else this week.",
+   "keep": [],
+   "translations": {
+    "es": "Arregla primero la mayor caída e ignora lo demás esta semana."
+   }
+  }
+ ],
+ "translator_note": "Spanish translated by an AI assistant for this demo. Not reviewed by a fluent speaker: do not publish it as is."
+}
