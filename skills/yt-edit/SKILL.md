@@ -45,6 +45,11 @@ copies, and the last line of every run is the question: **ship it, or change it?
 - `removed` and the runtime are computed from the UNION of the cuts: overlapping cuts (common with
   auto-caption cues that overlap) are counted once. Upstream double-counted them.
 - Whisper JSON may be an object with `segments` or a bare array of segments.
+- **Prefer a transcript with word timings** (Whisper with word timestamps on). With them, fillers
+  inside a sentence are cut and pauses inside long captions are found. YouTube's own
+  auto-captions are the weakest input for editing.
+- Cuts marked `[review]` are short pauses that may be deliberate (emphasis, a beat after a joke).
+  Tell the user to listen to those before cutting, or run with `--hold-review` to leave them in.
 - `--json` output carries `"schema": "youtube-intelligence/edl@1"`. That is the shape a future
   video engine (for example CineForge) would accept, and only after a human approves the list -
   see `docs/TAKE_CINEFORGE_INTEGRATION.md`.

@@ -31,7 +31,7 @@ def test_titles_are_deterministic_across_hash_seeds():
     outs = set()
     for seed in ("0", "1", "2", "12345"):
         env = dict(os.environ, PYTHONHASHSEED=seed, PYTHONPATH=os.path.join(ROOT, "src"))
-        p = subprocess.run([sys.executable, "-m", M, fixture("sample.srt"), "--json"], env=env,
+        p = subprocess.run([sys.executable, "-m", M, fixture("sample.srt"), "--json", "--target", "7"], env=env,
                            capture_output=True, text=True, cwd=ROOT)
         outs.add(p.stdout)
     assert len(outs) == 1
@@ -90,3 +90,15 @@ def test_cli_errors():
     assert run_cli(M, "nope.srt").returncode == 1
     p = run_cli(M, fixture("regress_short_retake.srt"))
     assert p.returncode == 1 and "too few cues" in p.stderr
+
+
+@pytest.mark.parametrize("dur,n", [(30, 3), (90, 3), (180, 3), (300, 4), (540, 7), (600, 8), (3600, 10)])
+def test_auto_target_from_length(dur, n):
+    from youtube_intelligence.editing.chapters import auto_target
+    assert auto_target(dur) == n
+
+
+def test_default_target_is_auto_and_explicit_target_unchanged():
+    cues = load_cues(fixture("sample.srt"))                 # 90 s
+    assert build(cues)["target"] == 3 and len(build(cues)["chapters"]) == 3
+    assert _bounds(build(cues, 7)) == _bounds(golden("chapters_sample_srt.json"))

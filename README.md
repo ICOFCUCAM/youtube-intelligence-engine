@@ -19,7 +19,7 @@ The creator decides and acts. See [SECURITY.md](SECURITY.md).
 | --- | --- | --- | --- |
 | Creative | `/yt-script` | `yt-hookscore` | Five hooks off [21 formulas](skills/yt-script/hooks.json), scored by a **heuristic** five-property panel, then the spoken script with retention beats. |
 | Packaging | `/yt-package` | `yt-title` | Title and thumbnail text linted as one pairing: truncation, duplication, vagueness, shouting, unverifiable claims. |
-| Editing | `/yt-edit` | `yt-deadair` | Transcript to edit decision list: dead air, filler cues and retakes, with timecodes and a merged runtime estimate. |
+| Editing | `/yt-edit` | `yt-deadair` | Transcript to edit decision list: dead air, filler cues and retakes, with timecodes and a merged runtime estimate. Uses word timings when present (fillers inside sentences); marks short, possibly deliberate pauses `[review]`. |
 | Editing | `/yt-chapters` | `yt-chapters` | Chapters from a transcript, checked against YouTube's rules (0:00 first, 3+ entries, 10 s minimum). |
 | Analytics | `/yt-retention` | `yt-retention` | A Studio retention export read as hook leak, cliffs and slide, optionally quoting what was said at each cliff. |
 | Research | `/yt-viral` | `yt-swipe` | Collected videos ranked by multiple over their own channel's median, with the title's formula named. |
@@ -100,7 +100,9 @@ skill folder (`python3 deadair.py transcript.srt`). See [examples/](examples/).
   traffic mix all change the curve. Its thresholds are long-form rules of thumb.
 - **`yt-deadair` measures speech.** Its runtime estimate ignores silent demos and B-roll. On
   the synthetic evaluation set it finds all dead air but also cuts pauses kept for emphasis, and
-  misses most fillers in auto-generated captions. Review its cuts; do not apply them blind.
+  misses most fillers in auto-generated captions. A Whisper transcript with word timestamps
+  fixes the inline-filler blind spot. Review its cuts, especially those marked `[review]`; do not
+  apply them blind.
 - **Formula names are about the words**, not about why a video worked.
 
 Details: [docs/TOOL_REVIEW.md](docs/TOOL_REVIEW.md).
@@ -121,7 +123,7 @@ src/youtube_intelligence/
   integrations/    youtube/: read-only Data + Analytics API connector, yt-youtube (new)
   data/hooks.json  the 21-formula library (upstream, unmodified)
 templates/         voice.md (upstream, unmodified)
-datasets/          labelled evaluation sets (synthetic-v1: generated, with pinned baseline)
+datasets/          labelled evaluation sets (synthetic-v1, synthetic-words-v1: generated, pinned baselines)
 tests/             pytest suite, fixtures, upstream golden outputs
 docs/              architecture, security, API design, integrations, roadmap, reviews
 examples/          runnable examples

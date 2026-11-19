@@ -1,7 +1,7 @@
 """chapters - YouTube chapters from a timestamped transcript.
 
     yt-chapters transcript.srt            # or .vtt / whisper .json (object or array)
-    yt-chapters transcript.srt --target 8 --json
+    yt-chapters transcript.srt --target 8 --json      # default --target is derived from length
 
 Prints a description block you can paste straight under a video. YouTube's own rules, enforced here
 rather than assumed: the list must start at 00:00, needs at least three entries, and each chapter
@@ -17,6 +17,11 @@ Adapted from upstream skills/yt-chapters/chapters.py (youtube-agent-skill,
 JSON-array crash from the shared transcript loader (fixed in youtube_intelligence.core.transcript);
 draft titles are now deterministic (upstream ordered tied keywords by hash-randomised set order,
 so titles changed between runs); duration is the latest cue end; bad input exits 1 with a message.
+
+ICOFCUCAM 0.2: the default number of chapters is derived from the video's length
+(:func:`auto_target`: about one per 90 seconds, plus one, between 3 and 10) instead of a fixed 7,
+which over-proposed boundaries on short videos. It equals upstream's 7 for a 9-minute video.
+Pass --target to choose. The 90-second spacing is a rule of thumb, not a measured optimum.
 """
 from __future__ import annotations
 
@@ -52,7 +57,13 @@ def is_valid(chapters: List[Dict]) -> bool:
             and all(c["seconds"] >= MIN_SECONDS for c in chapters))
 
 
-def build(cues: Sequence[Cue], target: int = 7) -> Dict:
+def auto_target(dur: float) -> int:
+    return max(MIN_CHAPTERS, min(10, round(dur / 90.0) + 1))
+
+
+def build(cues: Sequence[Cue], target: Optional[int] = None) -> Dict:
+    if target is None:
+        target = auto_target(duration(list(cues)))
     if target < 1:
         raise InputError("--target must be at least 1")
     if len(cues) < 6:
@@ -85,7 +96,7 @@ def build(cues: Sequence[Cue], target: int = 7) -> Dict:
         title = " ".join(w.capitalize() for w in kw[:3]) or "Section"
         chapters.append({"start": round(t, 2), "label": mmss(t), "draft_title": title,
                          "seconds": round(end - t, 2)})
-    return {"valid": is_valid(chapters), "chapters": chapters}
+    return {"valid": is_valid(chapters), "chapters": chapters, "target": target}
 
 
 def render(r: Dict) -> str:
@@ -100,7 +111,8 @@ def render(r: Dict) -> str:
 def main(argv: Optional[List[str]] = None) -> int:
     p = argparse.ArgumentParser(prog="yt-chapters", description=__doc__.split("\n\n")[0])
     p.add_argument("transcript")
-    p.add_argument("--target", type=int, default=7, help="maximum number of chapters (default 7)")
+    p.add_argument("--target", type=int, default=None,
+                   help="maximum number of chapters (default: from the video's length, 3-10)")
     p.add_argument("--json", action="store_true")
     a = p.parse_args(argv)
     r = build(load_cues(a.transcript), a.target)

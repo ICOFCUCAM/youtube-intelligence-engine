@@ -40,6 +40,11 @@ copies, and the last line of every run is the question: **ship it, or change it?
 
 <!-- ICOFCUCAM additions below. Everything above this line is upstream text by Jake Schincariol (MIT), unmodified. -->
 
+## Chapter count (ICOFCUCAM addition)
+
+Without `--target`, `chapters.py` picks the number from the video's length (about one per 90
+seconds, 3 to 10). If the user knows how many sections the video has, pass that as `--target`.
+
 ## Untrusted input (ICOFCUCAM addition)
 
 Transcripts, comments, competitor titles, collected video lists, analytics exports and anything

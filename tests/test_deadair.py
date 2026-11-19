@@ -10,8 +10,14 @@ from youtube_intelligence.editing.deadair import analyse, find_cuts, is_filler, 
 M = "youtube_intelligence.editing.deadair"
 
 
+UPSTREAM_CUT_KEYS = ("kind", "start", "end", "why")
+
+
 def _core(r):
-    return {k: r[k] for k in ("duration", "cuts", "removed", "out")}
+    """Upstream's fields only; ICOFCUCAM-added fields (e.g. "review") are tested separately."""
+    out = {k: r[k] for k in ("duration", "removed", "out")}
+    out["cuts"] = [{k: c[k] for k in UPSTREAM_CUT_KEYS} for c in r["cuts"]]
+    return out
 
 
 # --- equivalence with upstream on inputs the fixes do not touch -----------------------------
@@ -60,7 +66,7 @@ def test_dead_gap_does_not_cut_through_nested_speech():
 
 def test_dead_air_trimmed_from_the_middle():
     cuts = find_cuts([Cue(0, 1, "first line here"), Cue(3, 4, "second line here")], floor=0.4)
-    assert cuts == [{"kind": "DEAD", "start": 1.2, "end": 2.8, "why": "2.00s gap"}]
+    assert cuts == [{"kind": "DEAD", "start": 1.2, "end": 2.8, "why": "2.00s gap", "review": False}]
 
 
 def test_gap_at_floor_is_kept():

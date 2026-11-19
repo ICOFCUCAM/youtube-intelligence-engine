@@ -1,0 +1,1228 @@
+{
+ "language": "en",
+ "segments": [
+  {
+   "id": 0,
+   "start": 0.0,
+   "end": 4.38,
+   "text": " Your first fifteen seconds decide whether anyone stays to the end.",
+   "words": [
+    {
+     "word": " Your",
+     "start": 0.0,
+     "end": 0.38
+    },
+    {
+     "word": " first",
+     "start": 0.38,
+     "end": 0.76
+    },
+    {
+     "word": " fifteen",
+     "start": 0.76,
+     "end": 1.14
+    },
+    {
+     "word": " seconds",
+     "start": 1.14,
+     "end": 1.52
+    },
+    {
+     "word": " decide",
+     "start": 1.52,
+     "end": 1.9
+    },
+    {
+     "word": " whether",
+     "start": 1.9,
+     "end": 2.28
+    },
+    {
+     "word": " anyone",
+     "start": 2.28,
+     "end": 2.66
+    },
+    {
+     "word": " stays",
+     "start": 2.66,
+     "end": 3.04
+    },
+    {
+     "word": " to",
+     "start": 3.04,
+     "end": 3.42
+    },
+    {
+     "word": " the",
+     "start": 3.42,
+     "end": 3.8
+    },
+    {
+     "word": " end.",
+     "start": 3.8,
+     "end": 4.18
+    }
+   ]
+  },
+  {
+   "id": 1,
+   "start": 4.53,
+   "end": 9.67,
+   "text": " Most openings fail because they summarise the video instead of asking a question.",
+   "words": [
+    {
+     "word": " Most",
+     "start": 4.53,
+     "end": 4.91
+    },
+    {
+     "word": " openings",
+     "start": 4.91,
+     "end": 5.29
+    },
+    {
+     "word": " fail",
+     "start": 5.29,
+     "end": 5.67
+    },
+    {
+     "word": " because",
+     "start": 5.67,
+     "end": 6.05
+    },
+    {
+     "word": " they",
+     "start": 6.05,
+     "end": 6.43
+    },
+    {
+     "word": " summarise",
+     "start": 6.43,
+     "end": 6.81
+    },
+    {
+     "word": " the",
+     "start": 6.81,
+     "end": 7.19
+    },
+    {
+     "word": " video",
+     "start": 7.19,
+     "end": 7.57
+    },
+    {
+     "word": " instead",
+     "start": 7.57,
+     "end": 7.95
+    },
+    {
+     "word": " of",
+     "start": 7.95,
+     "end": 8.33
+    },
+    {
+     "word": " asking",
+     "start": 8.33,
+     "end": 8.71
+    },
+    {
+     "word": " a",
+     "start": 8.71,
+     "end": 9.09
+    },
+    {
+     "word": " question.",
+     "start": 9.09,
+     "end": 9.47
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "start": 9.82,
+   "end": 14.2,
+   "text": " The viewer already knows the topic from the title they clicked.",
+   "words": [
+    {
+     "word": " The",
+     "start": 9.82,
+     "end": 10.2
+    },
+    {
+     "word": " viewer",
+     "start": 10.2,
+     "end": 10.58
+    },
+    {
+     "word": " already",
+     "start": 10.58,
+     "end": 10.96
+    },
+    {
+     "word": " knows",
+     "start": 10.96,
+     "end": 11.34
+    },
+    {
+     "word": " the",
+     "start": 11.34,
+     "end": 11.72
+    },
+    {
+     "word": " topic",
+     "start": 11.72,
+     "end": 12.1
+    },
+    {
+     "word": " from",
+     "start": 12.1,
+     "end": 12.48
+    },
+    {
+     "word": " the",
+     "start": 12.48,
+     "end": 12.86
+    },
+    {
+     "word": " title",
+     "start": 12.86,
+     "end": 13.24
+    },
+    {
+     "word": " they",
+     "start": 13.24,
+     "end": 13.62
+    },
+    {
+     "word": " clicked.",
+     "start": 13.62,
+     "end": 14.0
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "start": 14.35,
+   "end": 20.25,
+   "text": " What they do not know is why this video is different from the last ten.",
+   "words": [
+    {
+     "word": " What",
+     "start": 14.35,
+     "end": 14.73
+    },
+    {
+     "word": " they",
+     "start": 14.73,
+     "end": 15.11
+    },
+    {
+     "word": " do",
+     "start": 15.11,
+     "end": 15.49
+    },
+    {
+     "word": " not",
+     "start": 15.49,
+     "end": 15.87
+    },
+    {
+     "word": " know",
+     "start": 15.87,
+     "end": 16.25
+    },
+    {
+     "word": " is",
+     "start": 16.25,
+     "end": 16.63
+    },
+    {
+     "word": " why",
+     "start": 16.63,
+     "end": 17.01
+    },
+    {
+     "word": " this",
+     "start": 17.01,
+     "end": 17.39
+    },
+    {
+     "word": " video",
+     "start": 17.39,
+     "end": 17.77
+    },
+    {
+     "word": " is",
+     "start": 17.77,
+     "end": 18.15
+    },
+    {
+     "word": " different",
+     "start": 18.15,
+     "end": 18.53
+    },
+    {
+     "word": " from",
+     "start": 18.53,
+     "end": 18.91
+    },
+    {
+     "word": " the",
+     "start": 18.91,
+     "end": 19.29
+    },
+    {
+     "word": " last",
+     "start": 19.29,
+     "end": 19.67
+    },
+    {
+     "word": " ten.",
+     "start": 19.67,
+     "end": 20.05
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "start": 21.35,
+   "end": 24.97,
+   "text": " So answer that, and only that, before anything else.",
+   "words": [
+    {
+     "word": " So",
+     "start": 21.35,
+     "end": 21.73
+    },
+    {
+     "word": " answer",
+     "start": 21.73,
+     "end": 22.11
+    },
+    {
+     "word": " that,",
+     "start": 22.11,
+     "end": 22.49
+    },
+    {
+     "word": " and",
+     "start": 22.49,
+     "end": 22.87
+    },
+    {
+     "word": " only",
+     "start": 22.87,
+     "end": 23.25
+    },
+    {
+     "word": " that,",
+     "start": 23.25,
+     "end": 23.63
+    },
+    {
+     "word": " before",
+     "start": 23.63,
+     "end": 24.01
+    },
+    {
+     "word": " anything",
+     "start": 24.01,
+     "end": 24.39
+    },
+    {
+     "word": " else.",
+     "start": 24.39,
+     "end": 24.77
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "start": 25.12,
+   "end": 29.5,
+   "text": " Confirm the title, open a gap, then prove the payoff exists.",
+   "words": [
+    {
+     "word": " Confirm",
+     "start": 25.12,
+     "end": 25.5
+    },
+    {
+     "word": " the",
+     "start": 25.5,
+     "end": 25.88
+    },
+    {
+     "word": " title,",
+     "start": 25.88,
+     "end": 26.26
+    },
+    {
+     "word": " open",
+     "start": 26.26,
+     "end": 26.64
+    },
+    {
+     "word": " a",
+     "start": 26.64,
+     "end": 27.02
+    },
+    {
+     "word": " gap,",
+     "start": 27.02,
+     "end": 27.4
+    },
+    {
+     "word": " then",
+     "start": 27.4,
+     "end": 27.78
+    },
+    {
+     "word": " prove",
+     "start": 27.78,
+     "end": 28.16
+    },
+    {
+     "word": " the",
+     "start": 28.16,
+     "end": 28.54
+    },
+    {
+     "word": " payoff",
+     "start": 28.54,
+     "end": 28.92
+    },
+    {
+     "word": " exists.",
+     "start": 28.92,
+     "end": 29.3
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "start": 31.9,
+   "end": 36.66,
+   "text": " Now the thumbnail, which most people design last and in a hurry.",
+   "words": [
+    {
+     "word": " Now",
+     "start": 31.9,
+     "end": 32.28
+    },
+    {
+     "word": " the",
+     "start": 32.28,
+     "end": 32.66
+    },
+    {
+     "word": " thumbnail,",
+     "start": 32.66,
+     "end": 33.04
+    },
+    {
+     "word": " which",
+     "start": 33.04,
+     "end": 33.42
+    },
+    {
+     "word": " most",
+     "start": 33.42,
+     "end": 33.8
+    },
+    {
+     "word": " people",
+     "start": 33.8,
+     "end": 34.18
+    },
+    {
+     "word": " design",
+     "start": 34.18,
+     "end": 34.56
+    },
+    {
+     "word": " last",
+     "start": 34.56,
+     "end": 34.94
+    },
+    {
+     "word": " and",
+     "start": 34.94,
+     "end": 35.32
+    },
+    {
+     "word": " in",
+     "start": 35.32,
+     "end": 35.7
+    },
+    {
+     "word": " a",
+     "start": 35.7,
+     "end": 36.08
+    },
+    {
+     "word": " hurry.",
+     "start": 36.08,
+     "end": 36.46
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "start": 36.81,
+   "end": 37.39,
+   "text": " um",
+   "words": [
+    {
+     "word": " um",
+     "start": 36.81,
+     "end": 37.19
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "start": 37.54,
+   "end": 42.68,
+   "text": " Shrink it to the size of a postage stamp before you choose it.",
+   "words": [
+    {
+     "word": " Shrink",
+     "start": 37.54,
+     "end": 37.92
+    },
+    {
+     "word": " it",
+     "start": 37.92,
+     "end": 38.3
+    },
+    {
+     "word": " to",
+     "start": 38.3,
+     "end": 38.68
+    },
+    {
+     "word": " the",
+     "start": 38.68,
+     "end": 39.06
+    },
+    {
+     "word": " size",
+     "start": 39.06,
+     "end": 39.44
+    },
+    {
+     "word": " of",
+     "start": 39.44,
+     "end": 39.82
+    },
+    {
+     "word": " a",
+     "start": 39.82,
+     "end": 40.2
+    },
+    {
+     "word": " postage",
+     "start": 40.2,
+     "end": 40.58
+    },
+    {
+     "word": " stamp",
+     "start": 40.58,
+     "end": 40.96
+    },
+    {
+     "word": " before",
+     "start": 40.96,
+     "end": 41.34
+    },
+    {
+     "word": " you",
+     "start": 41.34,
+     "end": 41.72
+    },
+    {
+     "word": " choose",
+     "start": 41.72,
+     "end": 42.1
+    },
+    {
+     "word": " it.",
+     "start": 42.1,
+     "end": 42.48
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "start": 42.83,
+   "end": 44.55,
+   "text": " Three words is the",
+   "words": [
+    {
+     "word": " Three",
+     "start": 42.83,
+     "end": 43.21
+    },
+    {
+     "word": " words",
+     "start": 43.21,
+     "end": 43.59
+    },
+    {
+     "word": " is",
+     "start": 43.59,
+     "end": 43.97
+    },
+    {
+     "word": " the",
+     "start": 43.97,
+     "end": 44.35
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "start": 44.7,
+   "end": 45.28,
+   "text": " uh",
+   "words": [
+    {
+     "word": " uh",
+     "start": 44.7,
+     "end": 45.08
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "start": 45.43,
+   "end": 50.19,
+   "text": " Three words is the most a thumbnail can carry at feed size.",
+   "words": [
+    {
+     "word": " Three",
+     "start": 45.43,
+     "end": 45.81
+    },
+    {
+     "word": " words",
+     "start": 45.81,
+     "end": 46.19
+    },
+    {
+     "word": " is",
+     "start": 46.19,
+     "end": 46.57
+    },
+    {
+     "word": " the",
+     "start": 46.57,
+     "end": 46.95
+    },
+    {
+     "word": " most",
+     "start": 46.95,
+     "end": 47.33
+    },
+    {
+     "word": " a",
+     "start": 47.33,
+     "end": 47.71
+    },
+    {
+     "word": " thumbnail",
+     "start": 47.71,
+     "end": 48.09
+    },
+    {
+     "word": " can",
+     "start": 48.09,
+     "end": 48.47
+    },
+    {
+     "word": " carry",
+     "start": 48.47,
+     "end": 48.85
+    },
+    {
+     "word": " at",
+     "start": 48.85,
+     "end": 49.23
+    },
+    {
+     "word": " feed",
+     "start": 49.23,
+     "end": 49.61
+    },
+    {
+     "word": " size.",
+     "start": 49.61,
+     "end": 49.99
+    }
+   ]
+  },
+  {
+   "id": 12,
+   "start": 50.34,
+   "end": 55.1,
+   "text": " And it should never repeat the words already sitting in the title.",
+   "words": [
+    {
+     "word": " And",
+     "start": 50.34,
+     "end": 50.72
+    },
+    {
+     "word": " it",
+     "start": 50.72,
+     "end": 51.1
+    },
+    {
+     "word": " should",
+     "start": 51.1,
+     "end": 51.48
+    },
+    {
+     "word": " never",
+     "start": 51.48,
+     "end": 51.86
+    },
+    {
+     "word": " repeat",
+     "start": 51.86,
+     "end": 52.24
+    },
+    {
+     "word": " the",
+     "start": 52.24,
+     "end": 52.62
+    },
+    {
+     "word": " words",
+     "start": 52.62,
+     "end": 53.0
+    },
+    {
+     "word": " already",
+     "start": 53.0,
+     "end": 53.38
+    },
+    {
+     "word": " sitting",
+     "start": 53.38,
+     "end": 53.76
+    },
+    {
+     "word": " in",
+     "start": 53.76,
+     "end": 54.14
+    },
+    {
+     "word": " the",
+     "start": 54.14,
+     "end": 54.52
+    },
+    {
+     "word": " title.",
+     "start": 54.52,
+     "end": 54.9
+    }
+   ]
+  },
+  {
+   "id": 13,
+   "start": 56.7,
+   "end": 61.08,
+   "text": " Contrast matters more than colour when the image is that small.",
+   "words": [
+    {
+     "word": " Contrast",
+     "start": 56.7,
+     "end": 57.08
+    },
+    {
+     "word": " matters",
+     "start": 57.08,
+     "end": 57.46
+    },
+    {
+     "word": " more",
+     "start": 57.46,
+     "end": 57.84
+    },
+    {
+     "word": " than",
+     "start": 57.84,
+     "end": 58.22
+    },
+    {
+     "word": " colour",
+     "start": 58.22,
+     "end": 58.6
+    },
+    {
+     "word": " when",
+     "start": 58.6,
+     "end": 58.98
+    },
+    {
+     "word": " the",
+     "start": 58.98,
+     "end": 59.36
+    },
+    {
+     "word": " image",
+     "start": 59.36,
+     "end": 59.74
+    },
+    {
+     "word": " is",
+     "start": 59.74,
+     "end": 60.12
+    },
+    {
+     "word": " that",
+     "start": 60.12,
+     "end": 60.5
+    },
+    {
+     "word": " small.",
+     "start": 60.5,
+     "end": 60.88
+    }
+   ]
+  },
+  {
+   "id": 14,
+   "start": 63.98,
+   "end": 68.74,
+   "text": " Retention is where the honest feedback lives, and almost nobody exports it.",
+   "words": [
+    {
+     "word": " Retention",
+     "start": 63.98,
+     "end": 64.36
+    },
+    {
+     "word": " is",
+     "start": 64.36,
+     "end": 64.74
+    },
+    {
+     "word": " where",
+     "start": 64.74,
+     "end": 65.12
+    },
+    {
+     "word": " the",
+     "start": 65.12,
+     "end": 65.5
+    },
+    {
+     "word": " honest",
+     "start": 65.5,
+     "end": 65.88
+    },
+    {
+     "word": " feedback",
+     "start": 65.88,
+     "end": 66.26
+    },
+    {
+     "word": " lives,",
+     "start": 66.26,
+     "end": 66.64
+    },
+    {
+     "word": " and",
+     "start": 66.64,
+     "end": 67.02
+    },
+    {
+     "word": " almost",
+     "start": 67.02,
+     "end": 67.4
+    },
+    {
+     "word": " nobody",
+     "start": 67.4,
+     "end": 67.78
+    },
+    {
+     "word": " exports",
+     "start": 67.78,
+     "end": 68.16
+    },
+    {
+     "word": " it.",
+     "start": 68.16,
+     "end": 68.54
+    }
+   ]
+  },
+  {
+   "id": 15,
+   "start": 68.89,
+   "end": 73.27,
+   "text": " Open the audience retention chart in studio and download the file.",
+   "words": [
+    {
+     "word": " Open",
+     "start": 68.89,
+     "end": 69.27
+    },
+    {
+     "word": " the",
+     "start": 69.27,
+     "end": 69.65
+    },
+    {
+     "word": " audience",
+     "start": 69.65,
+     "end": 70.03
+    },
+    {
+     "word": " retention",
+     "start": 70.03,
+     "end": 70.41
+    },
+    {
+     "word": " chart",
+     "start": 70.41,
+     "end": 70.79
+    },
+    {
+     "word": " in",
+     "start": 70.79,
+     "end": 71.17
+    },
+    {
+     "word": " studio",
+     "start": 71.17,
+     "end": 71.55
+    },
+    {
+     "word": " and",
+     "start": 71.55,
+     "end": 71.93
+    },
+    {
+     "word": " download",
+     "start": 71.93,
+     "end": 72.31
+    },
+    {
+     "word": " the",
+     "start": 72.31,
+     "end": 72.69
+    },
+    {
+     "word": " file.",
+     "start": 72.69,
+     "end": 73.07
+    }
+   ]
+  },
+  {
+   "id": 16,
+   "start": 73.42,
+   "end": 74.38,
+   "text": " so yeah",
+   "words": [
+    {
+     "word": " so",
+     "start": 73.42,
+     "end": 73.8
+    },
+    {
+     "word": " yeah",
+     "start": 73.8,
+     "end": 74.18
+    }
+   ]
+  },
+  {
+   "id": 17,
+   "start": 74.53,
+   "end": 80.05,
+   "text": " Steep cliffs are moments where people left, usually a topic change with no signpost.",
+   "words": [
+    {
+     "word": " Steep",
+     "start": 74.53,
+     "end": 74.91
+    },
+    {
+     "word": " cliffs",
+     "start": 74.91,
+     "end": 75.29
+    },
+    {
+     "word": " are",
+     "start": 75.29,
+     "end": 75.67
+    },
+    {
+     "word": " moments",
+     "start": 75.67,
+     "end": 76.05
+    },
+    {
+     "word": " where",
+     "start": 76.05,
+     "end": 76.43
+    },
+    {
+     "word": " people",
+     "start": 76.43,
+     "end": 76.81
+    },
+    {
+     "word": " left,",
+     "start": 76.81,
+     "end": 77.19
+    },
+    {
+     "word": " usually",
+     "start": 77.19,
+     "end": 77.57
+    },
+    {
+     "word": " a",
+     "start": 77.57,
+     "end": 77.95
+    },
+    {
+     "word": " topic",
+     "start": 77.95,
+     "end": 78.33
+    },
+    {
+     "word": " change",
+     "start": 78.33,
+     "end": 78.71
+    },
+    {
+     "word": " with",
+     "start": 78.71,
+     "end": 79.09
+    },
+    {
+     "word": " no",
+     "start": 79.09,
+     "end": 79.47
+    },
+    {
+     "word": " signpost.",
+     "start": 79.47,
+     "end": 79.85
+    }
+   ]
+  },
+  {
+   "id": 18,
+   "start": 80.2,
+   "end": 85.34,
+   "text": " A slow slide is pacing, and the fix is cutting rather than rewriting.",
+   "words": [
+    {
+     "word": " A",
+     "start": 80.2,
+     "end": 80.58
+    },
+    {
+     "word": " slow",
+     "start": 80.58,
+     "end": 80.96
+    },
+    {
+     "word": " slide",
+     "start": 80.96,
+     "end": 81.34
+    },
+    {
+     "word": " is",
+     "start": 81.34,
+     "end": 81.72
+    },
+    {
+     "word": " pacing,",
+     "start": 81.72,
+     "end": 82.1
+    },
+    {
+     "word": " and",
+     "start": 82.1,
+     "end": 82.48
+    },
+    {
+     "word": " the",
+     "start": 82.48,
+     "end": 82.86
+    },
+    {
+     "word": " fix",
+     "start": 82.86,
+     "end": 83.24
+    },
+    {
+     "word": " is",
+     "start": 83.24,
+     "end": 83.62
+    },
+    {
+     "word": " cutting",
+     "start": 83.62,
+     "end": 84.0
+    },
+    {
+     "word": " rather",
+     "start": 84.0,
+     "end": 84.38
+    },
+    {
+     "word": " than",
+     "start": 84.38,
+     "end": 84.76
+    },
+    {
+     "word": " rewriting.",
+     "start": 84.76,
+     "end": 85.14
+    }
+   ]
+  },
+  {
+   "id": 19,
+   "start": 85.49,
+   "end": 90.25,
+   "text": " Fix the single biggest cliff first and ignore everything else this week.",
+   "words": [
+    {
+     "word": " Fix",
+     "start": 85.49,
+     "end": 85.87
+    },
+    {
+     "word": " the",
+     "start": 85.87,
+     "end": 86.25
+    },
+    {
+     "word": " single",
+     "start": 86.25,
+     "end": 86.63
+    },
+    {
+     "word": " biggest",
+     "start": 86.63,
+     "end": 87.01
+    },
+    {
+     "word": " cliff",
+     "start": 87.01,
+     "end": 87.39
+    },
+    {
+     "word": " first",
+     "start": 87.39,
+     "end": 87.77
+    },
+    {
+     "word": " and",
+     "start": 87.77,
+     "end": 88.15
+    },
+    {
+     "word": " ignore",
+     "start": 88.15,
+     "end": 88.53
+    },
+    {
+     "word": " everything",
+     "start": 88.53,
+     "end": 88.91
+    },
+    {
+     "word": " else",
+     "start": 88.91,
+     "end": 89.29
+    },
+    {
+     "word": " this",
+     "start": 89.29,
+     "end": 89.67
+    },
+    {
+     "word": " week.",
+     "start": 89.67,
+     "end": 90.05
+    }
+   ]
+  },
+  {
+   "id": 20,
+   "start": 91.25,
+   "end": 95.63,
+   "text": " That is the whole system, and it fits on one page.",
+   "words": [
+    {
+     "word": " That",
+     "start": 91.25,
+     "end": 91.63
+    },
+    {
+     "word": " is",
+     "start": 91.63,
+     "end": 92.01
+    },
+    {
+     "word": " the",
+     "start": 92.01,
+     "end": 92.39
+    },
+    {
+     "word": " whole",
+     "start": 92.39,
+     "end": 92.77
+    },
+    {
+     "word": " system,",
+     "start": 92.77,
+     "end": 93.15
+    },
+    {
+     "word": " and",
+     "start": 93.15,
+     "end": 93.53
+    },
+    {
+     "word": " it",
+     "start": 93.53,
+     "end": 93.91
+    },
+    {
+     "word": " fits",
+     "start": 93.91,
+     "end": 94.29
+    },
+    {
+     "word": " on",
+     "start": 94.29,
+     "end": 94.67
+    },
+    {
+     "word": " one",
+     "start": 94.67,
+     "end": 95.05
+    },
+    {
+     "word": " page.",
+     "start": 95.05,
+     "end": 95.43
+    }
+   ]
+  }
+ ]
+}

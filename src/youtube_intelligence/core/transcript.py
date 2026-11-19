@@ -13,6 +13,12 @@ Adapted from ``load`` / ``parse_ts`` in upstream ``skills/yt-edit/deadair.py``
 * WebVTT inline tags (``<c>``, ``<00:00:01.200>``, ``<v Speaker>``) are stripped from cue text.
 * Timestamps with more than three ``:`` parts are rejected instead of being mis-parsed.
 
+Word timings (ICOFCUCAM addition, :func:`load_words`): read from Whisper JSON ``words`` arrays
+(exact start and end) and from YouTube auto-caption WebVTT inline tags
+(``word<00:00:01.120><c> next</c>``, start times only). YouTube's "rolling" auto-caption files
+repeat every line in a second cue and add 10 ms transition cues; when a file carries inline word
+tags, :func:`parse_subtitles` drops those repeated lines so each line of speech appears once.
+
 Input is treated as untrusted data: it is parsed, never evaluated.
 """
 from __future__ import annotations
@@ -26,6 +32,7 @@ from .errors import InputError
 
 TIMING = re.compile(r"\s*(\d[\d:.,]+)\s*-->\s*(\d[\d:.,]+)")
 VTT_TAG = re.compile(r"<[^>]*>")
+WORD_TAG = re.compile(r"<(\d{1,2}:\d{2}:\d{2}[.,]\d{1,3}|\d{1,2}:\d{2}[.,]\d{1,3})>")
 MAX_BYTES = 50 * 1024 * 1024  # a transcript larger than this is not a transcript
 
 
@@ -35,6 +42,26 @@ class Cue(NamedTuple):
     start: float
     end: float
     text: str
+
+
+class Word(NamedTuple):
+    """One timed word. ``end`` is exact for Whisper; for YouTube VTT it is the next word's start."""
+
+    start: float
+    end: float
+    text: str
+
+
+class WordTrack(NamedTuple):
+    words: List[Word]
+    exact_ends: bool   # True when the source gives real word ends (Whisper), so gaps are real
+
+    @property
+    def available(self) -> bool:
+        return bool(self.words)
+
+
+NO_WORDS = WordTrack([], False)
 
 
 def parse_ts(s: str) -> float:
@@ -87,21 +114,102 @@ def parse_json_segments(raw: str, source: str = "<json>") -> List[Cue]:
     return cues
 
 
-def parse_subtitles(raw: str) -> List[Cue]:
-    """SRT or WebVTT text into cues. Cues with no text are dropped (as upstream)."""
-    cues, cur = [], None
+def _cue_blocks(raw: str):
+    """Yield ``(start, end, [raw text lines])`` for every cue block."""
+    cur = None
     for line in raw.splitlines():
         m = TIMING.match(line)
         if m:
-            cur = [parse_ts(m.group(1)), parse_ts(m.group(2)), []]
-            cues.append(cur)
-        elif not line.strip():
+            if cur is not None:
+                yield cur
+            cur = (parse_ts(m.group(1)), parse_ts(m.group(2)), [])
+        elif line.rstrip("\r") == "":
+            # Only a truly EMPTY line ends a cue (WebVTT/SRT rule). YouTube auto-captions put a
+            # single-space line INSIDE cues; treating it as an end dropped the next line's words.
+            if cur is not None:
+                yield cur
             cur = None
-        elif cur is not None and not line.strip().isdigit():
-            text = VTT_TAG.sub("", line).strip()
-            if text:
-                cur[2].append(text)
-    return [Cue(a, b, " ".join(t)) for a, b, t in cues if t]
+        elif cur is not None and line.strip() and not line.strip().isdigit():
+            cur[2].append(line)
+    if cur is not None:
+        yield cur
+
+
+def parse_subtitles(raw: str) -> List[Cue]:
+    """SRT or WebVTT text into cues. Cues with no text are dropped (as upstream).
+
+    YouTube rolling auto-captions (detected by inline word tags) are de-duplicated: a line equal
+    to the previously emitted line is a repeat, not new speech.
+    """
+    rolling = bool(WORD_TAG.search(raw))
+    cues, last = [], None
+    for a, b, lines in _cue_blocks(raw):
+        texts = []
+        for ln in lines:
+            t = VTT_TAG.sub("", ln).strip()
+            if not t:
+                continue
+            if rolling:
+                if t == last:
+                    continue
+                last = t
+            texts.append(t)
+        if texts:
+            cues.append(Cue(a, b, " ".join(texts)))
+    return cues
+
+
+def _youtube_words(raw: str) -> List[Word]:
+    """Words from lines carrying inline timestamps. A word ends where the next one starts."""
+    starts: List[Word] = []
+    for a, b, lines in _cue_blocks(raw):
+        for ln in lines:
+            if not WORD_TAG.search(ln):
+                continue
+            parts = WORD_TAG.split(ln)          # [text0, ts1, text1, ts2, text2, ...]
+            seq = [(a, parts[0])] + [(parse_ts(parts[i]), parts[i + 1]) for i in range(1, len(parts) - 1, 2)]
+            for t0, txt in seq:
+                w = VTT_TAG.sub("", txt).strip()
+                if w:
+                    starts.append(Word(t0, b, w))
+    starts.sort(key=lambda w: w.start)
+    out: List[Word] = []
+    for i, w in enumerate(starts):
+        nxt = starts[i + 1].start if i + 1 < len(starts) else w.end
+        out.append(Word(w.start, max(w.start, min(w.end, nxt)), w.text))
+    return out
+
+
+def _json_words(raw: str, source: str) -> List[Word]:
+    try:
+        d = json.loads(raw)
+    except json.JSONDecodeError:
+        return []
+    segs = d if isinstance(d, list) else d.get("segments", []) if isinstance(d, dict) else []
+    out: List[Word] = []
+    for s in segs if isinstance(segs, list) else []:
+        for w in (s.get("words") or []) if isinstance(s, dict) else []:
+            if not isinstance(w, dict):
+                continue
+            try:
+                a, b = float(w["start"]), float(w["end"])
+            except (KeyError, TypeError, ValueError):
+                continue        # WhisperX leaves some tokens (numerals) untimed; skip them
+            text = str(w.get("word", w.get("text", ""))).strip()
+            if text and b >= a:
+                out.append(Word(a, b, text))
+    out.sort(key=lambda w: w.start)
+    return out
+
+
+def load_words(path: str) -> WordTrack:
+    """Word timings for ``path`` if the format carries them, else an empty track."""
+    raw = _read(path)
+    if path.lower().endswith(".json"):
+        return WordTrack(_json_words(raw, path), True)
+    if WORD_TAG.search(raw):
+        return WordTrack(_youtube_words(raw), False)
+    return NO_WORDS
 
 
 def load_cues(path: str) -> List[Cue]:
