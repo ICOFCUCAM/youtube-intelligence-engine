@@ -17,6 +17,7 @@ TOOLS = {
     "serve": "youtube_intelligence.service.server",
     "handoff": "youtube_intelligence.handoff.cli",
     "report": "youtube_intelligence.reports.channel",
+    "check": "youtube_intelligence.preflight.check",
 }
 
 

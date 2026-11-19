@@ -16,6 +16,7 @@ from ..core.transcript import NO_WORDS, Cue, FORMATS, parse_transcript
 from ..creative import hookscore
 from ..editing import chapters, deadair
 from ..handoff import approval as handoff_approval
+from ..preflight import check as preflight
 from ..handoff import instruction as handoff_instruction
 from ..packaging import title
 from ..research import outliers
@@ -203,6 +204,24 @@ def validate_instruction(body: Dict) -> Payload:
     return {"valid": True}
 
 
+def preflight_check(body: Dict) -> Payload:
+    title = body.get("title")
+    if not isinstance(title, str):
+        raise BadRequest("'title' must be a string")
+    for k in ("thumb", "description"):
+        if body.get(k) is not None and not isinstance(body[k], str):
+            raise BadRequest(f"'{k}' must be a string")
+    queries = body.get("queries", [])
+    if not isinstance(queries, list) or len(queries) > 20 or not all(isinstance(q, str) for q in queries):
+        raise BadRequest("'queries' must be a list of at most 20 strings")
+    cues, words = (None, NO_WORDS)
+    if "transcript" in body:
+        cues, words = _transcript(body)
+        if not cues:
+            raise BadRequest("no cues found in transcript")
+    return preflight.run(title, body.get("thumb"), body.get("description"), queries, cues, words)
+
+
 def health(_body: Optional[Dict] = None) -> Payload:
     return {"status": "ok", "service": "youtube-intelligence-engine", "version": __version__,
             "writes_to_youtube": False}
@@ -213,6 +232,7 @@ POST: Dict[str, Callable[[Dict], Payload]] = {
     "/v1/retention": retention_report, "/v1/outliers": outlier_rank, "/v1/shorts": shorts,
     "/v1/handoff/approve": approve, "/v1/handoff/instruction": instruction,
     "/v1/handoff/validate": validate_instruction,
+    "/v1/check": preflight_check,
 }
 
 
