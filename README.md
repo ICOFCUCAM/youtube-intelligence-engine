@@ -123,7 +123,8 @@ skill folder (`python3 deadair.py transcript.srt`). See [examples/](examples/).
   apply them blind.
 - **Formula names are about the words**, not about why a video worked.
 
-Details: [docs/TOOL_REVIEW.md](docs/TOOL_REVIEW.md).
+Details: [docs/TOOL_REVIEW.md](docs/TOOL_REVIEW.md). What has and hasn't been verified against
+real systems: [docs/AUDIT.md](docs/AUDIT.md).
 
 ## Repository layout
 

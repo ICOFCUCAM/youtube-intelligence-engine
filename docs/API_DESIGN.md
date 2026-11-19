@@ -15,6 +15,12 @@
 | `analytics.retention.analyse(rows, duration=None, axis="auto", hint=None)` | `[(position, pct)]` | hook leak, cliffs, slide, limitations |
 | `research.outliers.rank(rows, lo=1.5)` | video dicts | outliers, thin channels, skipped count |
 | `shorts.candidates.find(cues, min_len, max_len, top)` | cues | non-overlapping candidate spans |
+| `preflight.check.run(title, thumb, description, queries, cues, words)` | upload package | verdict + fail/warn/pass/info checks (`preflight@1`) |
+| `creative.claims.check(text, voice, evidence)` | draft text | blocked / needs-source / check findings (`claims@1`) |
+| `community.comments.analyse(comments, creator, creator_id, top)` | comment rows | piles, scams, ideas, pins (`comments@1`) |
+| `analytics.moments.run(manifest_path)` | manifest of videos | extra loss by sentence type (`moments@1`) |
+| `localize.pack.export / check / build` | title, description, cues | translation pack, per-language checks, files |
+| `reports.channel.build(videos, retention_files, channel)` | upload rows | channel report with one fix (`channel-report@1`) |
 
 All raise `core.errors.InputError` on unusable input. All are deterministic and side-effect free.
 
@@ -64,6 +70,9 @@ curl -s -X POST localhost:8765/v1/titles/check -H 'Content-Type: application/jso
 | `POST /v1/handoff/approve` | `approved_by`, any of `edl`, `chapters`, `shorts` (+ `picked_shorts`), `acknowledge_review` | `approval@1` record (signed if the server has `YIE_APPROVAL_KEY`) |
 | `POST /v1/handoff/instruction` | `approval`, `media`, the approved artefacts, optional `transcript_offset`, `aspect`, `project` | `production-instruction@1` |
 | `POST /v1/handoff/validate` | `instruction` | `{"valid": true}` or `400` |
+| `POST /v1/check` | `title`, optional `thumb`, `description`, `queries`, `transcript` | pre-upload verdict (`preflight@1`) |
+| `POST /v1/claims` | `text`, optional `voice` (voice.md text), `evidence` (list of facts) | fact-guard findings (`claims@1`) |
+| `POST /v1/comments` | `comments` (rows), optional `creator`, `creator_id`, `top` | triage (`comments@1`) |
 | `GET /v1/openapi.json` | - | OpenAPI 3.1 document for all of the above |
 
 `transcript` is `{"format": "srt" | "vtt" | "json", "content": "<text>"}` or

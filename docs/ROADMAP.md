@@ -2,12 +2,17 @@
 
 "Implemented" means it runs and is tested in this repository. Everything else is planned.
 
-## Implemented (0.1.0)
+## Implemented
 
-- Eleven Claude skills (upstream workflows plus guardrails).
-- Seven deterministic tools: hookscore, title, deadair, chapters, retention, swipe/outliers,
-  shorts (new). Stdlib only, CLI and library, 183 tests, CI.
-- Stable EDL JSON (`edl@1`).
+0.1.0: eleven upstream skills with guardrails; seven deterministic tools (hookscore, title,
+deadair, chapters, retention, swipe/outliers, shorts); stable EDL JSON (`edl@1`).
+
+Since then (Unreleased, see CHANGELOG): a twelfth skill (`/yt-localize`); seventeen commands in
+total; the evaluation harness; the read-only YouTube connector and `login`; the HTTP service with
+OpenAPI; approval records and production instructions; the channel report, pre-upload check,
+moments, localisation, fact guard and comment triage; the landing page, waitlist and sample
+report. 499 Python tests and 10 Node tests, CI on Python 3.10-3.14. What has and hasn't been
+verified against real systems: [AUDIT.md](AUDIT.md).
 
 ## Phase 1: harden and measure
 

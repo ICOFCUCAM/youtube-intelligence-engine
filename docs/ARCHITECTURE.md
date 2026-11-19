@@ -27,8 +27,9 @@ and Claude skills.
                                                \/
                               youtube_intelligence (stdlib only)
    +--------------------------------------------------------------------------------+
-   | creative/hookscore  packaging/title  editing/deadair  editing/chapters          |
-   | analytics/retention research/outliers shorts/candidates                         |
+   | creative/hookscore, claims   packaging/title   editing/deadair, chapters        |
+   | analytics/retention, moments research/outliers shorts/candidates                |
+   | preflight/check   reports/channel   community/comments   localize/pack          |
    |--------------------------------------------------------------------------------|
    | core/transcript  core/intervals  core/formulas (data/hooks.json)  core/cli+errors |
    +--------------------------------------------------------------------------------+

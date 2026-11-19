@@ -26,7 +26,7 @@ import html
 import json
 import statistics
 import sys
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 from ..analytics import retention as ret
 from ..core.cli import guarded

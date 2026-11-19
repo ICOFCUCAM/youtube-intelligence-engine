@@ -61,6 +61,13 @@ points into the package, so there is one implementation to test.
 - `src/youtube_intelligence/` package structure, `core/errors.py`, `core/intervals.py`,
   `core/cli.py`, `__main__.py`
 - `src/youtube_intelligence/shorts/candidates.py` and `skills/yt-shorts/shorts.py` (new tool)
+- Packages with no upstream counterpart: `evaluation/`, `integrations/youtube/`, `service/`,
+  `handoff/`, `reports/`, `preflight/`, `community/`, `localize/`, `analytics/moments.py`,
+  `creative/claims.py`
+- `skills/yt-localize/` (a twelfth skill) and the extra skill-folder scripts
+  `skills/yt-script/claims.py`, `skills/yt-comment/comments.py`, `skills/yt-localize/localize.py`
+- `datasets/`, `examples/` data, `scripts/`, `public/` (landing page, privacy notice, sample
+  report), `api/waitlist.js`, `supabase/waitlist.sql`, `vercel.json`, `.env.example`
 - `tests/` (all), including `tests/fixtures/upstream_golden/`: outputs of the **unmodified
   upstream tools**, recorded at the extraction commit and used to prove equivalence
 - `pyproject.toml`, `.github/workflows/ci.yml`
