@@ -22,6 +22,8 @@ rules the code and skills follow.
 | Code in imported content being executed | Nothing is evaluated. URLs and titles in collected data are printed, never fetched |
 | YouTube connector writing to a channel | No write methods (exact allowlist test); GET-only to two allowlisted API hosts; refresh tokens with any non-read-only scope are refused |
 | API keys and tokens leaking | Read from environment only; redacted from request logs and error messages; masked in `repr`; `.env*` ignored by git; a test scans tracked files for key-shaped strings |
+| Refresh token leaking from `yt-youtube login` | Never printed; written with mode 600; refused inside a git working tree (checked before sign-in); refused at read time if group/world-readable |
+| Forged OAuth redirect or code interception | Random `state` checked on the loopback redirect; PKCE S256; listener bound to 127.0.0.1 only and closed after one response |
 | Runaway API usage | Pagination capped (100 pages); bounded retries with backoff; quota errors never retried |
 | Evaluation dataset paths escaping the dataset folder | Rejected by the loader (`..` and absolute paths) |
 

@@ -9,10 +9,11 @@ access token, or a refresh token plus the OAuth client it was issued to:
 
     YT_OAUTH_ACCESS_TOKEN
     YT_OAUTH_REFRESH_TOKEN + YT_OAUTH_CLIENT_ID + YT_OAUTH_CLIENT_SECRET
+    YT_OAUTH_TOKEN_FILE (instead of YT_OAUTH_REFRESH_TOKEN): a file written by `yt-youtube login`
 
-The refresh token must have been granted ONLY the read-only scopes below. Obtaining one (the
-browser consent step) is not implemented here yet; use a secrets manager to inject these values
-rather than an .env file committed anywhere.
+The refresh token must have been granted ONLY the read-only scopes below. `yt-youtube login`
+obtains one through the browser (see login.py). Prefer a secrets manager for these values; never
+an .env file committed anywhere.
 """
 from __future__ import annotations
 
@@ -55,8 +56,12 @@ class Credentials:
     @classmethod
     def from_env(cls, env: Mapping[str, str] = os.environ) -> "Credentials":
         g = lambda k: (env.get(k) or "").strip() or None  # noqa: E731
+        refresh = g("YT_OAUTH_REFRESH_TOKEN")
+        if not refresh and g("YT_OAUTH_TOKEN_FILE"):
+            from .login import read_token_file
+            refresh = read_token_file(g("YT_OAUTH_TOKEN_FILE"))
         return cls(api_key=g("YOUTUBE_API_KEY"), access_token=g("YT_OAUTH_ACCESS_TOKEN"),
-                   refresh_token=g("YT_OAUTH_REFRESH_TOKEN"), client_id=g("YT_OAUTH_CLIENT_ID"),
+                   refresh_token=refresh, client_id=g("YT_OAUTH_CLIENT_ID"),
                    client_secret=g("YT_OAUTH_CLIENT_SECRET"))
 
     def secrets(self):

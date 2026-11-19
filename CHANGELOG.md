@@ -34,6 +34,12 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
 - **`datasets/synthetic-words-v1`**: the synthetic-v1 talks rendered as Whisper JSON with word
   timings and as modelled YouTube rolling auto-captions, with a pinned baseline.
 - `yt-eval --words auto|off --hold-review`.
+- **`yt-youtube login`**: browser consent for a read-only refresh token (PKCE S256, random state,
+  one-time 127.0.0.1 listener). Refuses any grant beyond the two read-only scopes; saves the token
+  with mode 600, never prints it, and refuses paths inside a git working tree; the path is checked
+  before sign-in starts (a screenshot taken during the build showed it was checked only after,
+  which would have wasted a completed sign-in). `YT_OAUTH_TOKEN_FILE` lets the tools read it and
+  is refused if group/world-readable. Tested with a simulated browser; not yet run against Google.
 
 ### Changed
 - **chapters**: the default `--target` is derived from the video's length (about one per 90 s,
