@@ -15,6 +15,7 @@ TOOLS = {
     "eval": "youtube_intelligence.evaluation.runner",
     "youtube": "youtube_intelligence.integrations.youtube.cli",
     "serve": "youtube_intelligence.service.server",
+    "handoff": "youtube_intelligence.handoff.cli",
 }
 
 

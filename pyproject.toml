@@ -21,7 +21,7 @@ classifiers = [
 dependencies = []
 
 [project.optional-dependencies]
-dev = ["pytest>=7"]
+dev = ["pytest>=7", "jsonschema>=4.18"]
 
 [project.urls]
 Homepage = "https://github.com/ICOFCUCAM/youtube-intelligence-engine"
@@ -38,6 +38,7 @@ yt-shorts = "youtube_intelligence.shorts.candidates:main"
 yt-eval = "youtube_intelligence.evaluation.runner:main"
 yt-youtube = "youtube_intelligence.integrations.youtube.cli:main"
 yt-serve = "youtube_intelligence.service.server:main"
+yt-handoff = "youtube_intelligence.handoff.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

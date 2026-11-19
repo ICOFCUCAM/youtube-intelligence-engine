@@ -15,6 +15,8 @@ from ..core.errors import InputError
 from ..core.transcript import NO_WORDS, Cue, FORMATS, parse_transcript
 from ..creative import hookscore
 from ..editing import chapters, deadair
+from ..handoff import approval as handoff_approval
+from ..handoff import instruction as handoff_instruction
 from ..packaging import title
 from ..research import outliers
 from ..shorts import candidates
@@ -163,6 +165,44 @@ def shorts(body: Dict) -> Payload:
                                           _num(body, "top", 5, 1, 50, integer=True))}
 
 
+def _artifact(body: Dict, kind: str):
+    v = body.get(kind)
+    if v is not None and not isinstance(v, dict):
+        raise BadRequest(f"'{kind}' must be a JSON object")
+    return v
+
+
+def approve(body: Dict) -> Payload:
+    """``approved_by`` is asserted by the caller (e.g. TAKE after authenticating the person)."""
+    arts = {k: v for k in handoff_approval.KINDS if (v := _artifact(body, k)) is not None}
+    picked = body.get("picked_shorts")
+    if picked is not None and (not isinstance(picked, list) or not all(isinstance(i, int) and not isinstance(i, bool) for i in picked)):
+        raise BadRequest("'picked_shorts' must be a list of whole numbers")
+    ack = body.get("acknowledge_review", False)
+    if not isinstance(ack, bool):
+        raise BadRequest("'acknowledge_review' must be true or false")
+    return handoff_approval.approve(arts, body.get("approved_by"), acknowledge_review=ack, picked_shorts=picked,
+                                    key=handoff_approval.signing_key())
+
+
+def instruction(body: Dict) -> Payload:
+    if not isinstance(body.get("approval"), dict):
+        raise BadRequest("'approval' must be the approval record")
+    offset = _num(body, "transcript_offset", 0.0, -86400, 86400)
+    project = body.get("project")
+    if project is not None and (not isinstance(project, dict) or not all(isinstance(v, str) for v in project.values())):
+        raise BadRequest("'project' must be an object of string ids")
+    return handoff_instruction.build(body["approval"], body.get("media"), edl=_artifact(body, "edl"),
+                                     chapters=_artifact(body, "chapters"), shorts=_artifact(body, "shorts"),
+                                     transcript_offset=offset, project=project, key=handoff_approval.signing_key(),
+                                     aspect=_choice(body, "aspect", handoff_instruction.ASPECTS, "9:16"))
+
+
+def validate_instruction(body: Dict) -> Payload:
+    handoff_instruction.validate(body.get("instruction"))
+    return {"valid": True}
+
+
 def health(_body: Optional[Dict] = None) -> Payload:
     return {"status": "ok", "service": "youtube-intelligence-engine", "version": __version__,
             "writes_to_youtube": False}
@@ -171,8 +211,17 @@ def health(_body: Optional[Dict] = None) -> Payload:
 POST: Dict[str, Callable[[Dict], Payload]] = {
     "/v1/edl": edl, "/v1/chapters": chapter_list, "/v1/hooks/score": hooks, "/v1/titles/check": titles,
     "/v1/retention": retention_report, "/v1/outliers": outlier_rank, "/v1/shorts": shorts,
+    "/v1/handoff/approve": approve, "/v1/handoff/instruction": instruction,
+    "/v1/handoff/validate": validate_instruction,
 }
-GET: Dict[str, Callable] = {"/v1/health": health}
+
+
+def openapi(_body: Optional[Dict] = None) -> Payload:
+    from .openapi import spec
+    return spec()
+
+
+GET: Dict[str, Callable] = {"/v1/health": health, "/v1/openapi.json": openapi}
 
 
 def error(status: int, code: str, message: str) -> Tuple[int, Payload]:

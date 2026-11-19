@@ -61,6 +61,10 @@ curl -s -X POST localhost:8765/v1/titles/check -H 'Content-Type: application/jso
 | `POST /v1/retention` | `csv` (Studio export text) or `rows: [[position, percent]]`; optional `duration`, `axis`, `views`, `transcript` | retention report |
 | `POST /v1/outliers` | `videos: [...]` (max 20,000), optional `min` | `{outliers, skipped_thin_channels, ...}` |
 | `POST /v1/shorts` | `transcript`, optional `min`, `max`, `top` | `{candidates}` |
+| `POST /v1/handoff/approve` | `approved_by`, any of `edl`, `chapters`, `shorts` (+ `picked_shorts`), `acknowledge_review` | `approval@1` record (signed if the server has `YIE_APPROVAL_KEY`) |
+| `POST /v1/handoff/instruction` | `approval`, `media`, the approved artefacts, optional `transcript_offset`, `aspect`, `project` | `production-instruction@1` |
+| `POST /v1/handoff/validate` | `instruction` | `{"valid": true}` or `400` |
+| `GET /v1/openapi.json` | - | OpenAPI 3.1 document for all of the above |
 
 `transcript` is `{"format": "srt" | "vtt" | "json", "content": "<text>"}` or
 `{"cues": [{"start", "end", "text"}]}`. **Content only - no endpoint accepts a file path**, so a
@@ -79,7 +83,11 @@ status only. A connection whose body was not read (401/411/413/415) is closed, n
 is Python's `ThreadingHTTPServer`: put it behind a TLS-terminating reverse proxy, with rate
 limiting, before exposing it beyond a trusted network.
 
-## 3. Persistence and approvals (design only)
+## 3. Persistence (design only)
+
+Approval records and production instructions exist (section 2, and
+[TAKE_CINEFORGE_INTEGRATION.md](TAKE_CINEFORGE_INTEGRATION.md)); storing them, versioning
+artefacts and executing actions do not.
 
 Only when TAKE needs persistence:
 
