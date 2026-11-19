@@ -10,8 +10,8 @@ original eleven Claude skills and six tools are preserved. The tools are now one
 package, with known defects fixed and documented. See [UPSTREAM.md](UPSTREAM.md) for exactly what
 came from where.
 
-**Landing page:** https://icofcucam.github.io/youtube-intelligence-engine/ (source in
-[`site/`](site/), published by GitHub Pages).
+**Landing page:** a static page in [`site/`](site/), deployed on Vercel
+(configuration in [`vercel.json`](vercel.json): no build step, strict security headers).
 
 **Nothing here publishes, uploads, replies or deletes.** Every skill and tool drafts or analyses.
 The creator decides and acts. See [SECURITY.md](SECURITY.md).
@@ -134,7 +134,7 @@ templates/         voice.md (upstream, unmodified)
 datasets/          labelled evaluation sets (synthetic-v1, synthetic-words-v1: generated, pinned baselines)
 tests/             pytest suite, fixtures, upstream golden outputs
 docs/              architecture, security, API design, integrations, roadmap, reviews
-site/              the landing page (static HTML, no external requests), deployed by .github/workflows/pages.yml
+site/              the landing page (static HTML, no external requests), deployed on Vercel via vercel.json
 examples/          runnable examples
 ```
 
