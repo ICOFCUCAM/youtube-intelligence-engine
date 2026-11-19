@@ -77,3 +77,30 @@ def test_no_unsupported_claims():
     low = HTML.lower()
     for phrase in ("guarantee", "go viral", "10x", "trusted by", "thousands of creators", "testimonial", "#1 "):
         assert phrase not in low, phrase
+
+
+# --- Vercel deployment config ---------------------------------------------------------------------
+def _vercel():
+    import json
+    return json.load(open(os.path.join(ROOT, "vercel.json")))
+
+
+def test_vercel_serves_site_without_a_build():
+    cfg = _vercel()
+    assert cfg["outputDirectory"] == "site" and cfg["framework"] is None
+    assert cfg["buildCommand"].startswith("echo") and cfg["installCommand"].startswith("echo")
+
+
+def test_csp_script_hash_matches_the_inline_script():
+    """If the page's inline script changes, the CSP hash must change with it, or the live site's
+    theme switch silently stops working."""
+    import base64
+    import hashlib
+    scripts = re.findall(r"<script>(.*?)</script>", HTML, re.S)
+    assert len(scripts) == 1
+    want = "'sha256-" + base64.b64encode(hashlib.sha256(scripts[0].encode()).digest()).decode() + "'"
+    hdrs = {h["key"]: h["value"] for h in _vercel()["headers"][0]["headers"]}
+    csp = hdrs["Content-Security-Policy"]
+    assert f"script-src {want}" in csp, "update vercel.json: the inline script changed"
+    assert "default-src 'none'" in csp and "frame-ancestors 'none'" in csp and "unsafe-eval" not in csp
+    assert hdrs["X-Content-Type-Options"] == "nosniff" and hdrs["X-Frame-Options"] == "DENY"

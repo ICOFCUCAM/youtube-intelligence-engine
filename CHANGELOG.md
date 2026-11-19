@@ -65,8 +65,10 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
 - **Landing page** (`site/index.html`): a single static page for creators with a developer
   section; no external scripts, fonts or trackers; light/dark; checked at phone and desktop
   widths. Its example outputs are tested against the tools' real output, and its links and
-  install commands against the project. Published by `.github/workflows/pages.yml` once GitHub
-  Pages is set to "GitHub Actions" in the repository settings.
+  install commands against the project. Deployed on **Vercel** (`vercel.json`): serves `site/`
+  with no build step, and sends a strict Content Security Policy (no external sources; the one
+  inline script pinned by SHA-256, tested to match), plus `nosniff`, `DENY` framing, HSTS, and a
+  locked-down Permissions-Policy. The GitHub Pages workflow was removed in favour of Vercel.
 
 ### Changed
 - **chapters**: the default `--target` is derived from the video's length (about one per 90 s,
