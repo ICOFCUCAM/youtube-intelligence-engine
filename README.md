@@ -11,7 +11,9 @@ package, with known defects fixed and documented. See [UPSTREAM.md](UPSTREAM.md)
 came from where.
 
 **Landing page:** a static page in [`public/`](public/), deployed on Vercel
-(configuration in [`vercel.json`](vercel.json): no build step, strict security headers).
+(configuration in [`vercel.json`](vercel.json): no build step, strict security headers). It
+includes a demand test: planned plans (not on sale) and a waitlist that is **switched off** until
+storage is chosen. See [docs/WAITLIST.md](docs/WAITLIST.md).
 
 **Nothing here publishes, uploads, replies or deletes.** Every skill and tool drafts or analyses.
 The creator decides and acts. See [SECURITY.md](SECURITY.md).
@@ -134,6 +136,8 @@ templates/         voice.md (upstream, unmodified)
 datasets/          labelled evaluation sets (synthetic-v1, synthetic-words-v1: generated, pinned baselines)
 tests/             pytest suite, fixtures, upstream golden outputs
 docs/              architecture, security, API design, integrations, roadmap, reviews
+api/               waitlist.js: the landing page's sign-up function (Vercel), off by default
+supabase/          waitlist.sql: insert-only waitlist table
 public/            the landing page (static HTML, no external requests), deployed on Vercel via vercel.json
 examples/          runnable examples
 ```

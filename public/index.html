@@ -116,6 +116,39 @@ ol.flow{padding:0;margin:0}
 .code{background:var(--code-bg);color:var(--code-text);border-radius:10px;padding:14px 16px;font-size:13px;overflow-x:auto;margin:10px 0 0}
 .code .d{color:var(--code-dim)}
 
+/* plans */
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column}
+.plan.now{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.plan h3{margin:0;font-size:18px}
+.plan .status{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:2px 0 12px}
+.plan.now .status{color:var(--accent)}
+.plan .price{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:0}
+.plan .per{color:var(--muted);font-size:14px;margin:0 0 12px}
+.plan ul{margin:0;padding-left:18px;color:var(--muted);font-size:15px}
+.plan li{margin:4px 0}
+.banner{background:var(--accent-soft);border-radius:10px;padding:12px 16px;margin:0 0 22px;font-size:15px}
+
+/* waitlist form */
+.wl{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;max-width:640px}
+.wl label,.wl legend{display:block;font-weight:600;margin:0 0 6px}
+.wl fieldset{border:0;padding:0;margin:0 0 18px}
+.wl .row{margin:0 0 18px}
+.wl input[type=email],.wl select{width:100%;font:inherit;padding:11px 12px;border-radius:9px;border:1px solid var(--line);
+  background:var(--bg);color:var(--text)}
+.wl .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media (max-width:520px){.wl .opts{grid-template-columns:1fr}}
+.wl .opt{display:flex;gap:8px;align-items:flex-start;font-weight:400;border:1px solid var(--line);border-radius:9px;padding:10px 12px;margin:0;cursor:pointer}
+.wl .opt input{margin-top:4px}
+.wl .consent{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:15px;color:var(--muted)}
+.wl .consent input{margin-top:4px;flex:none}
+.wl .hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.wl button{font:inherit;font-weight:600;padding:12px 20px;border-radius:10px;border:0;background:var(--accent);color:var(--accent-ink);cursor:pointer}
+.wl button[disabled]{opacity:.6;cursor:progress}
+.wl .msg{margin:14px 0 0;font-size:15px;min-height:1.5em}
+.wl .msg.ok{color:var(--accent)} .wl .msg.err{color:var(--warn)}
+.fine{color:var(--muted);font-size:14px;margin:12px 0 0}
+
 /* grid children may shrink below their content; wide code scrolls inside its own box */
 .grid>*,.two>*,.demo>*{min-width:0}
 
@@ -139,6 +172,7 @@ footer p{margin:6px 0}
       <a href="#tools">Tools</a>
       <a class="opt" href="#honest">Honest numbers</a>
       <a class="opt" href="#safety">Safety</a>
+      <a class="opt" href="#plans">Plans</a>
       <a class="opt2" href="#developers">Developers</a>
       <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine">GitHub</a>
     </nav>
@@ -153,8 +187,8 @@ footer p{margin:6px 0}
     <p class="lede">Score your hooks, fix the title and thumbnail as one pair, turn a transcript into an edit list,
       chapters and Shorts, and read your retention graph properly. It drafts and analyses. <strong>You stay in charge of what gets published.</strong></p>
     <div class="cta">
-      <a class="btn primary" href="#install">Get started</a>
-      <a class="btn" href="https://github.com/ICOFCUCAM/youtube-intelligence-engine">View the code on GitHub</a>
+      <a class="btn primary" href="#waitlist">Join the waitlist</a>
+      <a class="btn" href="#install">Use it free today</a>
     </div>
     <ul class="promise">
       <li>Never publishes for you</li>
@@ -268,6 +302,77 @@ footer p{margin:6px 0}
   </div>
 </section>
 
+<section id="plans" aria-labelledby="plans-h">
+  <div class="wrap">
+    <h2 id="plans-h">Where this is going</h2>
+    <p class="sub">The tools are free and open source today. We're deciding what to build on top of them, and you can help choose.</p>
+    <p class="banner"><strong>Nothing here is on sale.</strong> The paid plans below are ideas with planned prices that we're testing. Joining the waitlist is free and commits you to nothing.</p>
+    <div class="plans">
+      <div class="plan now">
+        <h3>Open source</h3><p class="status">Available now</p>
+        <p class="price">Free</p><p class="per">forever, MIT licence</p>
+        <ul><li>All seven tools and eleven Claude skills</li><li>Runs on your computer</li><li>Local API for your own apps</li></ul>
+      </div>
+      <div class="plan">
+        <h3>Creator</h3><p class="status">Planned</p>
+        <p class="price">$19</p><p class="per">per month, planned</p>
+        <ul><li>Connect your channel (read-only)</li><li>A weekly report on every upload: hook, packaging, retention cliffs</li><li>See whether your changes helped</li></ul>
+      </div>
+      <div class="plan">
+        <h3>Shorts</h3><p class="status">Planned</p>
+        <p class="price">$15</p><p class="per">per month, planned</p>
+        <ul><li>Upload a long video, get finished Shorts back</li><li>A new first line written for each one</li><li>You approve every clip before it's made</li></ul>
+      </div>
+      <div class="plan">
+        <h3>Agency</h3><p class="status">Planned</p>
+        <p class="price">$99</p><p class="per">per month and up, planned</p>
+        <ul><li>Many channels in one place</li><li>Team approvals with a full record</li><li>Reports you can send to clients</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="waitlist" aria-labelledby="waitlist-h">
+  <div class="wrap">
+    <h2 id="waitlist-h">Join the waitlist</h2>
+    <p class="sub">Tell us which one you'd use first. We'll build the one most people ask for, and email you when it's ready.</p>
+    <form class="wl" id="wl" novalidate>
+      <div class="row">
+        <label for="wl-email">Email</label>
+        <input id="wl-email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com">
+      </div>
+      <fieldset>
+        <legend>Which would you use first?</legend>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="offer" value="reports" required> Weekly channel reports</label>
+          <label class="opt"><input type="radio" name="offer" value="shorts"> Shorts made for me</label>
+          <label class="opt"><input type="radio" name="offer" value="agency"> Agency / many channels</label>
+          <label class="opt"><input type="radio" name="offer" value="api"> API for my own product</label>
+          <label class="opt"><input type="radio" name="offer" value="not_sure"> Not sure yet</label>
+        </div>
+      </fieldset>
+      <div class="row">
+        <label for="wl-size">Channel size <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+        <select id="wl-size" name="channel_size">
+          <option value="">Prefer not to say</option>
+          <option value="starting">Just starting</option>
+          <option value="under_1k">Under 1,000 subscribers</option>
+          <option value="1k_10k">1,000 to 10,000</option>
+          <option value="10k_100k">10,000 to 100,000</option>
+          <option value="over_100k">Over 100,000</option>
+        </select>
+      </div>
+      <div class="hp" aria-hidden="true"><label for="wl-website">Leave this empty</label><input id="wl-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+      <div class="row">
+        <label class="consent"><input type="checkbox" name="consent" required> <span>I agree to be emailed about this waitlist. I can ask to be removed at any time. See the <a href="/privacy">privacy notice</a>.</span></label>
+      </div>
+      <button type="submit">Join the waitlist</button>
+      <p class="msg" id="wl-msg" role="status" aria-live="polite"></p>
+      <p class="fine">We store your email, your choice, the optional channel size and when you agreed. No tracking, no selling, no other use.</p>
+    </form>
+  </div>
+</section>
+
 <section id="install" aria-labelledby="install-h">
   <div class="wrap">
     <h2 id="install-h">Get started</h2>
@@ -313,6 +418,7 @@ yt-handoff instruction ...</pre></div>
         <p><strong>YouTube Intelligence Engine</strong> by ICOFCUCAM. MIT licence.</p>
         <p>Built on <a href="https://github.com/Jakeschincariol/youtube-agent-skill">youtube-agent-skill</a> by Jake Schincariol (MIT). See <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/UPSTREAM.md">what came from where</a>.</p>
         <p>Not affiliated with, endorsed by or sponsored by YouTube or Google. YouTube is a trademark of Google LLC.</p>
+        <p><a href="/privacy">Privacy notice</a></p>
       </div>
       <div><button class="theme" type="button" id="theme" aria-label="Switch colour theme">Theme: auto</button></div>
     </div>
@@ -332,6 +438,32 @@ yt-handoff instruction ...</pre></div>
     cur = order[(order.indexOf(cur) + 1) % order.length];
     try { localStorage.setItem(k, cur); } catch (e) {}
     apply(cur);
+  });
+
+  var f = document.getElementById("wl"), msg = document.getElementById("wl-msg");
+  if (!f) return;
+  function say(text, kind) { msg.textContent = text; msg.className = "msg " + (kind || ""); }
+  f.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var email = f.email.value.trim(), offer = f.querySelector("input[name=offer]:checked");
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)) { say("Please enter a valid email address.", "err"); f.email.focus(); return; }
+    if (!offer) { say("Please choose which one you would use first.", "err"); return; }
+    if (!f.consent.checked) { say("Please tick the box to agree to be emailed about the waitlist.", "err"); return; }
+    var btn = f.querySelector("button"); btn.disabled = true; say("Sending...");
+    fetch("/api/waitlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email, offer: offer.value, channel_size: f.channel_size.value,
+                             consent: true, website: f.website.value })
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (d) { return { status: r.status, d: d }; });
+    }).then(function (x) {
+      if (x.status === 200) { f.reset(); say("You're on the list. Thank you - we'll email you when it's ready.", "ok"); }
+      else if (x.status === 503) { say("The waitlist isn't open yet. Please check back soon - nothing was saved.", "err"); }
+      else { say((x.d && x.d.message) || "Something went wrong. Please try again later.", "err"); }
+    }).catch(function () {
+      say("Couldn't reach the server. Please try again later.", "err");
+    }).then(function () { btn.disabled = false; });
   });
 })();
 </script>
