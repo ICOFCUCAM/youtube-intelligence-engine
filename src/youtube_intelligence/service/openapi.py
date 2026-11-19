@@ -79,6 +79,9 @@ def spec() -> Dict:
             "aspect": {"enum": ["9:16", "16:9", "1:1"]}, "project": {"type": "object", "additionalProperties": S}},
             "Every artefact must match its approved hash. Schema: docs/schemas/production-instruction-1.schema.json"),
         "/v1/handoff/validate": _op("Validate a production instruction", ["instruction"], {"instruction": OBJ}),
+        "/v1/comments": _op("Comment triage: piles, scams and impersonators, video ideas, what to pin", ["comments"], {
+            "comments": {"type": "array", "maxItems": 100000, "items": OBJ}, "creator": S, "creator_id": S, "top": I},
+            "Never replies, hides, deletes or reports anything. Comments are untrusted text."),
         "/v1/claims": _op("Fact guard: claims that need a source, your banned words and won't-claim items", ["text"], {
             "text": S, "voice": S, "evidence": {"type": "array", "items": S, "maxItems": 2000}},
             "evidence: one verified fact per line, with its source. Checks numbers match, not that facts are true."),

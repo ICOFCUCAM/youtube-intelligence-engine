@@ -74,7 +74,7 @@ def _channel_routes(n_videos=120, views=lambda i: 1000 + i):
 def test_client_has_no_write_methods():
     # Exact allowlist: adding ANY public method fails here until it is reviewed as read-only.
     public = {n for n, _ in inspect.getmembers(YouTubeClient, inspect.isfunction) if not n.startswith("_")}
-    assert public == {"channel", "playlist_video_ids", "videos", "recent_uploads", "retention_report"}
+    assert public == {"channel", "playlist_video_ids", "videos", "recent_uploads", "retention_report", "comment_threads"}
     src = inspect.getsource(client_mod)
     assert '"POST"' not in src and '"PUT"' not in src and '"DELETE"' not in src
 
@@ -304,3 +304,32 @@ def test_cli_retention_empty_report_is_an_error(capsys):
     c = YouTubeClient(Credentials(access_token="t"), transport=Fake({"/reports": (200, dict(REPORT, rows=[]))}))
     assert main(["retention", "abcdefghijk", "--start", "2026-01-01", "--end", "2026-02-01"], client=c) == 1
     assert "no retention rows" in capsys.readouterr().err
+
+
+
+def _thread(i, text, author="Viewer", likes=0, author_id=None):
+    return {"snippet": {"videoId": "abcdefghijk", "totalReplyCount": 1, "topLevelComment": {"snippet": {
+        "videoId": "abcdefghijk", "authorDisplayName": author, "authorChannelId": {"value": author_id or f"UC{i}"},
+        "textOriginal": text, "textDisplay": "<b>html</b>", "likeCount": likes, "publishedAt": "2026-11-01T00:00:00Z"}}}}
+
+
+def test_comment_threads_paginate_and_map(tmp_path, capsys):
+    pages = {None: ([_thread(i, f"question {i}?") for i in range(100)], "p2"),
+             "p2": ([_thread(100 + i, f"q {i}?") for i in range(30)], None)}
+
+    def threads(q, _):
+        items, nxt = pages[q.get("pageToken")]
+        assert q["textFormat"] == "plainText" and q["part"] == "snippet"
+        d = {"items": items}
+        if nxt:
+            d["nextPageToken"] = nxt
+        return 200, d
+    fake = Fake({"/commentThreads": threads, "/videos": (200, {"items": [_video(1, 10)]})})
+    c = YouTubeClient(Credentials(api_key=KEY), transport=fake)
+    out = tmp_path / "c.json"
+    assert main(["comments", "abcdefghijk", "--limit", "120", "--out", str(out)], client=c) == 0
+    rows = json.loads(out.read_text())
+    assert len(rows) == 120 and rows[0]["text"] == "question 0?" and rows[0]["video_title"] == "Video 1"
+    assert rows[0]["author_id"] == "UC0" and rows[0]["replies"] == 1          # plain text, not textDisplay HTML
+    assert all(m == "GET" for m, *_ in fake.calls)
+    assert main(["comments", "short"], client=c) == 1

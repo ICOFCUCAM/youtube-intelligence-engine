@@ -13,6 +13,7 @@ from .. import __version__
 from ..analytics import retention
 from ..core.errors import InputError
 from ..core.transcript import NO_WORDS, Cue, FORMATS, parse_transcript
+from ..community import comments as comments_mod
 from ..creative import claims as claims_mod
 from ..creative import hookscore
 from ..editing import chapters, deadair
@@ -238,6 +239,17 @@ def claims_check(body: Dict) -> Payload:
     return claims_mod.check(text, voice, ev)
 
 
+def comments_triage(body: Dict) -> Payload:
+    rows = body.get("comments")
+    if not isinstance(rows, list):
+        raise BadRequest("'comments' must be a list of {text, author, author_id, video_id, video_title, likes}")
+    for k in ("creator", "creator_id"):
+        if body.get(k) is not None and not isinstance(body[k], str):
+            raise BadRequest(f"'{k}' must be a string")
+    return comments_mod.analyse(rows, body.get("creator"), body.get("creator_id"),
+                                _num(body, "top", 5, 1, 50, integer=True))
+
+
 def health(_body: Optional[Dict] = None) -> Payload:
     return {"status": "ok", "service": "youtube-intelligence-engine", "version": __version__,
             "writes_to_youtube": False}
@@ -250,6 +262,7 @@ POST: Dict[str, Callable[[Dict], Payload]] = {
     "/v1/handoff/validate": validate_instruction,
     "/v1/check": preflight_check,
     "/v1/claims": claims_check,
+    "/v1/comments": comments_triage,
 }
 
 

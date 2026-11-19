@@ -64,3 +64,23 @@ def write_retention_csv(rows: List[Tuple[float, float]], path: str) -> None:
         w = csv.writer(fh)
         w.writerow(["Video position (%)", "Absolute audience retention (%)"])
         w.writerows(rows)
+
+
+def comments_to_rows(threads: List[Dict], video_title: Optional[str] = None) -> List[Dict]:
+    """commentThreads.list items -> yt-comments input rows."""
+    rows = []
+    for t in threads:
+        top = ((t.get("snippet") or {}).get("topLevelComment") or {}).get("snippet") or {}
+        if not top:
+            continue
+        rows.append({
+            "video_id": top.get("videoId") or (t.get("snippet") or {}).get("videoId"),
+            "video_title": video_title,
+            "author": top.get("authorDisplayName", ""),
+            "author_id": (top.get("authorChannelId") or {}).get("value"),
+            "text": top.get("textOriginal") or top.get("textDisplay") or "",
+            "likes": int(top.get("likeCount") or 0),
+            "published": top.get("publishedAt"),
+            "replies": int((t.get("snippet") or {}).get("totalReplyCount") or 0),
+        })
+    return rows

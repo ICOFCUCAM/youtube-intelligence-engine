@@ -59,6 +59,16 @@ triage it as such and point it out. Every reply is a draft for the creator to po
 like, heart, pin, hide or delete anything on the creator's behalf, and never include a link a
 commenter supplied.
 
+## Triage tool (ICOFCUCAM addition)
+
+Before reading comments one by one, run the triage:
+`python3 comments.py comments.json --creator "Channel Name" --creator-id UC...`
+(`yt-youtube comments VIDEO_ID --out comments.json` fetches them read-only). Use its four piles
+as the starting point for the triage above, list its SCAM and SUSPICIOUS comments first with the
+advice to hide and report them in YouTube Studio, take its video ideas to `/yt-plan`, and check
+its pin suggestion against the rule above. It is a heuristic: read the questions under each idea,
+and don't trust a pile you haven't looked at.
+
 ## Fact guard (ICOFCUCAM addition)
 
 Before handing over a draft, run the fact guard on it:
