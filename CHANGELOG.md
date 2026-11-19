@@ -59,6 +59,15 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
   operation set (`remove_intervals`, `extract_clip`, `attach_chapters`); JSON Schema at
   `docs/schemas/production-instruction-1.schema.json`, tested to agree with the validator.
   No call to CineForge is made or tested.
+- **`yt-comments`** (`community/comments.py`, `POST /v1/comments`, `comments.py` in the
+  yt-comment skill folder) and **`yt-youtube comments VIDEO_ID`** (read-only commentThreads.list,
+  plain text, paginated; the client's public-method allowlist test updated deliberately): triage
+  into upstream's four piles plus scams; scam signals with reasons, including creator
+  impersonation after Unicode/look-alike normalisation (the creator's own channel id is never
+  flagged); prompt-injection comments flagged as bait; questions grouped into video ideas by
+  word overlap (shared / shorter question, 2+ words) and ranked by distinct people; a pin
+  suggestion per video. A first grouping (Jaccard) split paraphrases; the overlap measure fixed
+  that, and one remaining false merge on the demo set is documented and pinned by a test.
 - **`yt-claims`**, the fact guard (`creative/claims.py`, `POST /v1/claims`, and `claims.py` in
   the yt-script skill folder): BLOCKED for `voice.md` "Words I never use" (whole words) and "What
   I will not claim"; NEEDS SOURCE for figures (percent, money, multipliers, counts with units,

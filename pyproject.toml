@@ -44,6 +44,7 @@ yt-check = "youtube_intelligence.preflight.check:main"
 yt-moments = "youtube_intelligence.analytics.moments:main"
 yt-localize = "youtube_intelligence.localize.pack:main"
 yt-claims = "youtube_intelligence.creative.claims:main"
+yt-comments = "youtube_intelligence.community.comments:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

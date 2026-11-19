@@ -79,6 +79,16 @@ last 10% are skipped, and a type needs 3+ occurrences across 2+ videos before it
 pattern. The demo data is scripted, so recovering its effects shows the arithmetic works, not that
 real audiences behave this way.
 
+## comments (new)
+
+Triage by phrase patterns, scams by additive signals (impersonation after Unicode and look-alike
+normalisation, off-platform contact, phone numbers, prize/crypto bait, links). Expect misses
+(new scam wording) and false alarms (a genuine viewer who mentions Telegram). Question grouping
+matches words, not meaning: it misses synonyms and can merge questions that share only common
+words. On the demo set a hook-leak question joins the hook-length group, and a test pins that, so
+an improvement will show up as a deliberate change. Every idea lists its questions so a wrong merge
+is visible. It never acts on a comment.
+
 ## shorts (new)
 
 Surface signals only: pauses, punctuation, connective first words, contrast words. Without

@@ -6,6 +6,9 @@
     yt-youtube retention VIDEO_ID --start 2026-01-01 --end 2026-11-01 --out retention.csv
     yt-retention retention.csv --duration 600
 
+    yt-youtube comments VIDEO_ID --out comments.json
+    yt-comments comments.json --creator "Your Channel"
+
     yt-youtube login --save ~/.config/youtube-intelligence/token.json   # read-only consent
 
 Credentials come from the environment only (see youtube_intelligence.integrations.youtube.auth):
@@ -27,7 +30,7 @@ from ...core.errors import InputError
 from .auth import Credentials
 from .client import YouTubeClient
 from .login import check_save_path, login, save_token
-from .mappers import retention_to_rows, videos_to_rows, write_retention_csv
+from .mappers import comments_to_rows, retention_to_rows, videos_to_rows, write_retention_csv
 
 _DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 _VIDEO = re.compile(r"^[A-Za-z0-9_-]{11}$")
@@ -93,6 +96,26 @@ def cmd_login(a, login_fn=login) -> int:
     return 0
 
 
+def cmd_comments(a, client: YouTubeClient) -> int:
+    if not _VIDEO.match(a.video_id):
+        raise InputError("that does not look like an 11-character video id")
+    if not 1 <= a.limit <= 5000:
+        raise InputError("--limit must be between 1 and 5000")
+    title = None
+    vids = client.videos([a.video_id])
+    if vids:
+        title = (vids[0].get("snippet") or {}).get("title")
+    rows = comments_to_rows(client.comment_threads(a.video_id, a.limit), title)
+    text = json.dumps(rows, indent=1, ensure_ascii=False)
+    if a.out:
+        with open(a.out, "w", encoding="utf-8") as fh:
+            fh.write(text + "\n")
+        print(f"wrote {len(rows)} comments to {a.out} ({client.requests} API requests)", file=sys.stderr)
+    else:
+        print(text)
+    return 0
+
+
 @guarded
 def main(argv: Optional[List[str]] = None, client: Optional[YouTubeClient] = None, login_fn=None) -> int:
     p = argparse.ArgumentParser(prog="yt-youtube", description=__doc__.split("\n\n")[0],
@@ -111,6 +134,10 @@ def main(argv: Optional[List[str]] = None, client: Optional[YouTubeClient] = Non
     rt.add_argument("--start", required=True, help="YYYY-MM-DD")
     rt.add_argument("--end", required=True, help="YYYY-MM-DD")
     rt.add_argument("--out")
+    cm = sub.add_parser("comments", help="public top-level comments on a video, as yt-comments input")
+    cm.add_argument("video_id")
+    cm.add_argument("--limit", type=int, default=500)
+    cm.add_argument("--out")
     lg = sub.add_parser("login", help="browser consent for a read-only refresh token (saved to a file)")
     lg.add_argument("--save", required=True, help="token file, outside any git repository")
     lg.add_argument("--force", action="store_true", help="replace an existing token file")
@@ -120,6 +147,8 @@ def main(argv: Optional[List[str]] = None, client: Optional[YouTubeClient] = Non
     if a.cmd == "login":
         return cmd_login(a, login_fn or login)
     c = client or _client(a)
+    if a.cmd == "comments":
+        return cmd_comments(a, c)
     return cmd_channel_videos(a, c) if a.cmd == "channel-videos" else cmd_retention(a, c)
 
 

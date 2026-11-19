@@ -18,7 +18,7 @@ and risk:
 | --- | --- | --- | --- | --- |
 | 1 (built) | Channel and video metadata (titles, durations, publish dates, stats) for audit, packaging and outlier research | YouTube Data API v3: `channels.list`, `playlistItems.list` (uploads playlist), `videos.list` | `youtube.readonly` (own channel); an API key for public data | No |
 | 1 (built: retention curve only) | Retention and performance (replaces the manual CSV for `yt-retention`) | YouTube Analytics API: `reports.query` (`audienceWatchRatio` by `elapsedVideoTimeRatio`, views, average view duration) | `yt-analytics.readonly` | No |
-| 2 | Comment ingestion for `/yt-comment` triage | Data API `commentThreads.list` | `youtube.readonly` (`youtube.force-ssl` is needed only for writes) | No |
+| 2 (built) | Comment ingestion for `/yt-comment` triage | Data API `commentThreads.list` | `youtube.readonly` (`youtube.force-ssl` is needed only for writes) | No |
 | 2 | Captions for owned videos (transcripts for deadair, chapters, shorts) | Data API `captions.list` / `captions.download` | `youtube.force-ssl` | No (read), but the scope is broad; consider asking creators for a file instead |
 | 3 | Playlist management | `playlists.*`, `playlistItems.*` | `youtube` / `youtube.force-ssl` | Yes, behind approval |
 | 3 | Metadata updates (title, description, chapters) | `videos.update` | `youtube.force-ssl` | Yes, behind approval |
@@ -59,7 +59,7 @@ youtube_intelligence/integrations/youtube/
                    with backoff, never retries quotaExceeded
     mappers.py     API JSON -> yt-swipe rows and a yt-retention CSV (percent axis)
     login.py       browser consent (PKCE + loopback) for a read-only refresh token, saved 0600
-    cli.py         yt-youtube channel-videos | retention | login
+    cli.py         yt-youtube channel-videos | retention | comments | login
 ```
 
 ```bash

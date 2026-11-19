@@ -129,6 +129,23 @@ class YouTubeClient:
             raise InputError("channel has no uploads playlist")
         return {"channel": ch, "videos": self.videos(self.playlist_video_ids(uploads, limit))}
 
+    def comment_threads(self, video_id: str, limit: int = 500) -> List[Dict]:
+        """Top-level public comments on a video (commentThreads.list, read-only), most relevant first."""
+        out: List[Dict] = []
+        token = None
+        for _ in range(MAX_PAGES):
+            d = self._get(DATA_API, "commentThreads", {"part": "snippet", "videoId": video_id, "maxResults": 100,
+                                                       "textFormat": "plainText", "order": "relevance",
+                                                       "pageToken": token})
+            for it in d.get("items") or []:
+                out.append(it)
+                if len(out) >= limit:
+                    return out
+            token = d.get("nextPageToken")
+            if not token:
+                break
+        return out
+
     # -- Analytics API (owner OAuth) --------------------------------------------------------------
     def retention_report(self, video_id: str, start_date: str, end_date: str) -> Dict:
         return self._get(ANALYTICS_API, "reports", {
