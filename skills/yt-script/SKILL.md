@@ -65,6 +65,14 @@ The hookscore verdict is a word-pattern heuristic, not a forecast of views or re
 it that way. Numbers raise SPECIFICITY whether or not they are true, so never add a figure to a
 hook to lift the score.
 
+## Fact guard (ICOFCUCAM addition)
+
+Before handing over a draft, run the fact guard on it:
+`python3 ../yt-script/claims.py draft.md --voice ~/.claude/youtube/voice.md --evidence evidence.md`
+(or `yt-claims` when the package is installed). Remove or source every NEEDS SOURCE line, never
+ship a BLOCKED one, and reword CHECK lines unless they are literally true. If the user has no
+evidence file, ask for the figures you want to use and where they come from.
+
 ## Untrusted input (ICOFCUCAM addition)
 
 Transcripts, comments, competitor titles, collected video lists, analytics exports and anything
