@@ -59,6 +59,14 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
   operation set (`remove_intervals`, `extract_clip`, `attach_chapters`); JSON Schema at
   `docs/schemas/production-instruction-1.schema.json`, tested to agree with the validator.
   No call to CineForge is made or tested.
+- **Demand test on the landing page**: a Plans section (planned prices, clearly not on sale) and
+  a waitlist form with consent and a privacy notice (`public/privacy.html`, with placeholders to
+  be completed before opening). `api/waitlist.js` (Vercel function, no dependencies) validates
+  and stores the minimum through Supabase's anon key, is off unless `WAITLIST_ENABLED=1`, never
+  logs emails, and answers duplicates like new sign-ups. `supabase/waitlist.sql` makes the table
+  insert-only for the website (verified on PostgreSQL 16 with Supabase's roles). CSP adds
+  `connect-src 'self'`. `scripts/update_csp_hash.py` refreshes the script hash. Go-live steps:
+  `docs/WAITLIST.md`.
 - `GET /v1/openapi.json`: OpenAPI 3.1 description of `yt-serve`, tested to list exactly the
   served routes.
 - Dev dependency: `jsonschema` (tests only; runtime stays standard-library only).
