@@ -19,6 +19,7 @@ TOOLS = {
     "report": "youtube_intelligence.reports.channel",
     "check": "youtube_intelligence.preflight.check",
     "moments": "youtube_intelligence.analytics.moments",
+    "localize": "youtube_intelligence.localize.pack",
 }
 
 

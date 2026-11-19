@@ -40,6 +40,7 @@ The creator decides and acts. See [SECURITY.md](SECURITY.md).
 | Planning | `/yt-plan` | - | A week sized to real capacity: one anchor, one cheap one, Shorts from the anchor. |
 | Community | `/yt-comment` | - | Comments triaged into four piles, replies drafted in the creator's voice. |
 | Channel | `/yt-audit` | - | A channel audit that ends in ONE fix. |
+| Languages | `/yt-localize` *(new)* | `yt-localize` *(new)* | Translation packs for title, description and captions: links, @handles, #hashtags and promo codes kept exactly, chapter timestamps kept, caption timing kept and wrapped to two lines, per-language checks, files built only when nothing fails. The tool doesn't translate; Claude or a translator does, and a fluent speaker should review. |
 
 Skills are prompt workflows for Claude. Tools are deterministic Python on the standard library
 only. The analysis tools never touch the network. Only the optional `yt-youtube` connector
@@ -96,6 +97,7 @@ yt-serve                                       # HTTP/JSON API on http://127.0.0
 yt-report videos.json --retention ID=ret.csv   # channel report with one fix
 yt-check --title "..." --transcript t.srt --description d.txt   # pre-upload verdict
 yt-moments manifest.json                       # what you said when viewers left, across videos
+yt-localize export --title "..." --transcript t.srt --lang es,fr --out pack.json   # then check, build
 ```
 
 Every tool takes `--json`. Every tool exits `1` with a one-line `error:` message on unusable

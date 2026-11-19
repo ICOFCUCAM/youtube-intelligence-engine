@@ -59,6 +59,14 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
   operation set (`remove_intervals`, `extract_clip`, `attach_chapters`); JSON Schema at
   `docs/schemas/production-instruction-1.schema.json`, tested to agree with the validator.
   No call to CineForge is made or tested.
+- **`yt-localize`** and a new **`/yt-localize` skill** (the twelfth): export a translation pack
+  (title, each description line, each caption; chapter names only, timestamps kept; links,
+  emails, @handles, #hashtags and promo codes marked "keep exactly"), check it per language
+  (FAIL: untranslated, a protected token changed, title over 100, description over 5,000 bytes,
+  `<` or `>`, chapters broken; WARN: captions over 20 characters per second or too long for two
+  lines of about 42) and build title, description and SRT with the original timings, wrapped to
+  two balanced lines, only when nothing fails. The engine does not translate. Demo:
+  `examples/localize/pack.json`, Spanish by an AI assistant, labelled as not reviewed.
 - **`yt-moments`** (`youtube_intelligence.analytics.moments`): aligns each video's retention
   curve with its transcript, measures every sentence's extra loss against the video's typical
   (median) loss rate, tags sentences (sponsor, subscribe/like ask, housekeeping, tangent, recap,

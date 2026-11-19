@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "youtube-intelligence",
-      "description": "Eleven Claude skills for YouTube creators, backed by tested Python tools: a heuristic hook score, a title and thumbnail linter, an edit decision list, chapters, a retention reader, Shorts candidates and outlier research. Nothing publishes - every skill drafts and the creator acts.",
+      "description": "Twelve Claude skills for YouTube creators, backed by tested Python tools: a heuristic hook score, a title and thumbnail linter, an edit decision list, chapters, a retention reader, Shorts candidates and outlier research. Nothing publishes - every skill drafts and the creator acts.",
       "source": "./",
       "category": "productivity",
       "homepage": "https://github.com/ICOFCUCAM/youtube-intelligence-engine"
