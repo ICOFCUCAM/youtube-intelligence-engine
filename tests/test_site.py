@@ -1,11 +1,11 @@
-"""The landing page (site/index.html): self-contained, accurate links, honest claims."""
+"""The landing page (public/index.html): self-contained, accurate links, honest claims."""
 import os
 import re
 from html.parser import HTMLParser
 
 from conftest import ROOT
 
-PAGE = os.path.join(ROOT, "site", "index.html")
+PAGE = os.path.join(ROOT, "public", "index.html")
 HTML = open(PAGE, encoding="utf-8").read()
 
 
@@ -85,24 +85,14 @@ def _vercel():
     return json.load(open(os.path.join(ROOT, "vercel.json")))
 
 
-def test_vercel_serves_site_without_a_build():
-    """The "build" only copies site/ to public/ (Vercel's default output folder), so the deploy
-    works whichever folder name a dashboard preset expects. The first Vercel deploy failed with
-    STATIC_BUILD_NO_OUT_DIR while outputDirectory was "site"."""
-    import shutil
-    import subprocess
+def test_vercel_serves_public_without_a_build():
+    """The page lives in public/ - the folder Vercel serves for a static site even with no
+    configuration - and there is no install or build step that could fail. Two earlier deploys
+    failed on folder handling (STATIC_BUILD_NO_OUT_DIR, then "cp: cannot stat 'site'")."""
     cfg = _vercel()
     assert cfg["outputDirectory"] == "public" and cfg["framework"] is None
-    assert cfg["installCommand"].startswith("echo")
-    tmp = os.path.join(ROOT, "build-check-tmp")
-    shutil.rmtree(tmp, ignore_errors=True)
-    shutil.copytree(os.path.join(ROOT, "site"), os.path.join(tmp, "site"))
-    try:
-        subprocess.run(cfg["buildCommand"], shell=True, cwd=tmp, check=True, capture_output=True)
-        built = os.path.join(tmp, cfg["outputDirectory"], "index.html")
-        assert open(built, encoding="utf-8").read() == HTML
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
+    assert "buildCommand" not in cfg and "installCommand" not in cfg
+    assert os.path.isfile(os.path.join(ROOT, "public", "index.html"))
 
 
 def test_csp_script_hash_matches_the_inline_script():
