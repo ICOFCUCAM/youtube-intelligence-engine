@@ -18,6 +18,7 @@ TOOLS = {
     "handoff": "youtube_intelligence.handoff.cli",
     "report": "youtube_intelligence.reports.channel",
     "check": "youtube_intelligence.preflight.check",
+    "moments": "youtube_intelligence.analytics.moments",
 }
 
 
