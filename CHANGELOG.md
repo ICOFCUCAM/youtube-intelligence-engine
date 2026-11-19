@@ -65,8 +65,9 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
 - **Landing page** (`site/index.html`): a single static page for creators with a developer
   section; no external scripts, fonts or trackers; light/dark; checked at phone and desktop
   widths. Its example outputs are tested against the tools' real output, and its links and
-  install commands against the project. Deployed on **Vercel** (`vercel.json`): serves `site/`
-  with no build step, and sends a strict Content Security Policy (no external sources; the one
+  install commands against the project. Deployed on **Vercel** (`vercel.json`): the build only
+  copies `site/` to `public/` (Vercel's default output folder; the first deploy failed with
+  `STATIC_BUILD_NO_OUT_DIR` when it pointed at `site/` directly), and sends a strict Content Security Policy (no external sources; the one
   inline script pinned by SHA-256, tested to match), plus `nosniff`, `DENY` framing, HSTS, and a
   locked-down Permissions-Policy. The GitHub Pages workflow was removed in favour of Vercel.
 
