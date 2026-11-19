@@ -32,6 +32,7 @@ The creator decides and acts. See [SECURITY.md](SECURITY.md).
 | YouTube data | - | `yt-youtube` *(new, read-only)* | Fetches channel uploads (API key) and retention curves (OAuth) into the files `yt-swipe` and `yt-retention` read. Tested offline; not yet verified against the live API with real credentials. |
 | Service | - | `yt-serve` *(new)* | The same tools as a local, stateless HTTP/JSON API (for TAKE or any app). Loopback by default; a token is required to listen beyond it. See [docs/API_DESIGN.md](docs/API_DESIGN.md). |
 | Handoff | - | `yt-handoff` *(new)* | Approval records (SHA-256 pinned, HMAC-signed with a key) and `production-instruction@1` for a video engine such as CineForge. Only approved, unchanged artefacts become instructions. JSON Schema in [docs/schemas](docs/schemas/). |
+| Report | `/yt-audit` | `yt-report` *(new)* | One channel report: recent uploads vs the channel median, title checks, retention where exported, and ONE fix chosen by stated rules. HTML (self-contained), Markdown or JSON. [Sample](public/sample-report.html) (invented data). |
 | Evaluation | - | `yt-eval` *(new)* | Scores the edit, chapter and Shorts tools against labelled transcripts. See [docs/EVALUATION.md](docs/EVALUATION.md). |
 | SEO | `/yt-seo` | - | Description, tags worth having, and the three queries the video should win. |
 | Planning | `/yt-plan` | - | A week sized to real capacity: one anchor, one cheap one, Shorts from the anchor. |
@@ -90,6 +91,7 @@ yt-shorts transcript.srt --top 5               # Shorts candidates
 yt-eval datasets/synthetic-v1/dataset.json     # measure the tools against labels
 yt-youtube channel-videos --handle @Chan --out collected.json   # read-only fetch (YOUTUBE_API_KEY)
 yt-serve                                       # HTTP/JSON API on http://127.0.0.1:8765
+yt-report videos.json --retention ID=ret.csv   # channel report with one fix
 ```
 
 Every tool takes `--json`. Every tool exits `1` with a one-line `error:` message on unusable

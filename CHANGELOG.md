@@ -59,6 +59,13 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
   operation set (`remove_intervals`, `extract_clip`, `attach_chapters`); JSON Schema at
   `docs/schemas/production-instruction-1.schema.json`, tested to agree with the validator.
   No call to CineForge is made or tested.
+- **`yt-report`** (`youtube_intelligence.reports.channel`): a channel report built from the
+  existing tools (multiple of the channel median, title lint, formula, retention) that ends in one
+  fix chosen by four stated rules (leaking opening, then flagged packaging, then the steepest
+  cliff, then nothing urgent). HTML (self-contained, all third-party text escaped), Markdown or
+  JSON (`channel-report@1`). Reads `yt-youtube` output directly. A sample built from invented
+  data is published at `/sample-report` and linked from the Creator plan; a test keeps it
+  identical to the generator's output.
 - **Demand test on the landing page**: a Plans section (planned prices, clearly not on sale) and
   a waitlist form with consent and a privacy notice (`public/privacy.html`, with placeholders to
   be completed before opening). `api/waitlist.js` (Vercel function, no dependencies) validates
