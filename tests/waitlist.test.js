@@ -54,7 +54,8 @@ test("valid signup is stored minimally, email normalised", async () => {
   assert.equal(f.calls[0].url, "https://abcdefgh.supabase.co/rest/v1/yie_waitlist_signups");
   assert.equal(f.calls[0].init.headers.Prefer, "return=minimal");
   assert.deepEqual(JSON.parse(f.calls[0].init.body),
-    { email: "creator@example.org", offer: "shorts", channel_size: "1k_10k", consent_version: CONSENT_VERSION });
+    { email: "creator@example.org", offer: "shorts", channel_size: "1k_10k", other_platforms: [],
+      consent_version: CONSENT_VERSION });
 });
 
 test("duplicate email gets the same answer as a new one", async () => {
@@ -110,4 +111,18 @@ test("storage failures are generic and never log the email", async () => {
   await handler(req(GOOD), r2, { env: ON, fetch: async () => { throw new Error("down creator@example.org"); }, log: (m) => logs2.push(m) });
   assert.equal(r2.statusCode, 502);
   assert.ok(!logs2.join(" ").includes("creator@"));
+});
+
+test("other platforms: optional, de-duplicated, sorted, validated", async () => {
+  const ok = await call({ ...GOOD, other_platforms: ["tiktok", "linkedin", "tiktok"] });
+  assert.equal(ok.r.statusCode, 200);
+  assert.deepEqual(JSON.parse(ok.f.calls[0].init.body).other_platforms, ["linkedin", "tiktok"]);
+  const none = await call({ ...GOOD, other_platforms: ["none"] });
+  assert.deepEqual(JSON.parse(none.f.calls[0].init.body).other_platforms, ["none"]);
+  for (const bad of [["myspace"], "tiktok", [1], ["none", "tiktok"], Array(8).fill("x")]) {
+    const { r, f } = await call({ ...GOOD, other_platforms: bad });
+    assert.equal(r.statusCode, 400, JSON.stringify(bad));
+    assert.equal(r.json.error, "invalid_platforms");
+    assert.equal(f.calls.length, 0);
+  }
 });

@@ -10,7 +10,8 @@
 
 const OFFERS = new Set(["shorts", "reports", "agency", "api", "not_sure"]);
 const SIZES = new Set(["starting", "under_1k", "1k_10k", "10k_100k", "over_100k"]);
-const CONSENT_VERSION = "2026-11-v1";
+const PLATFORMS = new Set(["tiktok", "instagram", "facebook", "linkedin", "x", "podcasts", "none"]);
+const CONSENT_VERSION = "2026-11-v2";
 const EMAIL = /^[^@\s]{1,64}@[^@\s]+\.[^@\s]{2,63}$/;
 const SUPABASE_HOST = /^https:\/\/[a-z0-9-]+\.supabase\.co$/;
 const MAX_BODY = 4096;
@@ -79,6 +80,15 @@ async function handler(req, res, deps = {}) {
   if (size !== null && !SIZES.has(size)) {
     return bad(res, "invalid_channel_size", "Please choose a channel size from the list.");
   }
+  let platforms = body.other_platforms === undefined || body.other_platforms === null ? [] : body.other_platforms;
+  if (!Array.isArray(platforms) || platforms.length > PLATFORMS.size ||
+      !platforms.every((p) => typeof p === "string" && PLATFORMS.has(p))) {
+    return bad(res, "invalid_platforms", "Please choose platforms from the list.");
+  }
+  platforms = [...new Set(platforms)].sort();
+  if (platforms.includes("none") && platforms.length > 1) {
+    return bad(res, "invalid_platforms", "Choose platforms, or 'nowhere else' - not both.");
+  }
   if (body.consent !== true) {
     return bad(res, "consent_required", "Please tick the box to agree to be emailed about the waitlist.");
   }
@@ -94,7 +104,8 @@ async function handler(req, res, deps = {}) {
         "Content-Type": "application/json",
         Prefer: "return=minimal",
       },
-      body: JSON.stringify({ email, offer: body.offer, channel_size: size, consent_version: CONSENT_VERSION }),
+      body: JSON.stringify({ email, offer: body.offer, channel_size: size, other_platforms: platforms,
+                             consent_version: CONSENT_VERSION }),
     });
   } catch (e) {
     log("waitlist: storage unreachable");
