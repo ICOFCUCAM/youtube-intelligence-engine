@@ -1,9 +1,11 @@
 # TAKE and CineForge integration
 
-> **Status: design, plus a callable service.** This repository has no code that calls TAKE or
-> CineForge and does not depend on either. What exists today: a stable, versioned EDL JSON
-> (`youtube-intelligence/edl@1`), and a stateless HTTP API (`yt-serve`) that TAKE can call for
-> every analysis.
+> **Status: contracts implemented, no calls to either system.** This repository does not call
+> or depend on TAKE or CineForge. It now produces everything they need: the EDL
+> (`youtube-intelligence/edl@1`), approval records (`approval@1`), production instructions
+> (`production-instruction@1`, with a published JSON Schema), and a stateless HTTP API
+> (`yt-serve`) with an OpenAPI document. The CineForge side (accepting and executing an
+> instruction) is not built here and has not been tested against CineForge.
 
 ## Responsibilities
 
@@ -44,25 +46,70 @@ For a renderer:
 - the EDL is speech-only. Silent demos and B-roll may need a human to exclude intervals before
   approval.
 
-## Contract 2: production instruction (proposed)
+## Contract 2: approval and production instruction (implemented)
+
+```bash
+yt-deadair talk.srt --hold-review --json > edl.json
+```
+
+```bash
+yt-handoff approve --edl edl.json --chapters chapters.json --by editor@example.org --out approval.json
+```
+
+```bash
+yt-handoff instruction --approval approval.json --edl edl.json --chapters chapters.json --media cineforge://asset/123 --out instruction.json
+```
+
+The same steps are `POST /v1/handoff/approve`, `/v1/handoff/instruction` and
+`/v1/handoff/validate` on `yt-serve`.
+
+**Approval record (`youtube-intelligence/approval@1`)** pins each approved artefact by the
+SHA-256 of its canonical JSON (sorted keys, no whitespace), records `approved_by` and a UTC
+`approved_at`, and lists the Shorts actually picked. Rules:
+- an EDL that still applies `[review]` pause cuts can be approved only with an explicit
+  acknowledgement (`--acknowledge-review`), or after rebuilding it with `--hold-review`;
+- chapters that break YouTube's rules cannot be approved;
+- with `YIE_APPROVAL_KEY` (32+ characters, shared with the executor) the record is signed
+  (`hmac-sha256:<hex>` over the canonical record), and unsigned approvals are refused.
+
+A hash proves the artefact is unchanged; it does not prove who approved it. Identity comes from
+the system that authenticated the approver (TAKE) and from the signature key.
+
+**Instruction (`youtube-intelligence/production-instruction@1`)**, schema:
+[`docs/schemas/production-instruction-1.schema.json`](schemas/production-instruction-1.schema.json).
 
 ```json
 {
   "schema": "youtube-intelligence/production-instruction@1",
-  "instruction_id": "uuid",
-  "project": {"workspace": "ws_...", "channel": "ch_...", "project": "pr_..."},
-  "media": {"ref": "cineforge://asset/...", "transcript_offset_seconds": 0.0},
+  "instruction_id": "68759453-b88a-4281-b32c-3fd143e66095",
+  "media": {"ref": "cineforge://asset/demo-123", "transcript_offset_seconds": 0.0},
   "operations": [
-    {"op": "remove_intervals", "intervals": [[6.9, 7.4], [15.125, 16.175]], "source_artifact": "edl@1:v3"},
-    {"op": "extract_clip", "start": 0.0, "end": 28.6, "aspect": "9:16", "label": "short-1"},
-    {"op": "attach_chapters", "chapters": [{"start": 0, "title": "..."}]}
+    {"op": "remove_intervals", "intervals": [[6.9, 7.4], [19.9, 20.3]], "source_artifact": "edl:646cef3c67d15a13"},
+    {"op": "extract_clip", "start": 0.0, "end": 28.6, "aspect": "9:16", "label": "short-1", "source_artifact": "shorts:..."},
+    {"op": "attach_chapters", "chapters": [{"start": 0.0, "title": "..."}], "source_artifact": "chapters:ba2e192dd908187c"}
   ],
-  "approval": {"approved_by": "user_...", "approved_at": "2026-11-14T12:00:00Z", "artifact_versions": ["edl@1:v3"]}
+  "approval": {"approved_by": "editor@example.org", "approved_at": "2026-11-19T12:00:00Z",
+               "artifacts": [{"kind": "edl", "sha256": "..."}], "acknowledged_review": false,
+               "signature": "hmac-sha256:..."}
 }
 ```
 
-Rules: an instruction without `approval` is rejected; CineForge echoes `instruction_id` in its
-result; operations are declarative, never code; unknown ops are rejected, not ignored.
+Guarantees, enforced by `handoff.instruction.validate` and tested against the JSON Schema:
+- instructions are built only from artefacts whose hash matches the approval, so an edit list
+  changed after approval is refused;
+- `source_artifact` must name an approved artefact (`<kind>:<first 16 hex of its sha256>`);
+- the operation set is closed (`remove_intervals`, `extract_clip`, `attach_chapters`): unknown
+  operations and unknown fields are rejected, never ignored;
+- intervals are non-negative, sorted and non-overlapping, and pauses held back for review are
+  not in them;
+- chapters start at 0, number three or more, and are 10 s apart;
+- the full approval, including its signature, travels with the instruction, so the executor
+  can verify it with the shared key (`yt-handoff validate` does exactly that).
+
+**What CineForge must do (not built here):** reject anything that fails the schema or the
+checks above; verify the signature with the shared key; apply
+`media.transcript_offset_seconds`; echo `instruction_id` in its result; and never execute an
+instruction twice (treat `instruction_id` as an idempotency key).
 
 ## Contract 3: TAKE (proposed)
 
@@ -73,6 +120,8 @@ happens in TAKE. The engine records it against the artefact version. TAKE shows 
 
 1. Done: the existing functions are behind stateless HTTP endpoints (`yt-serve`, see
    [API_DESIGN.md](API_DESIGN.md)). TAKE can call it today; nothing is stored.
-2. Agree `production-instruction@1` with the CineForge team, starting with the
-   `remove_intervals` op only.
-3. Add the approval record and refuse unapproved instructions, before any second op.
+2. Done on this side: `production-instruction@1`, approval records with optional HMAC
+   signatures, a JSON Schema and `yt-handoff`. Next: review the schema with the CineForge team
+   and run one real instruction through CineForge, starting with `remove_intervals`.
+3. TAKE: authenticate the approver, then call `/v1/handoff/approve` with the shared key
+   configured on the engine, so every approval it records is signed.

@@ -27,8 +27,9 @@
 ## Phase 2: service layer (when TAKE needs it)
 
 - Done: stateless HTTP API wrapping the library, `yt-serve` ([API_DESIGN.md](API_DESIGN.md)).
-- Next for production use: run behind a TLS reverse proxy with rate limits; an OpenAPI document
-  generated from the endpoint table; per-workspace tokens when TAKE has workspaces.
+- Done: OpenAPI 3.1 document at `/v1/openapi.json`, tested to match the served routes.
+- Next for production use: run behind a TLS reverse proxy with rate limits; per-workspace tokens
+  when TAKE has workspaces.
 - Voice profiles as structured data per creator, not just `voice.md`.
 - Provider-independent AI adapter interface for the drafting steps outside Claude Code.
 
@@ -44,8 +45,10 @@
 
 ## Phase 4: approved actions
 
-- Approval records, action executor and action log ([SECURITY.md](SECURITY.md)).
-- CineForge `production-instruction@1` ([TAKE_CINEFORGE_INTEGRATION.md](TAKE_CINEFORGE_INTEGRATION.md)).
+- Done: approval records (signed with `YIE_APPROVAL_KEY`) and `production-instruction@1` with a
+  JSON Schema, `yt-handoff`, and `/v1/handoff/*` ([TAKE_CINEFORGE_INTEGRATION.md](TAKE_CINEFORGE_INTEGRATION.md)).
+- Next: a first real instruction through CineForge; storage and versioning of approvals; the
+  action executor and action log for YouTube writes ([SECURITY.md](SECURITY.md)).
 - Write scopes, one feature at a time: metadata updates, comment replies, then publishing.
 
 Not planned: unattended posting, scraping logged-in pages, tag generators.

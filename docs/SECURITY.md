@@ -26,6 +26,8 @@ rules the code and skills follow.
 | Forged OAuth redirect or code interception | Random `state` checked on the loopback redirect; PKCE S256; listener bound to 127.0.0.1 only and closed after one response |
 | Runaway API usage | Pagination capped (100 pages); bounded retries with backoff; quota errors never retried |
 | HTTP service (`yt-serve`) misuse | Loopback by default; non-loopback refused without a 16+ character bearer token (constant-time compare); content-only inputs (no file paths); 8 MB body cap, per-list item caps, numeric range checks; 30 s socket timeout; no CORS; internals never returned to clients; bodies never logged; unread-body connections closed |
+| An edit applied that nobody approved, or changed after approval | Instructions are built only from artefacts whose SHA-256 matches the approval; `[review]` cuts need explicit acknowledgement; closed operation set, unknown ops and fields rejected; JSON Schema published for the executor |
+| Forged approvals | With `YIE_APPROVAL_KEY` (32+ characters) approvals are HMAC-SHA256 signed and unsigned or altered ones are refused (constant-time compare); the signature travels with the instruction so the executor can verify it. Without a key, approvals prove integrity only, and the tools say so |
 | Evaluation dataset paths escaping the dataset folder | Rejected by the loader (`..` and absolute paths) |
 
 ## Prompt injection (the main risk)

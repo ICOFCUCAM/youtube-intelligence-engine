@@ -51,6 +51,18 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
 - `core.transcript.parse_transcript(content, format)`, `analytics.retention.parse_csv_text` and
   `attach_cues`: content-based entry points (the file-based functions now call them).
 
+- **Handoff** (`youtube_intelligence.handoff`, `yt-handoff`, `/v1/handoff/*`): `approval@1`
+  records pin approved artefacts by SHA-256 of canonical JSON; `[review]` cuts need an explicit
+  acknowledgement; invalid chapters cannot be approved; optional HMAC-SHA256 signatures with
+  `YIE_APPROVAL_KEY` (unsigned or altered approvals refused when a key is set).
+  `production-instruction@1` is built only from artefacts that match their approval; closed
+  operation set (`remove_intervals`, `extract_clip`, `attach_chapters`); JSON Schema at
+  `docs/schemas/production-instruction-1.schema.json`, tested to agree with the validator.
+  No call to CineForge is made or tested.
+- `GET /v1/openapi.json`: OpenAPI 3.1 description of `yt-serve`, tested to list exactly the
+  served routes.
+- Dev dependency: `jsonschema` (tests only; runtime stays standard-library only).
+
 ### Changed
 - **chapters**: the default `--target` is derived from the video's length (about one per 90 s,
   plus one, between 3 and 10; equals the old 7 for a 9-minute video). An explicit `--target`

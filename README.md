@@ -26,6 +26,7 @@ The creator decides and acts. See [SECURITY.md](SECURITY.md).
 | Shorts | `/yt-shorts` | `yt-shorts` *(new)* | Candidate 20-55 s spans inside a long video, scored on opening, turn and ending signals. |
 | YouTube data | - | `yt-youtube` *(new, read-only)* | Fetches channel uploads (API key) and retention curves (OAuth) into the files `yt-swipe` and `yt-retention` read. Tested offline; not yet verified against the live API with real credentials. |
 | Service | - | `yt-serve` *(new)* | The same tools as a local, stateless HTTP/JSON API (for TAKE or any app). Loopback by default; a token is required to listen beyond it. See [docs/API_DESIGN.md](docs/API_DESIGN.md). |
+| Handoff | - | `yt-handoff` *(new)* | Approval records (SHA-256 pinned, HMAC-signed with a key) and `production-instruction@1` for a video engine such as CineForge. Only approved, unchanged artefacts become instructions. JSON Schema in [docs/schemas](docs/schemas/). |
 | Evaluation | - | `yt-eval` *(new)* | Scores the edit, chapter and Shorts tools against labelled transcripts. See [docs/EVALUATION.md](docs/EVALUATION.md). |
 | SEO | `/yt-seo` | - | Description, tags worth having, and the three queries the video should win. |
 | Planning | `/yt-plan` | - | A week sized to real capacity: one anchor, one cheap one, Shorts from the anchor. |
@@ -123,7 +124,8 @@ src/youtube_intelligence/
   shorts/          Shorts candidates (new)
   evaluation/      metrics, dataset loader, yt-eval (new)
   integrations/    youtube/: read-only Data + Analytics API connector, yt-youtube (new)
-  service/         stateless HTTP/JSON API, yt-serve (new)
+  service/         stateless HTTP/JSON API, yt-serve, OpenAPI (new)
+  handoff/         approval records + production instructions, yt-handoff (new)
   data/hooks.json  the 21-formula library (upstream, unmodified)
 templates/         voice.md (upstream, unmodified)
 datasets/          labelled evaluation sets (synthetic-v1, synthetic-words-v1: generated, pinned baselines)
