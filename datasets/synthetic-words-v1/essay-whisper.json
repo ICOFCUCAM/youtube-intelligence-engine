@@ -1,0 +1,938 @@
+{
+ "language": "en",
+ "segments": [
+  {
+   "id": 0,
+   "start": 0.0,
+   "end": 5.14,
+   "text": " Every single time we changed the format, the numbers dipped for a week.",
+   "words": [
+    {
+     "word": " Every",
+     "start": 0.0,
+     "end": 0.38
+    },
+    {
+     "word": " single",
+     "start": 0.38,
+     "end": 0.76
+    },
+    {
+     "word": " time",
+     "start": 0.76,
+     "end": 1.14
+    },
+    {
+     "word": " we",
+     "start": 1.14,
+     "end": 1.52
+    },
+    {
+     "word": " changed",
+     "start": 1.52,
+     "end": 1.9
+    },
+    {
+     "word": " the",
+     "start": 1.9,
+     "end": 2.28
+    },
+    {
+     "word": " format,",
+     "start": 2.28,
+     "end": 2.66
+    },
+    {
+     "word": " the",
+     "start": 2.66,
+     "end": 3.04
+    },
+    {
+     "word": " numbers",
+     "start": 3.04,
+     "end": 3.42
+    },
+    {
+     "word": " dipped",
+     "start": 3.42,
+     "end": 3.8
+    },
+    {
+     "word": " for",
+     "start": 3.8,
+     "end": 4.18
+    },
+    {
+     "word": " a",
+     "start": 4.18,
+     "end": 4.56
+    },
+    {
+     "word": " week.",
+     "start": 4.56,
+     "end": 4.94
+    }
+   ]
+  },
+  {
+   "id": 1,
+   "start": 5.29,
+   "end": 10.43,
+   "text": " Every single time we held our nerve, they came back higher than before.",
+   "words": [
+    {
+     "word": " Every",
+     "start": 5.29,
+     "end": 5.67
+    },
+    {
+     "word": " single",
+     "start": 5.67,
+     "end": 6.05
+    },
+    {
+     "word": " time",
+     "start": 6.05,
+     "end": 6.43
+    },
+    {
+     "word": " we",
+     "start": 6.43,
+     "end": 6.81
+    },
+    {
+     "word": " held",
+     "start": 6.81,
+     "end": 7.19
+    },
+    {
+     "word": " our",
+     "start": 7.19,
+     "end": 7.57
+    },
+    {
+     "word": " nerve,",
+     "start": 7.57,
+     "end": 7.95
+    },
+    {
+     "word": " they",
+     "start": 7.95,
+     "end": 8.33
+    },
+    {
+     "word": " came",
+     "start": 8.33,
+     "end": 8.71
+    },
+    {
+     "word": " back",
+     "start": 8.71,
+     "end": 9.09
+    },
+    {
+     "word": " higher",
+     "start": 9.09,
+     "end": 9.47
+    },
+    {
+     "word": " than",
+     "start": 9.47,
+     "end": 9.85
+    },
+    {
+     "word": " before.",
+     "start": 9.85,
+     "end": 10.23
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "start": 11.73,
+   "end": 14.97,
+   "text": " That pattern took us two years to notice.",
+   "words": [
+    {
+     "word": " That",
+     "start": 11.73,
+     "end": 12.11
+    },
+    {
+     "word": " pattern",
+     "start": 12.11,
+     "end": 12.49
+    },
+    {
+     "word": " took",
+     "start": 12.49,
+     "end": 12.87
+    },
+    {
+     "word": " us",
+     "start": 12.87,
+     "end": 13.25
+    },
+    {
+     "word": " two",
+     "start": 13.25,
+     "end": 13.63
+    },
+    {
+     "word": " years",
+     "start": 13.63,
+     "end": 14.01
+    },
+    {
+     "word": " to",
+     "start": 14.01,
+     "end": 14.39
+    },
+    {
+     "word": " notice.",
+     "start": 14.39,
+     "end": 14.77
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "start": 17.17,
+   "end": 21.17,
+   "text": " Here is the uncomfortable part about growth on this platform.",
+   "words": [
+    {
+     "word": " Here",
+     "start": 17.17,
+     "end": 17.55
+    },
+    {
+     "word": " is",
+     "start": 17.55,
+     "end": 17.93
+    },
+    {
+     "word": " the",
+     "start": 17.93,
+     "end": 18.31
+    },
+    {
+     "word": " uncomfortable",
+     "start": 18.31,
+     "end": 18.69
+    },
+    {
+     "word": " part",
+     "start": 18.69,
+     "end": 19.07
+    },
+    {
+     "word": " about",
+     "start": 19.07,
+     "end": 19.45
+    },
+    {
+     "word": " growth",
+     "start": 19.45,
+     "end": 19.83
+    },
+    {
+     "word": " on",
+     "start": 19.83,
+     "end": 20.21
+    },
+    {
+     "word": " this",
+     "start": 20.21,
+     "end": 20.59
+    },
+    {
+     "word": " platform.",
+     "start": 20.59,
+     "end": 20.97
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "start": 21.32,
+   "end": 26.08,
+   "text": " So the, um, real problem was never the algorithm or the thumbnails.",
+   "words": [
+    {
+     "word": " So",
+     "start": 21.32,
+     "end": 21.7
+    },
+    {
+     "word": " the,",
+     "start": 21.7,
+     "end": 22.08
+    },
+    {
+     "word": " um,",
+     "start": 22.08,
+     "end": 22.46
+    },
+    {
+     "word": " real",
+     "start": 22.46,
+     "end": 22.84
+    },
+    {
+     "word": " problem",
+     "start": 22.84,
+     "end": 23.22
+    },
+    {
+     "word": " was",
+     "start": 23.22,
+     "end": 23.6
+    },
+    {
+     "word": " never",
+     "start": 23.6,
+     "end": 23.98
+    },
+    {
+     "word": " the",
+     "start": 23.98,
+     "end": 24.36
+    },
+    {
+     "word": " algorithm",
+     "start": 24.36,
+     "end": 24.74
+    },
+    {
+     "word": " or",
+     "start": 24.74,
+     "end": 25.12
+    },
+    {
+     "word": " the",
+     "start": 25.12,
+     "end": 25.5
+    },
+    {
+     "word": " thumbnails.",
+     "start": 25.5,
+     "end": 25.88
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "start": 26.23,
+   "end": 31.37,
+   "text": " It was that we kept abandoning ideas before they had time to work.",
+   "words": [
+    {
+     "word": " It",
+     "start": 26.23,
+     "end": 26.61
+    },
+    {
+     "word": " was",
+     "start": 26.61,
+     "end": 26.99
+    },
+    {
+     "word": " that",
+     "start": 26.99,
+     "end": 27.37
+    },
+    {
+     "word": " we",
+     "start": 27.37,
+     "end": 27.75
+    },
+    {
+     "word": " kept",
+     "start": 27.75,
+     "end": 28.13
+    },
+    {
+     "word": " abandoning",
+     "start": 28.13,
+     "end": 28.51
+    },
+    {
+     "word": " ideas",
+     "start": 28.51,
+     "end": 28.89
+    },
+    {
+     "word": " before",
+     "start": 28.89,
+     "end": 29.27
+    },
+    {
+     "word": " they",
+     "start": 29.27,
+     "end": 29.65
+    },
+    {
+     "word": " had",
+     "start": 29.65,
+     "end": 30.03
+    },
+    {
+     "word": " time",
+     "start": 30.03,
+     "end": 30.41
+    },
+    {
+     "word": " to",
+     "start": 30.41,
+     "end": 30.79
+    },
+    {
+     "word": " work.",
+     "start": 30.79,
+     "end": 31.17
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "start": 31.52,
+   "end": 37.04,
+   "text": " But the audience does not see your analytics, they see a channel that wanders.",
+   "words": [
+    {
+     "word": " But",
+     "start": 31.52,
+     "end": 31.9
+    },
+    {
+     "word": " the",
+     "start": 31.9,
+     "end": 32.28
+    },
+    {
+     "word": " audience",
+     "start": 32.28,
+     "end": 32.66
+    },
+    {
+     "word": " does",
+     "start": 32.66,
+     "end": 33.04
+    },
+    {
+     "word": " not",
+     "start": 33.04,
+     "end": 33.42
+    },
+    {
+     "word": " see",
+     "start": 33.42,
+     "end": 33.8
+    },
+    {
+     "word": " your",
+     "start": 33.8,
+     "end": 34.18
+    },
+    {
+     "word": " analytics,",
+     "start": 34.18,
+     "end": 34.56
+    },
+    {
+     "word": " they",
+     "start": 34.56,
+     "end": 34.94
+    },
+    {
+     "word": " see",
+     "start": 34.94,
+     "end": 35.32
+    },
+    {
+     "word": " a",
+     "start": 35.32,
+     "end": 35.7
+    },
+    {
+     "word": " channel",
+     "start": 35.7,
+     "end": 36.08
+    },
+    {
+     "word": " that",
+     "start": 36.08,
+     "end": 36.46
+    },
+    {
+     "word": " wanders.",
+     "start": 36.46,
+     "end": 36.84
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "start": 37.19,
+   "end": 41.57,
+   "text": " Consistency is not posting often, it is being recognisable every time.",
+   "words": [
+    {
+     "word": " Consistency",
+     "start": 37.19,
+     "end": 37.57
+    },
+    {
+     "word": " is",
+     "start": 37.57,
+     "end": 37.95
+    },
+    {
+     "word": " not",
+     "start": 37.95,
+     "end": 38.33
+    },
+    {
+     "word": " posting",
+     "start": 38.33,
+     "end": 38.71
+    },
+    {
+     "word": " often,",
+     "start": 38.71,
+     "end": 39.09
+    },
+    {
+     "word": " it",
+     "start": 39.09,
+     "end": 39.47
+    },
+    {
+     "word": " is",
+     "start": 39.47,
+     "end": 39.85
+    },
+    {
+     "word": " being",
+     "start": 39.85,
+     "end": 40.23
+    },
+    {
+     "word": " recognisable",
+     "start": 40.23,
+     "end": 40.61
+    },
+    {
+     "word": " every",
+     "start": 40.61,
+     "end": 40.99
+    },
+    {
+     "word": " time.",
+     "start": 40.99,
+     "end": 41.37
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "start": 44.67,
+   "end": 49.43,
+   "text": " So what would we do differently with a brand new channel today?",
+   "words": [
+    {
+     "word": " So",
+     "start": 44.67,
+     "end": 45.05
+    },
+    {
+     "word": " what",
+     "start": 45.05,
+     "end": 45.43
+    },
+    {
+     "word": " would",
+     "start": 45.43,
+     "end": 45.81
+    },
+    {
+     "word": " we",
+     "start": 45.81,
+     "end": 46.19
+    },
+    {
+     "word": " do",
+     "start": 46.19,
+     "end": 46.57
+    },
+    {
+     "word": " differently",
+     "start": 46.57,
+     "end": 46.95
+    },
+    {
+     "word": " with",
+     "start": 46.95,
+     "end": 47.33
+    },
+    {
+     "word": " a",
+     "start": 47.33,
+     "end": 47.71
+    },
+    {
+     "word": " brand",
+     "start": 47.71,
+     "end": 48.09
+    },
+    {
+     "word": " new",
+     "start": 48.09,
+     "end": 48.47
+    },
+    {
+     "word": " channel",
+     "start": 48.47,
+     "end": 48.85
+    },
+    {
+     "word": " today?",
+     "start": 48.85,
+     "end": 49.23
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "start": 49.58,
+   "end": 52.06,
+   "text": " We would pick one format and",
+   "words": [
+    {
+     "word": " We",
+     "start": 49.58,
+     "end": 49.96
+    },
+    {
+     "word": " would",
+     "start": 49.96,
+     "end": 50.34
+    },
+    {
+     "word": " pick",
+     "start": 50.34,
+     "end": 50.72
+    },
+    {
+     "word": " one",
+     "start": 50.72,
+     "end": 51.1
+    },
+    {
+     "word": " format",
+     "start": 51.1,
+     "end": 51.48
+    },
+    {
+     "word": " and",
+     "start": 51.48,
+     "end": 51.86
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "start": 52.21,
+   "end": 52.79,
+   "text": " hmm",
+   "words": [
+    {
+     "word": " hmm",
+     "start": 52.21,
+     "end": 52.59
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "start": 52.94,
+   "end": 58.08,
+   "text": " We would pick one format and make thirty of them before judging anything.",
+   "words": [
+    {
+     "word": " We",
+     "start": 52.94,
+     "end": 53.32
+    },
+    {
+     "word": " would",
+     "start": 53.32,
+     "end": 53.7
+    },
+    {
+     "word": " pick",
+     "start": 53.7,
+     "end": 54.08
+    },
+    {
+     "word": " one",
+     "start": 54.08,
+     "end": 54.46
+    },
+    {
+     "word": " format",
+     "start": 54.46,
+     "end": 54.84
+    },
+    {
+     "word": " and",
+     "start": 54.84,
+     "end": 55.22
+    },
+    {
+     "word": " make",
+     "start": 55.22,
+     "end": 55.6
+    },
+    {
+     "word": " thirty",
+     "start": 55.6,
+     "end": 55.98
+    },
+    {
+     "word": " of",
+     "start": 55.98,
+     "end": 56.36
+    },
+    {
+     "word": " them",
+     "start": 56.36,
+     "end": 56.74
+    },
+    {
+     "word": " before",
+     "start": 56.74,
+     "end": 57.12
+    },
+    {
+     "word": " judging",
+     "start": 57.12,
+     "end": 57.5
+    },
+    {
+     "word": " anything.",
+     "start": 57.5,
+     "end": 57.88
+    }
+   ]
+  },
+  {
+   "id": 12,
+   "start": 58.23,
+   "end": 63.37,
+   "text": " We would write the title and thumbnail together before recording a single frame.",
+   "words": [
+    {
+     "word": " We",
+     "start": 58.23,
+     "end": 58.61
+    },
+    {
+     "word": " would",
+     "start": 58.61,
+     "end": 58.99
+    },
+    {
+     "word": " write",
+     "start": 58.99,
+     "end": 59.37
+    },
+    {
+     "word": " the",
+     "start": 59.37,
+     "end": 59.75
+    },
+    {
+     "word": " title",
+     "start": 59.75,
+     "end": 60.13
+    },
+    {
+     "word": " and",
+     "start": 60.13,
+     "end": 60.51
+    },
+    {
+     "word": " thumbnail",
+     "start": 60.51,
+     "end": 60.89
+    },
+    {
+     "word": " together",
+     "start": 60.89,
+     "end": 61.27
+    },
+    {
+     "word": " before",
+     "start": 61.27,
+     "end": 61.65
+    },
+    {
+     "word": " recording",
+     "start": 61.65,
+     "end": 62.03
+    },
+    {
+     "word": " a",
+     "start": 62.03,
+     "end": 62.41
+    },
+    {
+     "word": " single",
+     "start": 62.41,
+     "end": 62.79
+    },
+    {
+     "word": " frame.",
+     "start": 62.79,
+     "end": 63.17
+    }
+   ]
+  },
+  {
+   "id": 13,
+   "start": 65.17,
+   "end": 70.31,
+   "text": " And we would read every retention graph like a letter from the viewer.",
+   "words": [
+    {
+     "word": " And",
+     "start": 65.17,
+     "end": 65.55
+    },
+    {
+     "word": " we",
+     "start": 65.55,
+     "end": 65.93
+    },
+    {
+     "word": " would",
+     "start": 65.93,
+     "end": 66.31
+    },
+    {
+     "word": " read",
+     "start": 66.31,
+     "end": 66.69
+    },
+    {
+     "word": " every",
+     "start": 66.69,
+     "end": 67.07
+    },
+    {
+     "word": " retention",
+     "start": 67.07,
+     "end": 67.45
+    },
+    {
+     "word": " graph",
+     "start": 67.45,
+     "end": 67.83
+    },
+    {
+     "word": " like",
+     "start": 67.83,
+     "end": 68.21
+    },
+    {
+     "word": " a",
+     "start": 68.21,
+     "end": 68.59
+    },
+    {
+     "word": " letter",
+     "start": 68.59,
+     "end": 68.97
+    },
+    {
+     "word": " from",
+     "start": 68.97,
+     "end": 69.35
+    },
+    {
+     "word": " the",
+     "start": 69.35,
+     "end": 69.73
+    },
+    {
+     "word": " viewer.",
+     "start": 69.73,
+     "end": 70.11
+    }
+   ]
+  },
+  {
+   "id": 14,
+   "start": 70.46,
+   "end": 71.42,
+   "text": " you know",
+   "words": [
+    {
+     "word": " you",
+     "start": 70.46,
+     "end": 70.84
+    },
+    {
+     "word": " know",
+     "start": 70.84,
+     "end": 71.22
+    }
+   ]
+  },
+  {
+   "id": 15,
+   "start": 71.57,
+   "end": 74.43,
+   "text": " Because that is exactly what it is.",
+   "words": [
+    {
+     "word": " Because",
+     "start": 71.57,
+     "end": 71.95
+    },
+    {
+     "word": " that",
+     "start": 71.95,
+     "end": 72.33
+    },
+    {
+     "word": " is",
+     "start": 72.33,
+     "end": 72.71
+    },
+    {
+     "word": " exactly",
+     "start": 72.71,
+     "end": 73.09
+    },
+    {
+     "word": " what",
+     "start": 73.09,
+     "end": 73.47
+    },
+    {
+     "word": " it",
+     "start": 73.47,
+     "end": 73.85
+    },
+    {
+     "word": " is.",
+     "start": 73.85,
+     "end": 74.23
+    }
+   ]
+  }
+ ]
+}

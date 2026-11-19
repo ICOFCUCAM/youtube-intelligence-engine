@@ -11,6 +11,11 @@ from youtube_intelligence.evaluation import dataset, metrics as m
 from youtube_intelligence.evaluation.runner import run
 
 DS = os.path.join(ROOT, "datasets", "synthetic-v1")
+DATASETS = {
+    "synthetic-v1": ("dataset.json", "tutorial-clean.srt", "tutorial-auto.vtt", "essay-clean.json", "essay-auto.vtt"),
+    "synthetic-words-v1": ("dataset.json", "tutorial-whisper.json", "tutorial-youtube.vtt",
+                           "essay-whisper.json", "essay-youtube.vtt"),
+}
 
 
 # --- metrics, hand-computed ------------------------------------------------------------------
@@ -79,21 +84,32 @@ def test_tasks_without_labels_are_skipped(tmp_path):
 
 
 # --- the synthetic set -----------------------------------------------------------------------
-def test_generator_is_deterministic(tmp_path):
-    subprocess.run([sys.executable, "-I", os.path.join(DS, "generate.py"), str(tmp_path)], check=True)
-    for f in ("dataset.json", "tutorial-clean.srt", "tutorial-auto.vtt", "essay-clean.json", "essay-auto.vtt"):
-        assert (tmp_path / f).read_bytes() == open(os.path.join(DS, f), "rb").read(), f
+@pytest.mark.parametrize("name", sorted(DATASETS))
+def test_generator_is_deterministic(tmp_path, name):
+    d = os.path.join(ROOT, "datasets", name)
+    subprocess.run([sys.executable, "-I", os.path.join(d, "generate.py"), str(tmp_path)], check=True)
+    for f in DATASETS[name]:
+        assert (tmp_path / f).read_bytes() == open(os.path.join(d, f), "rb").read(), f
 
 
-def test_labels_are_not_derived_from_tools():
-    src = open(os.path.join(DS, "generate.py")).read()
+@pytest.mark.parametrize("name", sorted(DATASETS))
+def test_labels_are_not_derived_from_tools(name):
+    src = open(os.path.join(ROOT, "datasets", name, "generate.py")).read()
     assert "youtube_intelligence" not in src
 
 
-def test_results_match_pinned_baseline():
+def test_word_dataset_uses_the_same_labels():
+    a = {c["id"].split("-")[0]: c["labels"] for c in json.load(open(os.path.join(DS, "dataset.json")))["cases"]}
+    b = json.load(open(os.path.join(ROOT, "datasets", "synthetic-words-v1", "dataset.json")))["cases"]
+    assert all(c["labels"] == a[c["id"].split("-")[0]] for c in b)
+
+
+@pytest.mark.parametrize("name", sorted(DATASETS))
+def test_results_match_pinned_baseline(name):
     """Any change in tool behaviour moves these numbers; update baseline + docs deliberately."""
-    base = json.load(open(os.path.join(DS, "baseline.json")))
-    r = run(os.path.join(DS, "dataset.json"))
+    d = os.path.join(ROOT, "datasets", name)
+    base = json.load(open(os.path.join(d, "baseline.json")))
+    r = run(os.path.join(d, "dataset.json"))
     assert r["summary"] == base["summary"]
     assert r["cases"] == base["cases"]
 

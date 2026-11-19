@@ -22,6 +22,20 @@ MIT). ICOFCUCAM changes - see CHANGELOG.md, each has a regression test:
     opens with a disfluency ("um so the thing" / "so the thing is");
   * duration is the latest cue end, not the last cue's end; a zero-length input cannot divide
     by zero.
+
+ICOFCUCAM additions (0.2), off when the transcript has no word timings, so plain SRT/VTT output
+is unchanged apart from the new "review" field:
+  * WORD TIMINGS (--words auto|off). From Whisper JSON "words" or YouTube auto-caption inline tags:
+      - a disfluency INSIDE a sentence ("so the, um, real problem") is cut as FILLER using the
+        word's own time. Only disfluencies (um, uh, er, erm, ah, hmm, mm), never "like" or "so",
+        which are often meaningful mid-sentence;
+      - with exact word ends (Whisper), dead air is measured between WORDS, which finds pauses
+        hidden inside long or overlapping cues. YouTube tags carry starts only, so there the
+        cue-level gaps are kept.
+  * REVIEW. Every DEAD cut carries "review": true when the pause is shorter than --review-below
+    (default 1.5 s): short pauses are where deliberate pauses for emphasis live, and a transcript
+    cannot tell the difference. --hold-review leaves those out of the removed time. The 1.5 s
+    default is an assumption, not a measured threshold - see docs/EVALUATION.md.
 """
 from __future__ import annotations
 
@@ -33,10 +47,11 @@ from typing import Dict, List, Optional, Sequence
 from ..core.cli import guarded
 from ..core.errors import InputError
 from ..core.intervals import merge_intervals
-from ..core.transcript import Cue, duration, load_cues
+from ..core.transcript import NO_WORDS, Cue, WordTrack, duration, load_cues, load_words
 
 SCHEMA = "youtube-intelligence/edl@1"
 DEFAULT_FLOOR = 0.45
+REVIEW_BELOW = 1.5
 
 _WORDS = (r"um+|uhm+|uh+|erm+|er+|ah+|hm+|mm+|so|okay|ok|right|yeah|like|anyway|basically|"
           r"actually|you know|i mean|let me see|hold on")
@@ -76,20 +91,43 @@ def is_restart(earlier: str, later: str) -> bool:
     return len(a1) >= 3 and a1 == b1
 
 
-def find_cuts(cues: Sequence[Cue], floor: float = DEFAULT_FLOOR) -> List[Dict]:
+def _dead(prev_end: float, start: float, floor: float, review_below: float) -> Dict:
+    gap = start - prev_end
+    keep = floor / 2
+    return {"kind": "DEAD", "start": round(prev_end + keep, 3), "end": round(start - keep, 3),
+            "why": f"{gap:.2f}s gap", "review": gap < review_below}
+
+
+def _word_cuts(cues: Sequence[Cue], words: WordTrack, floor: float, review_below: float) -> List[Dict]:
+    out: List[Dict] = []
+    filler_cues = [(c.start, c.end) for c in cues if is_filler(c.text)]
+    for w in words.words:
+        if re.sub(r"[^a-z]", "", w.text.lower()) in DISFLUENCY and w.end > w.start:
+            if not any(a <= w.start and w.end <= b for a, b in filler_cues):
+                out.append({"kind": "FILLER", "start": w.start, "end": w.end,
+                            "why": f'"{w.text.strip()}" inside a sentence', "review": False})
+    if words.exact_ends:
+        prev = None
+        for w in words.words:
+            if prev is not None and w.start - prev > floor:
+                out.append(_dead(prev, w.start, floor, review_below))
+            prev = w.end if prev is None else max(prev, w.end)
+    return out
+
+
+def find_cuts(cues: Sequence[Cue], floor: float = DEFAULT_FLOOR, words: WordTrack = NO_WORDS,
+              review_below: float = REVIEW_BELOW) -> List[Dict]:
     if floor < 0:
         raise InputError("--floor must be zero or more")
+    word_gaps = words.available and words.exact_ends
     cuts: List[Dict] = []
     prev_end: Optional[float] = None
     for i, (s, e, t) in enumerate(cues):
         if is_filler(t):
-            cuts.append({"kind": "FILLER", "start": s, "end": e, "why": t.strip()[:48]})
-        if prev_end is not None:
-            gap = s - prev_end
-            if gap > floor:
-                keep = floor / 2
-                cuts.append({"kind": "DEAD", "start": round(prev_end + keep, 3),
-                             "end": round(s - keep, 3), "why": f"{gap:.2f}s gap"})
+            cuts.append({"kind": "FILLER", "start": s, "end": e, "why": t.strip()[:48], "review": False})
+        if prev_end is not None and not word_gaps:
+            if s - prev_end > floor:
+                cuts.append(_dead(prev_end, s, floor, review_below))
         prev_end = e if prev_end is None else max(prev_end, e)
         # A restart is compared against the last cue that was actually SPEECH. Comparing against
         # the literal previous cue misses every retake with an "um" between the two attempts.
@@ -99,34 +137,53 @@ def find_cuts(cues: Sequence[Cue], floor: float = DEFAULT_FLOOR) -> List[Dict]:
                 j -= 1
             if j >= 0 and is_restart(cues[j][2], t):
                 cuts.append({"kind": "REPEAT", "start": cues[j][0], "end": cues[j][1],
-                             "why": f'restart of "{" ".join(_opening(cues[j][2])[:5])}"'})
+                             "why": f'restart of "{" ".join(_opening(cues[j][2])[:5])}"', "review": False})
+    if words.available:
+        cuts.extend(_word_cuts(cues, words, floor, review_below))
     cuts = [c for c in cuts if c["end"] > c["start"]]
     cuts.sort(key=lambda c: c["start"])
     return cuts
 
 
-def analyse(cues: Sequence[Cue], floor: float = DEFAULT_FLOOR, source: str = "") -> Dict:
-    """The full report. ``removed`` counts overlapping cut time once."""
+def analyse(cues: Sequence[Cue], floor: float = DEFAULT_FLOOR, source: str = "",
+            words: WordTrack = NO_WORDS, review_below: float = REVIEW_BELOW,
+            hold_review: bool = False) -> Dict:
+    """The full report. ``removed`` counts overlapping cut time once.
+
+    With ``hold_review``, cuts flagged for review stay in ``cuts`` but are left out of
+    ``removed``, ``out`` and ``removed_intervals`` (the list a video engine would apply).
+    """
     dur = duration(list(cues))
-    cuts = find_cuts(cues, floor)
-    merged = merge_intervals((c["start"], c["end"]) for c in cuts)
+    cuts = find_cuts(cues, floor, words, review_below)
+    applied = [c for c in cuts if not (hold_review and c["review"])]
+    merged = merge_intervals((c["start"], c["end"]) for c in applied)
     removed = sum(e - s for s, e in merged)
-    raw = sum(c["end"] - c["start"] for c in cuts)
+    raw = sum(c["end"] - c["start"] for c in applied)
+    timing = "none" if not words.available else ("exact" if words.exact_ends else "start-only")
     return {"schema": SCHEMA, "source": source, "duration": dur, "floor": floor, "cuts": cuts,
             "removed": round(removed, 3), "out": round(max(0.0, dur - removed), 3),
             "removed_intervals": [[round(s, 3), round(e, 3)] for s, e in merged],
-            "overlap_counted_once": round(raw - removed, 3)}
+            "overlap_counted_once": round(raw - removed, 3),
+            "word_timings": timing, "review_below": review_below, "hold_review": hold_review,
+            "held_for_review": sum(1 for c in cuts if c["review"]) if hold_review else 0}
 
 
 def render(r: Dict, n_cues: int) -> str:
     dur, removed = r["duration"], r["removed"]
     lines = [f"\n  {r['source']}   {dur:.2f}s in, {n_cues} cues, dead-air floor {r['floor']}s\n"]
     for c in r["cuts"]:
+        flag = "  [review]" if c.get("review") else ""
         lines.append(f"    {c['kind']:<7} {c['start']:8.2f} -> {c['end']:8.2f}   "
-                     f"{c['end'] - c['start']:5.2f}s   {c['why']}")
+                     f"{c['end'] - c['start']:5.2f}s   {c['why']}{flag}")
     pct = removed / dur * 100 if dur > 0 else 0.0
     lines.append(f"\n  {len(r['cuts'])} cuts, {removed:.2f}s removed, {r['out']:.2f}s out "
                  f"({pct:.1f}% shorter)")
+    n_review = sum(1 for c in r["cuts"] if c.get("review"))
+    if n_review:
+        held = " - held back, not counted above" if r["hold_review"] else " - possibly deliberate, listen before cutting"
+        lines.append(f"  {n_review} pause(s) marked [review]{held}")
+    if r["word_timings"] != "none":
+        lines.append(f"  word timings: {r['word_timings']}")
     if r["overlap_counted_once"] > 0:
         lines.append(f"  ({r['overlap_counted_once']:.2f}s of the cuts overlap and is counted once)")
     lines.append("  Speech-only estimate: check it against the footage before trusting the runtime.\n")
@@ -139,12 +196,18 @@ def main(argv: Optional[List[str]] = None) -> int:
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("transcript", help=".srt, .vtt or whisper .json")
     p.add_argument("--floor", type=float, default=DEFAULT_FLOOR, help="dead-air floor in seconds")
+    p.add_argument("--words", choices=["auto", "off"], default="auto",
+                   help="use word timings when the transcript has them (default auto)")
+    p.add_argument("--review-below", type=float, default=REVIEW_BELOW,
+                   help="mark pauses shorter than this many seconds for review (default 1.5)")
+    p.add_argument("--hold-review", action="store_true", help="leave review-marked pauses out of the cut")
     p.add_argument("--json", action="store_true", help="machine-readable EDL")
     a = p.parse_args(argv)
     cues = load_cues(a.transcript)
     if not cues:
         raise InputError("no cues found - is this an srt, vtt or whisper json?")
-    r = analyse(cues, a.floor, a.transcript)
+    words = load_words(a.transcript) if a.words == "auto" else NO_WORDS
+    r = analyse(cues, a.floor, a.transcript, words, a.review_below, a.hold_review)
     print(json.dumps(r, indent=1) if a.json else render(r, len(cues)))
     return 0
 

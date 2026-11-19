@@ -22,6 +22,31 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
   bounded retries, quota errors surfaced. Tested with a fake transport; against the live API only
   the error path has been exercised (invalid key). `.env.example` lists the variable names.
 - `core.cli.guarded` forwards keyword arguments (lets tests inject a client).
+- **Word timings** (`core.transcript.load_words`): Whisper JSON `words` (exact start and end) and
+  YouTube auto-caption inline tags (starts only). `yt-deadair --words auto|off` (default auto):
+  disfluencies inside a sentence (um, uh, er, erm, ah, hmm, mm; never "like" or "so") are cut
+  using the word's own time, and with exact word ends dead air is measured between words. Plain
+  SRT/VTT/JSON without word timings gives the same cuts as before.
+- **Review flag**: every cut carries `review`; DEAD cuts shorter than `--review-below` (default
+  1.5 s, an assumption) are `true` and shown as `[review]`. `--hold-review` keeps them out of
+  `removed`, `out` and `removed_intervals`. EDL JSON adds `word_timings`, `review_below`,
+  `hold_review`, `held_for_review` (additive; schema stays `edl@1`).
+- **`datasets/synthetic-words-v1`**: the synthetic-v1 talks rendered as Whisper JSON with word
+  timings and as modelled YouTube rolling auto-captions, with a pinned baseline.
+- `yt-eval --words auto|off --hold-review`.
+
+### Changed
+- **chapters**: the default `--target` is derived from the video's length (about one per 90 s,
+  plus one, between 3 and 10; equals the old 7 for a 9-minute video). An explicit `--target`
+  behaves exactly as before. JSON adds `target`. On synthetic-v1, chapter precision went from
+  0.42 to 1.00 (see the circularity caution in docs/EVALUATION.md).
+
+### Fixed
+- WebVTT: only a truly empty line ends a cue. YouTube auto-captions put a single-space line inside
+  cues, and treating it as the end dropped the following line's words (found while building
+  synthetic-words-v1). YouTube "rolling" duplicates are now dropped when a file carries inline
+  word tags, so each spoken line appears once. Plain files are unaffected.
+- yt-eval scored held-back cuts as predictions under `--hold-review`; only applied cuts count now.
 
 ### Found by the evaluation (documented, not yet changed)
 - deadair cuts deliberate emphasis pauses (3.65 s of 6.8 s labelled "keep").

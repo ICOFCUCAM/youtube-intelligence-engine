@@ -18,14 +18,15 @@ import json
 from typing import Dict, List, Optional
 
 from ..core.cli import guarded
-from ..core.transcript import load_cues
+from ..core.transcript import NO_WORDS, load_cues, load_words
 from ..editing import chapters as chapters_mod
 from ..editing import deadair
 from ..shorts import candidates
 from . import dataset as ds
 from . import metrics as m
 
-DEFAULTS = {"floor": deadair.DEFAULT_FLOOR, "chapters_target": 7, "tolerance": 3.0,
+DEFAULTS = {"floor": deadair.DEFAULT_FLOOR, "words": "auto", "hold_review": False,
+            "review_below": deadair.REVIEW_BELOW, "chapters_target": None, "tolerance": 3.0,
             "min_iou": 0.5, "shorts_min": 20.0, "shorts_max": 55.0, "shorts_top": 5}
 
 
@@ -34,8 +35,11 @@ def evaluate_case(case: Dict, s: Dict) -> Dict:
     lab = case["labels"]
     out: Dict = {"id": case["id"], "cues": len(cues)}
     if "cuts" in lab or "keep" in lab:
-        edl = deadair.analyse(cues, s["floor"])
-        pred_events = [(c["start"], c["end"]) for c in edl["cuts"]]
+        words = load_words(case["transcript_path"]) if s["words"] == "auto" else NO_WORDS
+        edl = deadair.analyse(cues, s["floor"], words=words, review_below=s["review_below"],
+                              hold_review=s["hold_review"])
+        # only the cuts that would actually be applied count as predictions
+        pred_events = [(c["start"], c["end"]) for c in edl["cuts"] if not (s["hold_review"] and c["review"])]
         pred_union = [tuple(x) for x in edl["removed_intervals"]]
         gold = lab.get("cuts", [])
         gold_iv = [(g["start"], g["end"]) for g in gold]
@@ -48,6 +52,7 @@ def evaluate_case(case: Dict, s: Dict) -> Dict:
         keep_iv = [(k["start"], k["end"]) for k in lab.get("keep", [])]
         r["keep_seconds_cut"] = round(m.intersection_length(pred_union, keep_iv), 3)
         r["keep_seconds"] = round(m.length(keep_iv), 3)
+        r["word_timings"] = edl["word_timings"]
         out["cuts"] = r
     if "chapters" in lab:
         built = chapters_mod.build(cues, s["chapters_target"])
@@ -150,13 +155,16 @@ def main(argv: Optional[List[str]] = None) -> int:
     p = argparse.ArgumentParser(prog="yt-eval", description=__doc__.split("\n\n")[0])
     p.add_argument("dataset")
     p.add_argument("--floor", type=float, default=DEFAULTS["floor"])
-    p.add_argument("--chapters-target", type=int, default=DEFAULTS["chapters_target"])
+    p.add_argument("--words", choices=["auto", "off"], default="auto")
+    p.add_argument("--hold-review", action="store_true", help="score the cut with review-marked pauses held back")
+    p.add_argument("--chapters-target", type=int, default=None, help="default: derived from length, as yt-chapters")
     p.add_argument("--tolerance", type=float, default=DEFAULTS["tolerance"], help="chapter match window, seconds")
     p.add_argument("--min-iou", type=float, default=DEFAULTS["min_iou"])
     p.add_argument("--shorts-top", type=int, default=DEFAULTS["shorts_top"])
     p.add_argument("--json", action="store_true")
     a = p.parse_args(argv)
-    r = run(a.dataset, {"floor": a.floor, "chapters_target": a.chapters_target, "tolerance": a.tolerance,
+    r = run(a.dataset, {"floor": a.floor, "words": a.words, "hold_review": a.hold_review,
+                        "chapters_target": a.chapters_target, "tolerance": a.tolerance,
                         "min_iou": a.min_iou, "shorts_top": a.shorts_top})
     print(json.dumps(r, indent=1) if a.json else render(r))
     return 0
