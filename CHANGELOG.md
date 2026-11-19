@@ -59,6 +59,13 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
   operation set (`remove_intervals`, `extract_clip`, `attach_chapters`); JSON Schema at
   `docs/schemas/production-instruction-1.schema.json`, tested to agree with the validator.
   No call to CineForge is made or tested.
+- **`yt-claims`**, the fact guard (`creative/claims.py`, `POST /v1/claims`, and `claims.py` in
+  the yt-script skill folder): BLOCKED for `voice.md` "Words I never use" (whole words) and "What
+  I will not claim"; NEEDS SOURCE for figures (percent, money, multipliers, counts with units,
+  rankings, "from X to Y" needing both numbers) not in the evidence file, unsourced citations
+  ("studies show") and unbacked result claims; CHECK for absolutes. Evidence numbers ignore
+  bracketed sources and dates, so a date can't back a claim. Exit 1 until clean. The yt-script and
+  yt-comment skills now run it before handing over a draft.
 - **`yt-localize`** and a new **`/yt-localize` skill** (the twelfth): export a translation pack
   (title, each description line, each caption; chapter names only, timestamps kept; links,
   emails, @handles, #hashtags and promo codes marked "keep exactly"), check it per language

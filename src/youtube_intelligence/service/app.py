@@ -13,6 +13,7 @@ from .. import __version__
 from ..analytics import retention
 from ..core.errors import InputError
 from ..core.transcript import NO_WORDS, Cue, FORMATS, parse_transcript
+from ..creative import claims as claims_mod
 from ..creative import hookscore
 from ..editing import chapters, deadair
 from ..handoff import approval as handoff_approval
@@ -222,6 +223,21 @@ def preflight_check(body: Dict) -> Payload:
     return preflight.run(title, body.get("thumb"), body.get("description"), queries, cues, words)
 
 
+def claims_check(body: Dict) -> Payload:
+    text = body.get("text")
+    if not isinstance(text, str):
+        raise BadRequest("'text' must be a string")
+    voice = body.get("voice")
+    if voice is not None and not isinstance(voice, str):
+        raise BadRequest("'voice' must be the text of voice.md")
+    ev = body.get("evidence", [])
+    if not isinstance(ev, list) or len(ev) > 2000 or not all(isinstance(x, str) for x in ev):
+        raise BadRequest("'evidence' must be a list of at most 2000 strings, one verified fact each")
+    if len(text) > 200_000:
+        raise BadRequest("'text' is longer than 200,000 characters")
+    return claims_mod.check(text, voice, ev)
+
+
 def health(_body: Optional[Dict] = None) -> Payload:
     return {"status": "ok", "service": "youtube-intelligence-engine", "version": __version__,
             "writes_to_youtube": False}
@@ -233,6 +249,7 @@ POST: Dict[str, Callable[[Dict], Payload]] = {
     "/v1/handoff/approve": approve, "/v1/handoff/instruction": instruction,
     "/v1/handoff/validate": validate_instruction,
     "/v1/check": preflight_check,
+    "/v1/claims": claims_check,
 }
 
 

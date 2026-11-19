@@ -79,6 +79,9 @@ def spec() -> Dict:
             "aspect": {"enum": ["9:16", "16:9", "1:1"]}, "project": {"type": "object", "additionalProperties": S}},
             "Every artefact must match its approved hash. Schema: docs/schemas/production-instruction-1.schema.json"),
         "/v1/handoff/validate": _op("Validate a production instruction", ["instruction"], {"instruction": OBJ}),
+        "/v1/claims": _op("Fact guard: claims that need a source, your banned words and won't-claim items", ["text"], {
+            "text": S, "voice": S, "evidence": {"type": "array", "items": S, "maxItems": 2000}},
+            "evidence: one verified fact per line, with its source. Checks numbers match, not that facts are true."),
         "/v1/check": _op("Pre-upload check: verdict plus fail/warn/pass/info checks", ["title"], {
             "title": S, "thumb": S, "description": S, "queries": {"type": "array", "items": S, "maxItems": 20},
             "transcript": TRANSCRIPT},

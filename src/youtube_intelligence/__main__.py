@@ -20,6 +20,7 @@ TOOLS = {
     "check": "youtube_intelligence.preflight.check",
     "moments": "youtube_intelligence.analytics.moments",
     "localize": "youtube_intelligence.localize.pack",
+    "claims": "youtube_intelligence.creative.claims",
 }
 
 
