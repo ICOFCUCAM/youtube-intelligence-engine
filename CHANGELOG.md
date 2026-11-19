@@ -62,6 +62,11 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
 - `GET /v1/openapi.json`: OpenAPI 3.1 description of `yt-serve`, tested to list exactly the
   served routes.
 - Dev dependency: `jsonschema` (tests only; runtime stays standard-library only).
+- **Landing page** (`site/index.html`): a single static page for creators with a developer
+  section; no external scripts, fonts or trackers; light/dark; checked at phone and desktop
+  widths. Its example outputs are tested against the tools' real output, and its links and
+  install commands against the project. Published by `.github/workflows/pages.yml` once GitHub
+  Pages is set to "GitHub Actions" in the repository settings.
 
 ### Changed
 - **chapters**: the default `--target` is derived from the video's length (about one per 90 s,

@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YouTube Intelligence Engine</title>
+<meta name="description" content="Open-source tools for YouTube creators: score hooks, lint titles and thumbnails, turn transcripts into edit lists and chapters, find Shorts, and read retention. It drafts and analyses; you publish.">
+<meta name="color-scheme" content="light dark">
+<meta property="og:title" content="YouTube Intelligence Engine">
+<meta property="og:description" content="Evidence-based tools for YouTube creators. It drafts and analyses; you publish.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f6f5c'/%3E%3Cpath d='M8 22l5-7 4 4 7-10' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f7f6f2; --surface:#ffffff; --surface-2:#efede6; --text:#1b1d1f; --muted:#5b6066;
+  --line:#dcd9cf; --accent:#1f6f5c; --accent-ink:#ffffff; --accent-soft:#dcefe8;
+  --warn:#9a5b00; --code-bg:#15181d; --code-text:#d8dde3; --code-dim:#8d96a0; --code-hi:#f2cc60; --code-ok:#7ee787;
+  --radius:14px; --max:1080px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111315; --surface:#181b1e; --surface-2:#1f2327; --text:#e8eaec; --muted:#a3a9b0;
+    --line:#2c3136; --accent:#4cc3a2; --accent-ink:#0b1512; --accent-soft:#183a31; --warn:#e2b25c;
+    --code-bg:#0c0e10;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111315; --surface:#181b1e; --surface-2:#1f2327; --text:#e8eaec; --muted:#a3a9b0;
+  --line:#2c3136; --accent:#4cc3a2; --accent-ink:#0b1512; --accent-soft:#183a31; --warn:#e2b25c;
+  --code-bg:#0c0e10;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);
+  font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 16px}
+code,pre,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+.skip{position:absolute;left:-999px}.skip:focus{left:16px;top:12px;background:var(--surface);padding:8px 12px;z-index:9}
+
+/* header */
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--text);text-decoration:none;letter-spacing:-.01em}
+.brand svg{flex:none}
+.brand span{white-space:nowrap}
+nav.links{margin-left:auto;display:flex;gap:18px;font-size:15px}
+nav.links a{color:var(--muted);text-decoration:none}
+nav.links a:hover{color:var(--text)}
+@media (max-width:720px){nav.links .opt{display:none}}
+@media (max-width:520px){nav.links .opt2{display:none}.brand{font-size:15px}.top .wrap{gap:12px}nav.links{gap:14px}}
+
+/* hero */
+.hero{padding:72px 0 48px}
+.eyebrow{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--accent);background:var(--accent-soft);padding:4px 10px;border-radius:999px}
+h1{font-size:clamp(34px,6vw,56px);line-height:1.08;letter-spacing:-.025em;margin:18px 0 18px;max-width:16ch}
+.lede{font-size:clamp(17px,2.2vw,20px);color:var(--muted);max-width:60ch;margin:0 0 28px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:10px;font-weight:600;
+  text-decoration:none;border:1px solid var(--line);color:var(--text);background:var(--surface)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.promise{margin-top:28px;display:flex;flex-wrap:wrap;gap:10px 22px;color:var(--muted);font-size:15px;padding:0;list-style:none}
+.promise li{display:flex;gap:8px}
+.promise li::before{content:"✓";color:var(--accent);font-weight:700;flex:none}
+
+/* sections */
+section{padding:56px 0;border-top:1px solid var(--line)}
+h2{font-size:clamp(26px,3.6vw,34px);letter-spacing:-.02em;line-height:1.15;margin:0 0 10px}
+.sub{color:var(--muted);max-width:62ch;margin:0 0 32px}
+
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;counter-reset:step}
+.flow li{list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.flow li::before{counter-increment:step;content:counter(step);display:inline-grid;place-items:center;width:28px;height:28px;
+  border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:14px;margin-bottom:10px}
+.flow b{display:block;margin-bottom:4px}
+.flow span{color:var(--muted);font-size:15px}
+.flow .you{border-style:dashed;background:transparent}
+@media (max-width:900px){.flow{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.flow{grid-template-columns:1fr}}
+ol.flow{padding:0;margin:0}
+
+/* demo */
+.demo{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+@media (max-width:900px){.demo{grid-template-columns:1fr}}
+.term{background:var(--code-bg);color:var(--code-text);border-radius:var(--radius);overflow:hidden;
+  box-shadow:0 1px 0 rgba(0,0,0,.04),0 12px 30px -18px rgba(0,0,0,.45)}
+.term .bar{display:flex;align-items:center;gap:7px;padding:10px 14px;background:rgba(255,255,255,.04);font-size:13px;color:var(--code-dim)}
+.term .bar i{width:10px;height:10px;border-radius:50%;background:#3a4048;display:inline-block}
+.term pre{margin:0;padding:16px 18px;font-size:13px;line-height:1.55;overflow-x:auto;white-space:pre}
+.term .c{color:var(--code-ok)} .term .d{color:var(--code-dim)} .term .h{color:var(--code-hi)}
+.caption{color:var(--muted);font-size:14px;margin:10px 2px 0}
+@media (max-width:520px){.term pre{font-size:11px;padding:14px}.code{font-size:12px}}
+
+/* tools */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.grid.fit{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.card h3{margin:0 0 6px;font-size:17px;letter-spacing:-.01em}
+.card p{margin:0;color:var(--muted);font-size:15px}
+.tag{display:inline-block;font-size:12px;font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--muted);
+  background:var(--surface-2);border-radius:6px;padding:2px 7px;margin-top:12px}
+
+/* honesty */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.two{grid-template-columns:1fr}}
+.note{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:10px;padding:16px 18px}
+.note b{display:block;margin-bottom:4px}
+.note p{margin:0;color:var(--muted);font-size:15px}
+.safe .note{border-left-color:var(--accent)}
+
+/* dev */
+.code{background:var(--code-bg);color:var(--code-text);border-radius:10px;padding:14px 16px;font-size:13px;overflow-x:auto;margin:10px 0 0}
+.code .d{color:var(--code-dim)}
+
+/* grid children may shrink below their content; wide code scrolls inside its own box */
+.grid>*,.two>*,.demo>*{min-width:0}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);font-size:14px}
+footer .row{display:flex;flex-wrap:wrap;gap:10px 28px;justify-content:space-between}
+footer p{margin:6px 0}
+.theme{background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:6px 10px;cursor:pointer;font:inherit;font-size:13px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="YouTube Intelligence Engine, top of page">
+      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="var(--accent)"/><path d="M8 22l5-7 4 4 7-10" stroke="var(--accent-ink)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>YouTube Intelligence Engine</span>
+    </a>
+    <nav class="links" aria-label="Sections">
+      <a href="#tools">Tools</a>
+      <a class="opt" href="#honest">Honest numbers</a>
+      <a class="opt" href="#safety">Safety</a>
+      <a class="opt2" href="#developers">Developers</a>
+      <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="hero" id="top">
+  <div class="wrap">
+    <span class="eyebrow">Open source &middot; MIT</span>
+    <h1>Make your next video better with evidence, not guesswork.</h1>
+    <p class="lede">Score your hooks, fix the title and thumbnail as one pair, turn a transcript into an edit list,
+      chapters and Shorts, and read your retention graph properly. It drafts and analyses. <strong>You stay in charge of what gets published.</strong></p>
+    <div class="cta">
+      <a class="btn primary" href="#install">Get started</a>
+      <a class="btn" href="https://github.com/ICOFCUCAM/youtube-intelligence-engine">View the code on GitHub</a>
+    </div>
+    <ul class="promise">
+      <li>Never publishes for you</li>
+      <li>Read-only access to YouTube, if you connect it at all</li>
+      <li>Runs on your computer</li>
+      <li>Free and open source</li>
+    </ul>
+  </div>
+</div>
+
+<section aria-labelledby="flow-h">
+  <div class="wrap">
+    <h2 id="flow-h">One video, from idea to what you learn from it</h2>
+    <p class="sub">Eleven Claude skills cover the whole workflow. Seven of the steps are backed by tools that measure instead of guessing.</p>
+    <ol class="flow">
+      <li><b>Script</b><span>Five hooks from 21 formulas, scored, then the spoken script with retention beats.</span></li>
+      <li><b>Package</b><span>Title and thumbnail text linted together: truncation, repetition, hype.</span></li>
+      <li><b>Edit</b><span>Dead air, fillers and retakes as an edit list with timecodes; chapters that render.</span></li>
+      <li class="you"><b>You publish</b><span>Nothing goes live until you upload it. Every step ends with "ship it, or change it?"</span></li>
+      <li><b>Learn</b><span>Retention: hook leak, the exact cliffs, and what you said there. Then plan the next one.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section aria-labelledby="demo-h">
+  <div class="wrap">
+    <h2 id="demo-h">What it actually tells you</h2>
+    <p class="sub">Real output from the tools, run on the sample files that ship with the project.</p>
+    <div class="demo">
+      <figure style="margin:0">
+        <div class="term" role="img" aria-label="Terminal output of yt-title linting a title and thumbnail pair">
+          <div class="bar"><i></i><i></i><i></i>&nbsp;title and thumbnail check</div>
+<pre><span class="c">$ yt-title --title "The ULTIMATE guide to growing on YouTube" \
+           --thumb "ULTIMATE GUIDE"</span>
+
+  "The ULTIMATE guide to growing on YouTube"
+  40 chars   score 80/100
+    x  vague        ultimate - swap for something
+                    specific and true
+    x  duplicate    thumbnail repeats the title on
+                    guide, ultimate
+    ok              40 characters, inside the
+                    60-character desktop cut
+    <span class="d">note            no number, date or name - a specific
+                    detail usually helps, but only a true one</span></pre>
+        </div>
+        <figcaption class="caption">The thumbnail should say what the title doesn't. Numbers earn no points unless they're true.</figcaption>
+      </figure>
+      <figure style="margin:0">
+        <div class="term" role="img" aria-label="Terminal output of yt-deadair listing cuts with timecodes">
+          <div class="bar"><i></i><i></i><i></i>&nbsp;edit list from a transcript</div>
+<pre><span class="c">$ yt-deadair talk.srt</span>
+
+  talk.srt   90.00s in, 24 cues, dead-air floor 0.45s
+
+    FILLER    6.90 ->  7.40   0.50s  um
+    DEAD     15.12 -> 16.18   1.05s  1.50s gap  <span class="h">[review]</span>
+    FILLER   19.90 -> 20.30   0.40s  so yeah
+    REPEAT   20.50 -> 24.10   3.60s  restart of
+                                     "read the hook out loud"
+    DEAD     28.82 -> 31.18   2.35s  2.80s gap
+    <span class="d">...</span>
+  10 cuts, 14.55s removed, 75.45s out (16.2% shorter)</pre>
+        </div>
+        <figcaption class="caption">Short pauses are flagged <span class="mono">[review]</span>: they may be deliberate. It lists the cuts; your editor applies them.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="tools" aria-labelledby="tools-h">
+  <div class="wrap">
+    <h2 id="tools-h">The tools</h2>
+    <p class="sub">Each runs from the command line, from a Claude skill, or over a local API. No account, no sign-up.</p>
+    <div class="grid">
+      <div class="card"><h3>Hook score</h3><p>Five properties of an opening line, weighted toward its weakest. A prompt to look again, not a forecast.</p><span class="tag">yt-hookscore</span></div>
+      <div class="card"><h3>Title + thumbnail lint</h3><p>Desktop and mobile truncation, shouting, vague words, repeated text, and claims you'd have to prove.</p><span class="tag">yt-title</span></div>
+      <div class="card"><h3>Edit list</h3><p>Dead air, filler and retakes with timecodes. Uses word timings when your transcript has them.</p><span class="tag">yt-deadair</span></div>
+      <div class="card"><h3>Chapters</h3><p>Drafted from your pauses and topic shifts, checked against YouTube's rules so they actually appear.</p><span class="tag">yt-chapters</span></div>
+      <div class="card"><h3>Shorts finder</h3><p>20&ndash;55 second moments that stand on their own, for you to re-hook and cut.</p><span class="tag">yt-shorts</span></div>
+      <div class="card"><h3>Retention reader</h3><p>Hook leak, cliffs and slide from your Studio export, with what you were saying at each drop.</p><span class="tag">yt-retention</span></div>
+      <div class="card"><h3>Outlier research</h3><p>Videos ranked by how far they beat their own channel's median, not by channel size.</p><span class="tag">yt-swipe</span></div>
+      <div class="card"><h3>Skills for Claude</h3><p>Script, package, edit, Shorts, SEO, plan, comments, chapters, retention, research and audit, all in your voice.</p><span class="tag">/yt-script &hellip; /yt-audit</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="honest" aria-labelledby="honest-h">
+  <div class="wrap">
+    <h2 id="honest-h">What the numbers mean, and what they don't</h2>
+    <p class="sub">We'd rather you trust the tools a little less and use them well.</p>
+    <div class="two">
+      <div class="note"><b>Scores are heuristics</b><p>The hook and title scores come from word patterns. They don't predict views, and no tool here claims to.</p></div>
+      <div class="note"><b>Retention depends on context</b><p>Small view counts, video age, format and audience all change the curve. The report says so every time.</p></div>
+      <div class="note"><b>Edits need a listen</b><p>A transcript can't tell a dramatic pause from dead air. That's why short pauses are flagged instead of silently cut.</p></div>
+      <div class="note"><b>Measured, with limits stated</b><p>Accuracy is measured on labelled test transcripts, and the published results say plainly that these are synthetic, not real recordings.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="safety" class="safe" aria-labelledby="safety-h">
+  <div class="wrap">
+    <h2 id="safety-h">Built so it can't run your channel behind your back</h2>
+    <p class="sub">Everything here drafts or analyses. Acting on it is always your decision.</p>
+    <div class="two">
+      <div class="note"><b>No publishing, replying or deleting</b><p>There is no code that writes to YouTube. Replies to comments are drafts you post yourself.</p></div>
+      <div class="note"><b>Read-only, if you connect at all</b><p>The optional YouTube connection asks only for read-only permission and refuses anything more.</p></div>
+      <div class="note"><b>Your files stay with you</b><p>The tools run locally on files you choose. Keys and sign-in tokens come from your environment and are never printed.</p></div>
+      <div class="note"><b>Approved edits only</b><p>An edit list can only be handed to a video engine after a person approves it, and any change after approval is caught.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="install" aria-labelledby="install-h">
+  <div class="wrap">
+    <h2 id="install-h">Get started</h2>
+    <p class="sub">Python 3.10 or newer. No other dependencies.</p>
+    <div class="two">
+      <div class="card"><h3>As command-line tools</h3>
+<pre class="code">pip install git+https://github.com/ICOFCUCAM/youtube-intelligence-engine
+yt-title --title "Your title" --thumb "THUMB TEXT"</pre></div>
+      <div class="card"><h3>As Claude Code skills</h3>
+<pre class="code">/plugin marketplace add ICOFCUCAM/youtube-intelligence-engine
+/plugin install youtube-intelligence</pre>
+        <p style="margin-top:10px">Then fill in <span class="mono">templates/voice.md</span> so every draft sounds like you.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="developers" aria-labelledby="dev-h">
+  <div class="wrap">
+    <h2 id="dev-h">For developers and partners</h2>
+    <p class="sub">An independent intelligence layer you can call from your own studio or video engine.</p>
+    <div class="grid fit">
+      <div class="card"><h3>Local HTTP API</h3><p>Every tool as JSON over HTTP, with an OpenAPI 3.1 description. Loopback-only unless you set a token.</p>
+<pre class="code">yt-serve
+<span class="d"># GET /v1/openapi.json</span></pre></div>
+      <div class="card"><h3>Approved handoff</h3><p>Approval records and a versioned production instruction (with a published JSON Schema) for a video engine to execute.</p>
+<pre class="code">yt-handoff approve ...
+yt-handoff instruction ...</pre></div>
+      <div class="card"><h3>Python library</h3><p>Pure, deterministic functions underneath everything, plus an evaluation harness that scores them against labels.</p>
+<pre class="code">from youtube_intelligence.editing import deadair</pre></div>
+    </div>
+    <p class="caption" style="margin-top:18px">Docs: <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/docs/ARCHITECTURE.md">architecture</a> &middot;
+      <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/docs/API_DESIGN.md">API</a> &middot;
+      <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/docs/SECURITY.md">security</a> &middot;
+      <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/docs/EVALUATION.md">evaluation</a></p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="row">
+      <div>
+        <p><strong>YouTube Intelligence Engine</strong> by ICOFCUCAM. MIT licence.</p>
+        <p>Built on <a href="https://github.com/Jakeschincariol/youtube-agent-skill">youtube-agent-skill</a> by Jake Schincariol (MIT). See <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/UPSTREAM.md">what came from where</a>.</p>
+        <p>Not affiliated with, endorsed by or sponsored by YouTube or Google. YouTube is a trademark of Google LLC.</p>
+      </div>
+      <div><button class="theme" type="button" id="theme" aria-label="Switch colour theme">Theme: auto</button></div>
+    </div>
+  </div>
+</footer>
+<script>
+(function () {
+  var b = document.getElementById("theme"), order = ["auto", "light", "dark"], k = "yie-theme", cur = "auto";
+  try { cur = localStorage.getItem(k) || "auto"; } catch (e) {}
+  function apply(t) {
+    if (t === "auto") document.documentElement.removeAttribute("data-theme");
+    else document.documentElement.setAttribute("data-theme", t);
+    b.textContent = "Theme: " + t;
+  }
+  apply(cur);
+  b.addEventListener("click", function () {
+    cur = order[(order.indexOf(cur) + 1) % order.length];
+    try { localStorage.setItem(k, cur); } catch (e) {}
+    apply(cur);
+  });
+})();
+</script>
+</body>
+</html>
