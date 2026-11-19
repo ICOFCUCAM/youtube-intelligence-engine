@@ -24,7 +24,5 @@ token*.json
 credentials*.json
 oauth*.json
 
-# Vercel build output (generated from site/ by vercel.json's buildCommand)
-public/
+# Vercel CLI state
 .vercel/
-build-check-tmp/

@@ -62,12 +62,12 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
 - `GET /v1/openapi.json`: OpenAPI 3.1 description of `yt-serve`, tested to list exactly the
   served routes.
 - Dev dependency: `jsonschema` (tests only; runtime stays standard-library only).
-- **Landing page** (`site/index.html`): a single static page for creators with a developer
+- **Landing page** (`public/index.html`): a single static page for creators with a developer
   section; no external scripts, fonts or trackers; light/dark; checked at phone and desktop
   widths. Its example outputs are tested against the tools' real output, and its links and
-  install commands against the project. Deployed on **Vercel** (`vercel.json`): the build only
-  copies `site/` to `public/` (Vercel's default output folder; the first deploy failed with
-  `STATIC_BUILD_NO_OUT_DIR` when it pointed at `site/` directly), and sends a strict Content Security Policy (no external sources; the one
+  install commands against the project. Deployed on **Vercel** (`vercel.json`): the page lives
+  in `public/` (the folder Vercel serves for a static site with no configuration) and there is no
+  install or build step; two earlier deploys failed on folder handling, and sends a strict Content Security Policy (no external sources; the one
   inline script pinned by SHA-256, tested to match), plus `nosniff`, `DENY` framing, HSTS, and a
   locked-down Permissions-Policy. The GitHub Pages workflow was removed in favour of Vercel.
 
