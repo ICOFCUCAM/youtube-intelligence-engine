@@ -86,9 +86,23 @@ def _vercel():
 
 
 def test_vercel_serves_site_without_a_build():
+    """The "build" only copies site/ to public/ (Vercel's default output folder), so the deploy
+    works whichever folder name a dashboard preset expects. The first Vercel deploy failed with
+    STATIC_BUILD_NO_OUT_DIR while outputDirectory was "site"."""
+    import shutil
+    import subprocess
     cfg = _vercel()
-    assert cfg["outputDirectory"] == "site" and cfg["framework"] is None
-    assert cfg["buildCommand"].startswith("echo") and cfg["installCommand"].startswith("echo")
+    assert cfg["outputDirectory"] == "public" and cfg["framework"] is None
+    assert cfg["installCommand"].startswith("echo")
+    tmp = os.path.join(ROOT, "build-check-tmp")
+    shutil.rmtree(tmp, ignore_errors=True)
+    shutil.copytree(os.path.join(ROOT, "site"), os.path.join(tmp, "site"))
+    try:
+        subprocess.run(cfg["buildCommand"], shell=True, cwd=tmp, check=True, capture_output=True)
+        built = os.path.join(tmp, cfg["outputDirectory"], "index.html")
+        assert open(built, encoding="utf-8").read() == HTML
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def test_csp_script_hash_matches_the_inline_script():
