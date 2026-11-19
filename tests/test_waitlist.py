@@ -31,7 +31,9 @@ def test_form_offers_and_sizes_match_server_and_database():
     sizes = set(re.findall(r'<option value="([a-z0-9_]+)"', PAGE))
     assert offers == _js_set("OFFERS")
     assert sizes == _js_set("SIZES")
-    for v in offers | sizes:
+    platforms = set(re.findall(r'name="other_platforms" value="([a-z_]+)"', PAGE))
+    assert platforms == _js_set("PLATFORMS")
+    for v in offers | sizes | platforms:
         assert f"'{v}'" in SQL, v
 
 
@@ -43,7 +45,7 @@ def test_consent_version_matches_privacy_notice():
 def test_database_is_insert_only_for_the_website():
     assert "enable row level security" in SQL
     assert "revoke all on public.yie_waitlist_signups from anon, authenticated" in SQL
-    assert re.search(r"grant insert \(email, offer, channel_size, consent_version\) on public\.yie_waitlist_signups to anon;", SQL)
+    assert re.search(r"grant insert \(email, offer, channel_size, other_platforms, consent_version\) on public\.yie_waitlist_signups to anon;", SQL)
     assert not re.search(r"grant (select|update|delete|all)", SQL, re.I)
 
 

@@ -59,6 +59,11 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
   operation set (`remove_intervals`, `extract_clip`, `attach_chapters`); JSON Schema at
   `docs/schemas/production-instruction-1.schema.json`, tested to agree with the validator.
   No call to CineForge is made or tested.
+- Waitlist: optional "Where else do you post?" (TikTok, Instagram, Facebook, LinkedIn, X,
+  podcasts, or nowhere else) to measure multi-platform demand before building it. Validated by
+  the function, the form and a database constraint; the SQL upgrades a table from the earlier
+  script in place. Privacy notice and consent version bumped to `2026-11-v2` (nothing collected
+  yet: the waitlist is still closed).
 - **`yt-check`** (`youtube_intelligence.preflight`, `POST /v1/check`): the pre-upload check.
   FAIL is reserved for objective YouTube rule breaks (title over 100 characters, description over
   5,000 bytes, `<` or `>` in either, description chapters that will not render, checked against
