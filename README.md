@@ -25,6 +25,7 @@ The creator decides and acts. See [SECURITY.md](SECURITY.md).
 | Research | `/yt-viral` | `yt-swipe` | Collected videos ranked by multiple over their own channel's median, with the title's formula named. |
 | Shorts | `/yt-shorts` | `yt-shorts` *(new)* | Candidate 20-55 s spans inside a long video, scored on opening, turn and ending signals. |
 | YouTube data | - | `yt-youtube` *(new, read-only)* | Fetches channel uploads (API key) and retention curves (OAuth) into the files `yt-swipe` and `yt-retention` read. Tested offline; not yet verified against the live API with real credentials. |
+| Service | - | `yt-serve` *(new)* | The same tools as a local, stateless HTTP/JSON API (for TAKE or any app). Loopback by default; a token is required to listen beyond it. See [docs/API_DESIGN.md](docs/API_DESIGN.md). |
 | Evaluation | - | `yt-eval` *(new)* | Scores the edit, chapter and Shorts tools against labelled transcripts. See [docs/EVALUATION.md](docs/EVALUATION.md). |
 | SEO | `/yt-seo` | - | Description, tags worth having, and the three queries the video should win. |
 | Planning | `/yt-plan` | - | A week sized to real capacity: one anchor, one cheap one, Shorts from the anchor. |
@@ -82,6 +83,7 @@ yt-swipe collected.json --min 2.0              # outliers by own-channel multipl
 yt-shorts transcript.srt --top 5               # Shorts candidates
 yt-eval datasets/synthetic-v1/dataset.json     # measure the tools against labels
 yt-youtube channel-videos --handle @Chan --out collected.json   # read-only fetch (YOUTUBE_API_KEY)
+yt-serve                                       # HTTP/JSON API on http://127.0.0.1:8765
 ```
 
 Every tool takes `--json`. Every tool exits `1` with a one-line `error:` message on unusable
@@ -121,6 +123,7 @@ src/youtube_intelligence/
   shorts/          Shorts candidates (new)
   evaluation/      metrics, dataset loader, yt-eval (new)
   integrations/    youtube/: read-only Data + Analytics API connector, yt-youtube (new)
+  service/         stateless HTTP/JSON API, yt-serve (new)
   data/hooks.json  the 21-formula library (upstream, unmodified)
 templates/         voice.md (upstream, unmodified)
 datasets/          labelled evaluation sets (synthetic-v1, synthetic-words-v1: generated, pinned baselines)

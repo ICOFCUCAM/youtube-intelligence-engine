@@ -35,6 +35,7 @@ and Claude skills.
                   inputs: local files          outputs: stdout text / JSON
    +--------------------------------------------------------------------------------+
    | evaluation/ (yt-eval)            integrations/youtube/ (yt-youtube, read-only) |
+   | service/ (yt-serve): stateless HTTP/JSON over the same functions                |
    +--------------------------------------------------------------------------------+
      labelled datasets -> metrics        YouTube APIs -> the same files the tools read
 ```
@@ -64,7 +65,7 @@ model supplies the language. Every skill ends in a human gate ("ship it, or chan
 Build these only when a real consumer needs them. See [ROADMAP.md](ROADMAP.md).
 
 ```
- TAKE (studio UI)  ---- HTTP/JSON ---->  Engine API (thin, stateless first)
+ TAKE (studio UI)  ---- HTTP/JSON ---->  Engine API (stateless part built: yt-serve)
                                             |-- workspace / channel / creator scoping
                                             |-- the same pure functions as today
                                             |-- AI adapter interface (provider-independent)

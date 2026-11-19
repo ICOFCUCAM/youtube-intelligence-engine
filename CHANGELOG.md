@@ -41,6 +41,16 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
   which would have wasted a completed sign-in). `YT_OAUTH_TOKEN_FILE` lets the tools read it and
   is refused if group/world-readable. Tested with a simulated browser; not yet run against Google.
 
+- **`yt-serve`** (`youtube_intelligence.service`): stateless HTTP/JSON API over the library:
+  `GET /v1/health`; `POST /v1/edl`, `/v1/chapters`, `/v1/hooks/score`, `/v1/titles/check`,
+  `/v1/retention`, `/v1/outliers`, `/v1/shorts`. Responses equal the library's output (tested).
+  Content-only inputs (no file paths); loopback by default, bearer token required beyond it;
+  8 MB cap, item caps, range checks, 30 s socket timeout, no CORS, generic 500s. Built while the
+  build was screenshotted; a test exposed that rejected-but-unread requests must close the
+  connection, which they now do.
+- `core.transcript.parse_transcript(content, format)`, `analytics.retention.parse_csv_text` and
+  `attach_cues`: content-based entry points (the file-based functions now call them).
+
 ### Changed
 - **chapters**: the default `--target` is derived from the video's length (about one per 90 s,
   plus one, between 3 and 10; equals the old 7 for a 9-minute video). An explicit `--target`

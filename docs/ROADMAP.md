@@ -26,7 +26,9 @@
 
 ## Phase 2: service layer (when TAKE needs it)
 
-- Stateless HTTP API wrapping the library ([API_DESIGN.md](API_DESIGN.md)).
+- Done: stateless HTTP API wrapping the library, `yt-serve` ([API_DESIGN.md](API_DESIGN.md)).
+- Next for production use: run behind a TLS reverse proxy with rate limits; an OpenAPI document
+  generated from the endpoint table; per-workspace tokens when TAKE has workspaces.
 - Voice profiles as structured data per creator, not just `voice.md`.
 - Provider-independent AI adapter interface for the drafting steps outside Claude Code.
 
