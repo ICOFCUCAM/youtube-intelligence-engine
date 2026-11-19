@@ -16,6 +16,7 @@ TOOLS = {
     "youtube": "youtube_intelligence.integrations.youtube.cli",
     "serve": "youtube_intelligence.service.server",
     "handoff": "youtube_intelligence.handoff.cli",
+    "report": "youtube_intelligence.reports.channel",
 }
 
 
