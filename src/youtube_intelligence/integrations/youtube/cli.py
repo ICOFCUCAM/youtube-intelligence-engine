@@ -6,6 +6,8 @@
     yt-youtube retention VIDEO_ID --start 2026-01-01 --end 2026-11-01 --out retention.csv
     yt-retention retention.csv --duration 600
 
+    yt-youtube login --save ~/.config/youtube-intelligence/token.json   # read-only consent
+
 Credentials come from the environment only (see youtube_intelligence.integrations.youtube.auth):
 YOUTUBE_API_KEY for public channel data; YT_OAUTH_* for --mine and for retention (owner data,
 read-only scopes). Nothing here can publish, edit, reply or delete.
@@ -22,7 +24,9 @@ from typing import List, Optional
 
 from ...core.cli import guarded
 from ...core.errors import InputError
+from .auth import Credentials
 from .client import YouTubeClient
+from .login import check_save_path, login, save_token
 from .mappers import retention_to_rows, videos_to_rows, write_retention_csv
 
 _DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -77,8 +81,20 @@ def cmd_retention(a, client: YouTubeClient) -> int:
     return 0
 
 
+def cmd_login(a, login_fn=login) -> int:
+    import webbrowser
+    check_save_path(a.save, a.force)       # fail before the user signs in, not after
+    creds = Credentials.from_env()
+    tok = login_fn(creds, open_url=None if a.no_browser else webbrowser.open, timeout=a.timeout,
+                   announce=lambda m: print(m, file=sys.stderr))
+    path = save_token(tok, a.save, force=a.force)
+    print(f"saved a read-only refresh token to {path} (mode 600). Use it with:\n"
+          f"  export YT_OAUTH_TOKEN_FILE={path}", file=sys.stderr)
+    return 0
+
+
 @guarded
-def main(argv: Optional[List[str]] = None, client: Optional[YouTubeClient] = None) -> int:
+def main(argv: Optional[List[str]] = None, client: Optional[YouTubeClient] = None, login_fn=None) -> int:
     p = argparse.ArgumentParser(prog="yt-youtube", description=__doc__.split("\n\n")[0],
                                 epilog="Credentials: YOUTUBE_API_KEY, or YT_OAUTH_ACCESS_TOKEN / "
                                        "YT_OAUTH_REFRESH_TOKEN + YT_OAUTH_CLIENT_ID + YT_OAUTH_CLIENT_SECRET")
@@ -95,7 +111,14 @@ def main(argv: Optional[List[str]] = None, client: Optional[YouTubeClient] = Non
     rt.add_argument("--start", required=True, help="YYYY-MM-DD")
     rt.add_argument("--end", required=True, help="YYYY-MM-DD")
     rt.add_argument("--out")
+    lg = sub.add_parser("login", help="browser consent for a read-only refresh token (saved to a file)")
+    lg.add_argument("--save", required=True, help="token file, outside any git repository")
+    lg.add_argument("--force", action="store_true", help="replace an existing token file")
+    lg.add_argument("--no-browser", action="store_true", help="only print the URL")
+    lg.add_argument("--timeout", type=float, default=300.0, help="seconds to wait for the browser")
     a = p.parse_args(argv)
+    if a.cmd == "login":
+        return cmd_login(a, login_fn or login)
     c = client or _client(a)
     return cmd_channel_videos(a, c) if a.cmd == "channel-videos" else cmd_retention(a, c)
 

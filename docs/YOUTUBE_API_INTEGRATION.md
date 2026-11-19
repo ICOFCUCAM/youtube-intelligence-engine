@@ -58,7 +58,8 @@ youtube_intelligence/integrations/youtube/
                    reports.query (audienceWatchRatio x elapsedVideoTimeRatio); retries 429/5xx
                    with backoff, never retries quotaExceeded
     mappers.py     API JSON -> yt-swipe rows and a yt-retention CSV (percent axis)
-    cli.py         yt-youtube channel-videos | retention
+    login.py       browser consent (PKCE + loopback) for a read-only refresh token, saved 0600
+    cli.py         yt-youtube channel-videos | retention | login
 ```
 
 ```bash
@@ -81,9 +82,27 @@ yt-youtube retention VIDEO_ID --start 2026-01-01 --end 2026-11-01 --out retentio
 yt-retention retention.csv --duration 600 --views 4200
 ```
 
-Variable names are listed in [`.env.example`](../.env.example). There is no browser
-consent ("login") command yet: obtain the read-only refresh token with Google's OAuth tooling and
-inject it from a secrets manager. A `yt-youtube login` (loopback + PKCE) is the next step.
+Variable names are listed in [`.env.example`](../.env.example).
+
+### Getting a read-only token: `yt-youtube login`
+
+```bash
+yt-youtube login --save ~/.config/youtube-intelligence/token.json
+```
+
+```bash
+export YT_OAUTH_TOKEN_FILE=~/.config/youtube-intelligence/token.json
+```
+
+It needs `YT_OAUTH_CLIENT_ID` and `YT_OAUTH_CLIENT_SECRET` from a **Desktop app** OAuth client
+in Google Cloud. It opens Google's consent page asking only for `youtube.readonly` and
+`yt-analytics.readonly`, receives the redirect on a one-time 127.0.0.1 listener, checks a random
+`state`, uses PKCE (S256), and refuses the result if Google grants any other scope. The refresh
+token goes to the named file with mode 600, never to the screen. The save path is checked before
+the browser opens: paths inside a git working tree and existing files (without `--force`) are
+refused. Tools read the file through `YT_OAUTH_TOKEN_FILE` and refuse it if other users can read
+it. **Status:** tested with a simulated browser and token endpoint (real loopback HTTP); not yet
+run against Google's consent screen.
 
 Guarantees enforced by tests (`tests/test_youtube_integration.py`): the client's public methods
 are an exact read-only allowlist; every API request is a GET to an allowlisted host; tokens with

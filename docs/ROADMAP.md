@@ -13,11 +13,12 @@
 
 - Done: evaluation harness `yt-eval`, the synthetic-v1 set and its pinned baseline
   ([EVALUATION.md](EVALUATION.md)); `yt-retention --views`.
+- Done: word timings (Whisper, YouTube inline tags), the `[review]` flag and `--hold-review`,
+  length-based chapter count, `synthetic-words-v1`.
 - Next: a **real** labelled set (consented transcripts, labelled by an editor), so that
-  accuracy claims rest on real recordings rather than the synthetic set.
-- Act on what the baseline found: word-level filler cuts when word timings exist (Whisper
-  `words`), a "review" flag for long pauses that may be intentional, and a chapter target derived
-  from the video's length.
+  accuracy claims rest on real recordings and the 1.5 s review threshold and 90 s chapter spacing
+  can be tuned on data their author did not write. Check the YouTube auto-caption model against a
+  real downloaded caption file.
 - Improve the hook-formula patterns, which misclassify 8 of 21 of their own examples, as a
   documented, tested change to the data with a version bump.
 - Comment triage helper (questions, corrections, praise, possible bait) for `/yt-comment`, if a
@@ -33,8 +34,9 @@
 
 - Done (offline-tested, live success path unverified): `yt-youtube` read-only connector:
   uploads and metadata via API key, retention curve via OAuth, mapped into the existing tools.
-- Next: verify against the live API with real read-only credentials; `yt-youtube login`
-  (loopback + PKCE consent, token to a secrets store); performance metrics beyond retention;
+- Done: `yt-youtube login` (loopback + PKCE consent, token file mode 600).
+- Next: verify both against the live API with real read-only credentials; performance metrics
+  beyond retention;
   comment ingestion for `/yt-comment` ([YOUTUBE_API_INTEGRATION.md](YOUTUBE_API_INTEGRATION.md)).
 - Multiple channels, workspaces and teams, research workspaces, and editorial calendar storage.
 
