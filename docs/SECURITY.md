@@ -25,6 +25,7 @@ rules the code and skills follow.
 | Refresh token leaking from `yt-youtube login` | Never printed; written with mode 600; refused inside a git working tree (checked before sign-in); refused at read time if group/world-readable |
 | Forged OAuth redirect or code interception | Random `state` checked on the loopback redirect; PKCE S256; listener bound to 127.0.0.1 only and closed after one response |
 | Runaway API usage | Pagination capped (100 pages); bounded retries with backoff; quota errors never retried |
+| HTTP service (`yt-serve`) misuse | Loopback by default; non-loopback refused without a 16+ character bearer token (constant-time compare); content-only inputs (no file paths); 8 MB body cap, per-list item caps, numeric range checks; 30 s socket timeout; no CORS; internals never returned to clients; bodies never logged; unread-body connections closed |
 | Evaluation dataset paths escaping the dataset folder | Rejected by the loader (`..` and absolute paths) |
 
 ## Prompt injection (the main risk)

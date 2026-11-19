@@ -212,6 +212,26 @@ def load_words(path: str) -> WordTrack:
     return NO_WORDS
 
 
+FORMATS = ("srt", "vtt", "json")
+
+
+def parse_transcript(content: str, fmt: str, source: str = "<transcript>"):
+    """Parse transcript TEXT (not a path) -> ``(cues, WordTrack)``. ``fmt`` is srt, vtt or json.
+
+    Used by the HTTP service, which accepts content only, so callers can never make it read a file.
+    """
+    if fmt not in FORMATS:
+        raise InputError(f"transcript format must be one of {', '.join(FORMATS)}")
+    if not isinstance(content, str):
+        raise InputError("transcript content must be a string")
+    if len(content.encode("utf-8", "replace")) > MAX_BYTES:
+        raise InputError(f"transcript is larger than {MAX_BYTES // (1024 * 1024)} MB")
+    if fmt == "json":
+        return parse_json_segments(content, source), WordTrack(_json_words(content, source), True)
+    words = WordTrack(_youtube_words(content), False) if WORD_TAG.search(content) else NO_WORDS
+    return parse_subtitles(content), words
+
+
 def load_cues(path: str) -> List[Cue]:
     """Load ``path`` (``.json`` -> Whisper JSON, anything else -> SRT/WebVTT)."""
     raw = _read(path)

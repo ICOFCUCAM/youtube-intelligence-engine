@@ -65,7 +65,6 @@ LIMITATIONS = [
 
 def load_csv(path: str) -> Tuple[List[Tuple[float, float]], Optional[str]]:
     """Return ``(rows, axis_hint)``; ``axis_hint`` is ``percent``/``seconds`` from the header or None."""
-    rows, hint = [], None
     try:
         fh = open(path, newline="", encoding="utf-8-sig", errors="replace")
     except FileNotFoundError:
@@ -73,23 +72,33 @@ def load_csv(path: str) -> Tuple[List[Tuple[float, float]], Optional[str]]:
     except IsADirectoryError:
         raise InputError(f"{path} is a directory") from None
     with fh:
-        for r in csv.reader(fh):
-            nums = []
-            for c in r:
-                c = c.strip().replace("%", "").replace(",", "")
-                try:
-                    nums.append(float(c))
-                except ValueError:
-                    nums.append(None)
-            vals = [n for n in nums if n is not None]
-            if len(vals) >= 2:
-                rows.append((vals[0], vals[1]))
-            elif not rows and r and hint is None:
-                head = r[0].lower()
-                if "%" in head or "percent" in head:
-                    hint = "percent"
-                elif re.search(r"second|\(s\)|time", head):
-                    hint = "seconds"
+        return parse_csv_lines(fh)
+
+
+def parse_csv_text(text: str) -> Tuple[List[Tuple[float, float]], Optional[str]]:
+    """Same as :func:`load_csv`, from CSV text instead of a path."""
+    return parse_csv_lines(text.lstrip("\ufeff").splitlines())
+
+
+def parse_csv_lines(lines) -> Tuple[List[Tuple[float, float]], Optional[str]]:
+    rows, hint = [], None
+    for r in csv.reader(lines):
+        nums = []
+        for c in r:
+            c = c.strip().replace("%", "").replace(",", "")
+            try:
+                nums.append(float(c))
+            except ValueError:
+                nums.append(None)
+        vals = [n for n in nums if n is not None]
+        if len(vals) >= 2:
+            rows.append((vals[0], vals[1]))
+        elif not rows and r and hint is None:
+            head = r[0].lower()
+            if "%" in head or "percent" in head:
+                hint = "percent"
+            elif re.search(r"second|\(s\)|time", head):
+                hint = "seconds"
     return rows, hint
 
 
@@ -141,7 +150,10 @@ def analyse(rows: List[Tuple[float, float]], duration: Optional[float] = None,
 
 
 def attach_transcript(report: Dict, transcript: str, window: float = 4.0) -> None:
-    cues = load_cues(transcript)
+    attach_cues(report, load_cues(transcript), window)
+
+
+def attach_cues(report: Dict, cues, window: float = 4.0) -> None:
     for c in report["cliffs"]:
         if c["at_seconds"] is None:
             continue

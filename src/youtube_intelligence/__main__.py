@@ -14,6 +14,7 @@ TOOLS = {
     "shorts": "youtube_intelligence.shorts.candidates",
     "eval": "youtube_intelligence.evaluation.runner",
     "youtube": "youtube_intelligence.integrations.youtube.cli",
+    "serve": "youtube_intelligence.service.server",
 }
 
 

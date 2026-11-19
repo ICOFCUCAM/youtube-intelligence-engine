@@ -1,8 +1,9 @@
 # TAKE and CineForge integration
 
-> **Status: design.** This repository has no code that calls TAKE or CineForge and does not
-> depend on either. What exists today is a stable, versioned EDL JSON (`youtube-intelligence/edl@1`)
-> and pure library functions that a service can wrap.
+> **Status: design, plus a callable service.** This repository has no code that calls TAKE or
+> CineForge and does not depend on either. What exists today: a stable, versioned EDL JSON
+> (`youtube-intelligence/edl@1`), and a stateless HTTP API (`yt-serve`) that TAKE can call for
+> every analysis.
 
 ## Responsibilities
 
@@ -70,7 +71,8 @@ happens in TAKE. The engine records it against the artefact version. TAKE shows 
 
 ## What to build first
 
-1. Package the existing functions behind the stateless HTTP endpoints (no storage).
+1. Done: the existing functions are behind stateless HTTP endpoints (`yt-serve`, see
+   [API_DESIGN.md](API_DESIGN.md)). TAKE can call it today; nothing is stored.
 2. Agree `production-instruction@1` with the CineForge team, starting with the
    `remove_intervals` op only.
 3. Add the approval record and refuse unapproved instructions, before any second op.
