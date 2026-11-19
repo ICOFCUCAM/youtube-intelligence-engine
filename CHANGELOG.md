@@ -59,6 +59,13 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
   operation set (`remove_intervals`, `extract_clip`, `attach_chapters`); JSON Schema at
   `docs/schemas/production-instruction-1.schema.json`, tested to agree with the validator.
   No call to CineForge is made or tested.
+- **`yt-check`** (`youtube_intelligence.preflight`, `POST /v1/check`): the pre-upload check.
+  FAIL is reserved for objective YouTube rule breaks (title over 100 characters, description over
+  5,000 bytes, `<` or `>` in either, description chapters that will not render, checked against
+  the real video length); WARN for judgement (weak opening, opening that doesn't echo the title,
+  a subscribe pitch or channel intro in the first 30 s, flagged title, over 10% removable, target
+  search words missing from the title and first two description lines). Verdict: ready / ready
+  with fixes / not yet; the CLI exits 1 when not ready. Drafts chapters when none are given.
 - **`yt-report`** (`youtube_intelligence.reports.channel`): a channel report built from the
   existing tools (multiple of the channel median, title lint, formula, retention) that ends in one
   fix chosen by four stated rules (leaking opening, then flagged packaging, then the steepest

@@ -33,6 +33,7 @@ The creator decides and acts. See [SECURITY.md](SECURITY.md).
 | Service | - | `yt-serve` *(new)* | The same tools as a local, stateless HTTP/JSON API (for TAKE or any app). Loopback by default; a token is required to listen beyond it. See [docs/API_DESIGN.md](docs/API_DESIGN.md). |
 | Handoff | - | `yt-handoff` *(new)* | Approval records (SHA-256 pinned, HMAC-signed with a key) and `production-instruction@1` for a video engine such as CineForge. Only approved, unchanged artefacts become instructions. JSON Schema in [docs/schemas](docs/schemas/). |
 | Report | `/yt-audit` | `yt-report` *(new)* | One channel report: recent uploads vs the channel median, title checks, retention where exported, and ONE fix chosen by stated rules. HTML (self-contained), Markdown or JSON. [Sample](public/sample-report.html) (invented data). |
+| Pre-upload | - | `yt-check` *(new)* | One command before upload: opening (hook, title echo, no early subscribe pitch), title + thumbnail, edit, description limits, chapter rules, search words, Shorts ready. FAIL only for objective YouTube rule breaks; WARN for judgement. Exit code 1 when not ready. |
 | Evaluation | - | `yt-eval` *(new)* | Scores the edit, chapter and Shorts tools against labelled transcripts. See [docs/EVALUATION.md](docs/EVALUATION.md). |
 | SEO | `/yt-seo` | - | Description, tags worth having, and the three queries the video should win. |
 | Planning | `/yt-plan` | - | A week sized to real capacity: one anchor, one cheap one, Shorts from the anchor. |
@@ -92,6 +93,7 @@ yt-eval datasets/synthetic-v1/dataset.json     # measure the tools against label
 yt-youtube channel-videos --handle @Chan --out collected.json   # read-only fetch (YOUTUBE_API_KEY)
 yt-serve                                       # HTTP/JSON API on http://127.0.0.1:8765
 yt-report videos.json --retention ID=ret.csv   # channel report with one fix
+yt-check --title "..." --transcript t.srt --description d.txt   # pre-upload verdict
 ```
 
 Every tool takes `--json`. Every tool exits `1` with a one-line `error:` message on unusable

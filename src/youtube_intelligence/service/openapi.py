@@ -79,6 +79,10 @@ def spec() -> Dict:
             "aspect": {"enum": ["9:16", "16:9", "1:1"]}, "project": {"type": "object", "additionalProperties": S}},
             "Every artefact must match its approved hash. Schema: docs/schemas/production-instruction-1.schema.json"),
         "/v1/handoff/validate": _op("Validate a production instruction", ["instruction"], {"instruction": OBJ}),
+        "/v1/check": _op("Pre-upload check: verdict plus fail/warn/pass/info checks", ["title"], {
+            "title": S, "thumb": S, "description": S, "queries": {"type": "array", "items": S, "maxItems": 20},
+            "transcript": TRANSCRIPT},
+            "FAIL is reserved for objective YouTube rule breaks (lengths, < or >, chapter rules); WARN is judgement."),
     }
     return {
         "openapi": "3.1.0",
