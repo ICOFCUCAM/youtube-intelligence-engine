@@ -59,6 +59,14 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
   operation set (`remove_intervals`, `extract_clip`, `attach_chapters`); JSON Schema at
   `docs/schemas/production-instruction-1.schema.json`, tested to agree with the validator.
   No call to CineForge is made or tested.
+- **`yt-moments`** (`youtube_intelligence.analytics.moments`): aligns each video's retention
+  curve with its transcript, measures every sentence's extra loss against the video's typical
+  (median) loss rate, tags sentences (sponsor, subscribe/like ask, housekeeping, tangent, recap,
+  signpost) and compares the types across videos. Skips the first 30 s and last 10%; calls
+  something a pattern only with 3+ occurrences across 2+ videos; says correlation, not cause. On an
+  invented, scripted demo set (`examples/moments/`) it recovers the scripted costs within 0.1
+  points, and shows its blind spot: the commonest kind of sentence sets the baseline, so it cannot
+  stand out (the scripted signpost benefit is not found).
 - Waitlist: optional "Where else do you post?" (TikTok, Instagram, Facebook, LinkedIn, X,
   podcasts, or nowhere else) to measure multi-platform demand before building it. Validated by
   the function, the form and a database constraint; the SQL upgrades a table from the earlier

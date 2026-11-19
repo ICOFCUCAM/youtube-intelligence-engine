@@ -41,6 +41,7 @@ yt-serve = "youtube_intelligence.service.server:main"
 yt-handoff = "youtube_intelligence.handoff.cli:main"
 yt-report = "youtube_intelligence.reports.channel:main"
 yt-check = "youtube_intelligence.preflight.check:main"
+yt-moments = "youtube_intelligence.analytics.moments:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

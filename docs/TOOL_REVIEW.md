@@ -68,6 +68,17 @@ Multiple-over-own-median is the right normaliser for channel size. It does not a
 age, upload date or Shorts mixed with long-form. Collect comparable windows. Four videos per
 channel is the minimum to compute anything, not a statistically comfortable sample.
 
+## moments (new)
+
+Each sentence's "extra loss" is the audience lost while it was said, minus the video's typical
+(median) loss rate across its middle. Two limits follow from that design. First, it is correlation:
+a sponsor read placed where viewers would leave anyway looks costly. Second, whatever kind of
+sentence fills most of a video becomes the typical rate and cannot stand out; on the invented demo
+set, signposts were scripted to hold viewers and measure as "no clear effect". The first 30 s and
+last 10% are skipped, and a type needs 3+ occurrences across 2+ videos before it is called a
+pattern. The demo data is scripted, so recovering its effects shows the arithmetic works, not that
+real audiences behave this way.
+
 ## shorts (new)
 
 Surface signals only: pauses, punctuation, connective first words, contrast words. Without

@@ -1,0 +1,26 @@
+{
+ "note": "Invented demo data: talks and audience are made up.",
+ "videos": [
+  {
+   "id": "vid-hooks",
+   "title": "Why your hooks fail",
+   "transcript": "vid-hooks.srt",
+   "retention": "vid-hooks-retention.csv",
+   "duration": 286.0
+  },
+  {
+   "id": "vid-thumbs",
+   "title": "Thumbnails at feed size",
+   "transcript": "vid-thumbs.srt",
+   "retention": "vid-thumbs-retention.csv",
+   "duration": 261.0
+  },
+  {
+   "id": "vid-retention",
+   "title": "Reading your retention graph",
+   "transcript": "vid-retention.srt",
+   "retention": "vid-retention-retention.csv",
+   "duration": 250.0
+  }
+ ]
+}
