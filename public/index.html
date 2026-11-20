@@ -8,156 +8,303 @@
 <meta name="color-scheme" content="light dark">
 <meta property="og:title" content="YouTube Intelligence Engine">
 <meta property="og:description" content="Evidence-based tools for YouTube creators. It drafts and analyses; you publish.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f6f5c'/%3E%3Cpath d='M8 22l5-7 4 4 7-10' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f766e'/%3E%3Cpath d='M8 22l5-7 4 4 7-10' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
 :root{
-  --bg:#f7f6f2; --surface:#ffffff; --surface-2:#efede6; --text:#1b1d1f; --muted:#5b6066;
-  --line:#dcd9cf; --accent:#1f6f5c; --accent-ink:#ffffff; --accent-soft:#dcefe8;
-  --warn:#9a5b00; --code-bg:#15181d; --code-text:#d8dde3; --code-dim:#8d96a0; --code-hi:#f2cc60; --code-ok:#7ee787;
-  --radius:14px; --max:1080px;
+  --bg:#fbfbf9; --bg-2:#f3f4f1; --surface:#ffffff; --surface-2:#f4f5f3; --text:#0e141b; --muted:#56606c; --faint:#8a939e;
+  --line:#e4e6e8; --line-2:#d5d9dd; --accent:#0f766e; --accent-hover:#0b5f58; --accent-ink:#ffffff; --accent-soft:#e3f3f0; --accent-text:#0d6b63;
+  --warn:#a15c07; --warn-soft:#fdf1df; --bad:#b42318;
+  --band:#0b1218; --band-2:#121b23; --band-line:#22303b; --band-text:#e6ebef; --band-muted:#9aa7b3; --band-accent:#5fd4bd;
+  --code-bg:#0d1117; --code-text:#d7dde4; --code-dim:#7d8894; --code-hi:#f2cc60; --code-ok:#7ee787;
+  --shadow-sm:0 1px 2px rgba(16,24,40,.05);
+  --shadow:0 1px 2px rgba(16,24,40,.04),0 8px 24px -12px rgba(16,24,40,.12);
+  --shadow-lg:0 2px 4px rgba(16,24,40,.04),0 24px 48px -20px rgba(16,24,40,.28);
+  --radius:16px; --radius-sm:10px; --max:1160px;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#111315; --surface:#181b1e; --surface-2:#1f2327; --text:#e8eaec; --muted:#a3a9b0;
-    --line:#2c3136; --accent:#4cc3a2; --accent-ink:#0b1512; --accent-soft:#183a31; --warn:#e2b25c;
-    --code-bg:#0c0e10;
+    --bg:#0a0e12; --bg-2:#0e1318; --surface:#121820; --surface-2:#171e27; --text:#e9edf1; --muted:#a2acb7; --faint:#77828e;
+    --line:#212a34; --line-2:#2c3743; --accent:#3cc9ae; --accent-hover:#5fd4bd; --accent-ink:#06120f; --accent-soft:#11302b; --accent-text:#5fd4bd;
+    --warn:#e7b45a; --warn-soft:#2c2213; --bad:#f97066;
+    --band:#060a0d; --band-2:#0e151b; --band-line:#1d2833;
+    --shadow-sm:none; --shadow:0 0 0 1px rgba(255,255,255,.02); --shadow-lg:0 24px 48px -20px rgba(0,0,0,.7);
   }
 }
 :root[data-theme="dark"]{
-  --bg:#111315; --surface:#181b1e; --surface-2:#1f2327; --text:#e8eaec; --muted:#a3a9b0;
-  --line:#2c3136; --accent:#4cc3a2; --accent-ink:#0b1512; --accent-soft:#183a31; --warn:#e2b25c;
-  --code-bg:#0c0e10;
+  --bg:#0a0e12; --bg-2:#0e1318; --surface:#121820; --surface-2:#171e27; --text:#e9edf1; --muted:#a2acb7; --faint:#77828e;
+  --line:#212a34; --line-2:#2c3743; --accent:#3cc9ae; --accent-hover:#5fd4bd; --accent-ink:#06120f; --accent-soft:#11302b; --accent-text:#5fd4bd;
+  --warn:#e7b45a; --warn-soft:#2c2213; --bad:#f97066;
+  --band:#060a0d; --band-2:#0e151b; --band-line:#1d2833;
+  --shadow-sm:none; --shadow:0 0 0 1px rgba(255,255,255,.02); --shadow-lg:0 24px 48px -20px rgba(0,0,0,.7);
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
 body{margin:0;background:var(--bg);color:var(--text);
-  font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  -webkit-font-smoothing:antialiased}
-a{color:var(--accent)}
-a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+  font:16px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:var(--accent-text);text-underline-offset:3px}
+a:hover{color:var(--accent-hover)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 55%,transparent);outline-offset:2px;border-radius:8px}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 16px}
-code,pre,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+@media (min-width:640px){.wrap{padding:0 28px}}
+code,pre,.mono{font-family:ui-monospace,SFMono-Regular,"JetBrains Mono",Menlo,Consolas,"Liberation Mono",monospace}
 .skip{position:absolute;left:-999px}.skip:focus{left:16px;top:12px;background:var(--surface);padding:8px 12px;z-index:9}
+svg.i{width:20px;height:20px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
 /* header */
-header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);
-  backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid var(--line)}
-.top .wrap{display:flex;align-items:center;gap:20px;height:60px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--text);text-decoration:none;letter-spacing:-.01em}
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 82%,transparent);
+  backdrop-filter:saturate(1.5) blur(12px);-webkit-backdrop-filter:saturate(1.5) blur(12px);border-bottom:1px solid color-mix(in srgb,var(--line) 80%,transparent)}
+.top .wrap{display:flex;align-items:center;gap:24px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:650;color:var(--text);text-decoration:none;letter-spacing:-.015em;font-size:16px}
+.brand:hover{color:var(--text)}
 .brand svg{flex:none}
 .brand span{white-space:nowrap}
-nav.links{margin-left:auto;display:flex;gap:18px;font-size:15px}
-nav.links a{color:var(--muted);text-decoration:none}
-nav.links a:hover{color:var(--text)}
-@media (max-width:720px){nav.links .opt{display:none}}
-@media (max-width:520px){nav.links .opt2{display:none}.brand{font-size:15px}.top .wrap{gap:12px}nav.links{gap:14px}}
+nav.links{margin-left:auto;display:flex;align-items:center;gap:4px;font-size:14.5px}
+nav.links a{color:var(--muted);text-decoration:none;padding:7px 11px;border-radius:8px;font-weight:500}
+nav.links a:hover{color:var(--text);background:var(--surface-2)}
+nav.links a.navcta{color:var(--accent-ink);background:var(--accent);margin-left:8px;font-weight:600}
+nav.links a.navcta{white-space:nowrap}
+nav.links a.navcta:hover{background:var(--accent-hover);color:var(--accent-ink)}
+@media (max-width:980px){nav.links .opt{display:none}}
+@media (max-width:640px){nav.links .opt2{display:none}.brand span{font-size:14.5px}.top .wrap{gap:10px}nav.links a.navcta{margin-left:0;padding:7px 10px}}
+@media (max-width:640px){nav.links a.opt3{display:none}}
+@media (max-width:520px){.hs{display:none}.brand span{font-size:14px}nav.links a.navcta{font-size:14px}}
+@media (max-width:370px){.brand span{display:none}}
 
 /* hero */
-.hero{padding:72px 0 48px}
-.eyebrow{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
-  color:var(--accent);background:var(--accent-soft);padding:4px 10px;border-radius:999px}
-h1{font-size:clamp(34px,6vw,56px);line-height:1.08;letter-spacing:-.025em;margin:18px 0 18px;max-width:16ch}
-.lede{font-size:clamp(17px,2.2vw,20px);color:var(--muted);max-width:60ch;margin:0 0 28px}
+.hero{position:relative;padding:80px 0 72px;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:-20% -10% auto -10%;height:720px;z-index:-1;
+  background:radial-gradient(600px 320px at 18% 20%,color-mix(in srgb,var(--accent) 14%,transparent),transparent 70%),
+             radial-gradient(520px 300px at 85% 10%,color-mix(in srgb,#6366f1 10%,transparent),transparent 70%)}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;opacity:.5;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:48px 48px;-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 0%,#000 30%,transparent 75%);mask-image:radial-gradient(ellipse 70% 60% at 50% 0%,#000 30%,transparent 75%)}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+@media (max-width:980px){.hero-grid{grid-template-columns:1fr;gap:44px}.hero{padding:56px 0 56px}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--accent-text);
+  background:var(--surface);border:1px solid var(--line);padding:5px 12px 5px 6px;border-radius:999px;box-shadow:var(--shadow-sm)}
+.eyebrow b{background:var(--accent-soft);color:var(--accent-text);border-radius:999px;padding:1px 8px;font-size:12px}
+h1{font-size:clamp(36px,5.6vw,60px);line-height:1.04;letter-spacing:-.035em;margin:22px 0 20px;max-width:15ch;font-weight:750}
+h1 em{font-style:normal;background:linear-gradient(100deg,var(--accent) 10%,#4f46e5 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) h1 em{background-image:linear-gradient(100deg,var(--accent) 10%,#a5b4fc 95%)}}
+:root[data-theme="dark"] h1 em{background-image:linear-gradient(100deg,var(--accent) 10%,#a5b4fc 95%)}
+.lede{font-size:clamp(17px,2vw,19px);color:var(--muted);max-width:56ch;margin:0 0 32px;line-height:1.65}
+.lede strong{color:var(--text);font-weight:600}
 .cta{display:flex;flex-wrap:wrap;gap:12px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:10px;font-weight:600;
-  text-decoration:none;border:1px solid var(--line);color:var(--text);background:var(--surface)}
-.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:transparent}
-.promise{margin-top:28px;display:flex;flex-wrap:wrap;gap:10px 22px;color:var(--muted);font-size:15px;padding:0;list-style:none}
-.promise li{display:flex;gap:8px}
-.promise li::before{content:"✓";color:var(--accent);font-weight:700;flex:none}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:11px;font-weight:600;font-size:15.5px;
+  text-decoration:none;border:1px solid var(--line-2);color:var(--text);background:var(--surface);box-shadow:var(--shadow-sm);transition:background .15s,border-color .15s,transform .15s}
+.btn:hover{color:var(--text);border-color:var(--faint)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:transparent;box-shadow:0 1px 2px rgba(0,0,0,.08),0 8px 20px -8px color-mix(in srgb,var(--accent) 60%,transparent)}
+.btn.primary:hover{background:var(--accent-hover);color:var(--accent-ink)}
+.btn svg.i{width:18px;height:18px}
+.promise{margin:32px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;color:var(--muted);font-size:14.5px;padding:0;list-style:none;max-width:540px}
+@media (max-width:520px){.promise{grid-template-columns:1fr}}
+.promise li{display:flex;gap:9px;align-items:flex-start}
+.promise svg.i{width:18px;height:18px;color:var(--accent);margin-top:2px;stroke-width:2.2}
+
+/* product preview */
+.window{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow-lg);overflow:hidden;font-size:14px}
+.window .chrome{display:flex;align-items:center;gap:7px;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.window .chrome i{width:10px;height:10px;border-radius:50%;background:var(--line-2);display:inline-block}
+.window .chrome span{margin-left:10px;font-size:12.5px;color:var(--faint);font-family:ui-monospace,Menlo,Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.window .body{padding:20px}
+.rep-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px}
+.rep-head b{font-size:15px;letter-spacing:-.01em}
+.rep-head small{color:var(--faint);font-size:12.5px;white-space:nowrap}
+.fix{border:1px solid color-mix(in srgb,var(--warn) 35%,var(--line));background:var(--warn-soft);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.fix .k{font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--warn)}
+.fix .t{font-weight:650;font-size:16px;margin:2px 0 4px;letter-spacing:-.01em}
+.fix p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.stat{border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.stat .n{font-size:20px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat .l{font-size:12px;color:var(--faint);line-height:1.35}
+.stat .n.good{color:var(--accent-text)} .stat .n.bad{color:var(--warn)}
+.rows{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.rows div{display:grid;grid-template-columns:1fr auto auto;gap:12px;padding:9px 12px;font-size:13px;border-top:1px solid var(--line);align-items:center}
+.rows div:first-child{border-top:0}
+.rows span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.rows .m{font-variant-numeric:tabular-nums;color:var(--muted);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}
+.pill{font-size:11.5px;font-weight:600;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.pill.ok{background:var(--accent-soft);color:var(--accent-text)} .pill.warn{background:var(--warn-soft);color:var(--warn)}
+.sample-note{font-size:12.5px;color:var(--faint);margin:12px 2px 0;text-align:center}
+.sample-note a{color:var(--muted)}
+
+/* works-with strip */
+.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-2)}
+.strip .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 32px;padding-top:22px;padding-bottom:22px}
+.strip .lbl{font-size:12.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.strip ul{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 28px;list-style:none;margin:0;padding:0;color:var(--muted);font-weight:600;font-size:15px}
+.strip li{display:flex;align-items:center;gap:8px}
+.strip svg.i{width:17px;height:17px;color:var(--faint)}
 
 /* sections */
-section{padding:56px 0;border-top:1px solid var(--line)}
-h2{font-size:clamp(26px,3.6vw,34px);letter-spacing:-.02em;line-height:1.15;margin:0 0 10px}
-.sub{color:var(--muted);max-width:62ch;margin:0 0 32px}
+section{padding:96px 0}
+@media (max-width:640px){section{padding:68px 0}}
+.kicker{display:block;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-text);margin:0 0 12px}
+h2{font-size:clamp(28px,3.8vw,42px);letter-spacing:-.03em;line-height:1.1;margin:0 0 14px;font-weight:720;max-width:22ch}
+.sub{color:var(--muted);max-width:62ch;margin:0 0 44px;font-size:17.5px}
+.head-c{text-align:center}.head-c h2,.head-c .sub{margin-left:auto;margin-right:auto}
 
 /* flow */
-.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;counter-reset:step}
-.flow li{list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
-.flow li::before{counter-increment:step;content:counter(step);display:inline-grid;place-items:center;width:28px;height:28px;
-  border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:14px;margin-bottom:10px}
-.flow b{display:block;margin-bottom:4px}
-.flow span{color:var(--muted);font-size:15px}
-.flow .you{border-style:dashed;background:transparent}
-@media (max-width:900px){.flow{grid-template-columns:1fr 1fr}}
-@media (max-width:520px){.flow{grid-template-columns:1fr}}
-ol.flow{padding:0;margin:0}
+ol.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;counter-reset:step;padding:0;margin:0;position:relative}
+.flow li{list-style:none;position:relative;padding:0 18px 0 0}
+.flow li::before{counter-increment:step;content:counter(step);position:relative;z-index:1;display:grid;place-items:center;width:38px;height:38px;
+  border-radius:12px;background:var(--surface);border:1px solid var(--line-2);color:var(--accent-text);font-weight:700;font-size:15px;margin-bottom:16px;box-shadow:var(--shadow-sm)}
+.flow li::after{content:"";position:absolute;top:19px;left:46px;right:8px;height:1px;background:linear-gradient(90deg,var(--line-2),var(--line-2) 60%,transparent)}
+.flow li:last-child::after{display:none}
+.flow b{display:block;margin-bottom:6px;font-size:17px;letter-spacing:-.01em}
+.flow span{color:var(--muted);font-size:15px;line-height:1.55;display:block}
+.flow .you::before{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.flow .you b{color:var(--accent-text)}
+@media (max-width:900px){ol.flow{grid-template-columns:1fr;gap:26px}.flow li{padding:0 0 0 56px}.flow li::before{position:absolute;left:0;top:-4px;margin:0}
+  .flow li::after{top:40px;bottom:-26px;left:19px;right:auto;width:1px;height:auto;background:var(--line-2)}}
 
 /* demo */
-.demo{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.demo{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
 @media (max-width:900px){.demo{grid-template-columns:1fr}}
-.term{background:var(--code-bg);color:var(--code-text);border-radius:var(--radius);overflow:hidden;
-  box-shadow:0 1px 0 rgba(0,0,0,.04),0 12px 30px -18px rgba(0,0,0,.45)}
-.term .bar{display:flex;align-items:center;gap:7px;padding:10px 14px;background:rgba(255,255,255,.04);font-size:13px;color:var(--code-dim)}
-.term .bar i{width:10px;height:10px;border-radius:50%;background:#3a4048;display:inline-block}
-.term pre{margin:0;padding:16px 18px;font-size:13px;line-height:1.55;overflow-x:auto;white-space:pre}
+.term{background:var(--code-bg);color:var(--code-text);border-radius:var(--radius);overflow:hidden;border:1px solid #1f2731;
+  box-shadow:var(--shadow-lg)}
+.term .bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:rgba(255,255,255,.035);border-bottom:1px solid rgba(255,255,255,.06);font-size:12.5px;color:var(--code-dim)}
+.term .bar i{width:10px;height:10px;border-radius:50%;background:#2d343d;display:inline-block}
+.term .bar em{font-style:normal;margin-left:8px}
+.term pre{margin:0;padding:18px 20px;font-size:13px;line-height:1.6;overflow-x:auto;white-space:pre}
 .term .c{color:var(--code-ok)} .term .d{color:var(--code-dim)} .term .h{color:var(--code-hi)}
-.caption{color:var(--muted);font-size:14px;margin:10px 2px 0}
+.caption{color:var(--muted);font-size:14.5px;margin:14px 4px 0;line-height:1.55}
 @media (max-width:520px){.term pre{font-size:11px;padding:14px}.code{font-size:12px}}
 
 /* tools */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
-.grid.fit{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
-.card h3{margin:0 0 6px;font-size:17px;letter-spacing:-.01em}
-.card p{margin:0;color:var(--muted);font-size:15px}
+.groups{display:grid;gap:40px}
+.group h3.gh{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:0 0 14px}
+.group h3.gh::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.grid.fit{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm);transition:border-color .2s,box-shadow .2s,transform .2s}
+.grid .card:hover{border-color:var(--line-2);box-shadow:var(--shadow)}
+.grid.g3{grid-template-columns:repeat(3,1fr)}
+.card.wide{grid-column:span 2}
+@media (max-width:900px){.grid.g3{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.grid.g3{grid-template-columns:1fr}.card.wide{grid-column:auto}}
+.card .ic{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:var(--accent-soft);color:var(--accent-text);margin-bottom:14px}
+.card h3{margin:0 0 6px;font-size:16.5px;letter-spacing:-.01em;font-weight:650}
+.card p{margin:0;color:var(--muted);font-size:15px;line-height:1.55}
 .tag{display:inline-block;font-size:12px;font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--muted);
-  background:var(--surface-2);border-radius:6px;padding:2px 7px;margin-top:12px}
+  background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:2px 7px;margin-top:14px}
 
-/* honesty */
-.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+/* trust band */
+.band{background:var(--band);color:var(--band-text);position:relative;overflow:hidden}
+.band::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 85% 0%,rgba(95,212,189,.10),transparent 70%);pointer-events:none}
+.band .kicker{color:var(--band-accent)}
+.band h2{color:#fff}
+.band .sub{color:var(--band-muted)}
+.band a{color:var(--band-accent)}
+.band + .band{padding-top:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;position:relative}
 @media (max-width:760px){.two{grid-template-columns:1fr}}
-.note{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:10px;padding:16px 18px}
-.note b{display:block;margin-bottom:4px}
-.note p{margin:0;color:var(--muted);font-size:15px}
-.safe .note{border-left-color:var(--accent)}
+.note{display:flex;gap:16px;background:var(--band-2);border:1px solid var(--band-line);border-radius:var(--radius);padding:22px}
+.note .ic{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:rgba(231,180,90,.12);color:#e7b45a}
+.safe .note .ic{background:rgba(95,212,189,.12);color:var(--band-accent)}
+.note b{display:block;margin-bottom:4px;color:#fff;font-weight:620;font-size:16.5px}
+.note p{margin:0;color:var(--band-muted);font-size:15px;line-height:1.55}
+.divider{height:1px;background:var(--band-line);margin:0 0 88px;position:relative}
 
 /* dev */
-.code{background:var(--code-bg);color:var(--code-text);border-radius:10px;padding:14px 16px;font-size:13px;overflow-x:auto;margin:10px 0 0}
+.code{background:var(--code-bg);color:var(--code-text);border-radius:10px;padding:14px 16px;font-size:13px;line-height:1.6;overflow-x:auto;margin:14px 0 0;border:1px solid #1f2731}
 .code .d{color:var(--code-dim)}
 
 /* plans */
-.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.plan{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column}
-.plan.now{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
-.plan h3{margin:0;font-size:18px}
-.plan .status{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:2px 0 12px}
-.plan.now .status{color:var(--accent)}
-.plan .price{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:0}
-.plan .per{color:var(--muted);font-size:14px;margin:0 0 12px}
-.plan ul{margin:0;padding-left:18px;color:var(--muted);font-size:15px}
-.plan li{margin:4px 0}
-.banner{background:var(--accent-soft);border-radius:10px;padding:12px 16px;margin:0 0 22px;font-size:15px}
+.plans{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch}
+@media (max-width:1040px){.plans{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.plans{grid-template-columns:1fr}}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;box-shadow:var(--shadow-sm);position:relative}
+.plan.now{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow)}
+.plan h3{margin:0;font-size:18px;letter-spacing:-.01em}
+.plan .status{display:inline-block;align-self:flex-start;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);
+  background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:2px 9px;margin:10px 0 18px}
+.plan.now .status{color:var(--accent-text);background:var(--accent-soft);border-color:transparent}
+.plan .price{font-size:40px;font-weight:750;letter-spacing:-.035em;margin:0;line-height:1}
+.plan .per{color:var(--faint);font-size:14px;margin:8px 0 20px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.plan ul{margin:0;padding:0;list-style:none;color:var(--muted);font-size:15px}
+.plan li{margin:0 0 10px;padding-left:26px;position:relative;line-height:1.5}
+.plan li::before{content:"";position:absolute;left:2px;top:5px;width:14px;height:8px;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg) scale(.8)}
+.banner{display:flex;gap:12px;align-items:flex-start;background:var(--warn-soft);border:1px solid color-mix(in srgb,var(--warn) 30%,var(--line));border-radius:12px;padding:14px 18px;margin:0 0 28px;font-size:15px;color:var(--text)}
+.banner svg.i{color:var(--warn);margin-top:2px}
 
-/* waitlist form */
-.wl{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;max-width:640px}
-.wl label,.wl legend{display:block;font-weight:600;margin:0 0 6px}
-.wl fieldset{border:0;padding:0;margin:0 0 18px}
-.wl .row{margin:0 0 18px}
-.wl input[type=email],.wl select{width:100%;font:inherit;padding:11px 12px;border-radius:9px;border:1px solid var(--line);
-  background:var(--bg);color:var(--text)}
+/* waitlist */
+.wl-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+@media (max-width:960px){.wl-grid{grid-template-columns:1fr;gap:32px}}
+.wl-pitch .sub{margin-bottom:28px}
+.checks{list-style:none;padding:0;margin:0;display:grid;gap:16px}
+.checks li{display:flex;gap:14px}
+.checks .ic{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--accent-soft);color:var(--accent-text)}
+.checks b{display:block;font-weight:620}
+.checks span{color:var(--muted);font-size:15px}
+.wl{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:30px;box-shadow:var(--shadow-lg);position:relative}
+@media (max-width:520px){.wl{padding:20px}}
+.wl label,.wl legend{display:block;font-weight:600;margin:0 0 8px;font-size:15px}
+.wl fieldset{border:0;padding:0;margin:0 0 22px}
+.wl .row{margin:0 0 22px}
+.wl input[type=email],.wl select{width:100%;font:inherit;padding:12px 14px;border-radius:10px;border:1px solid var(--line-2);
+  background:var(--bg);color:var(--text);transition:border-color .15s,box-shadow .15s}
+.wl input[type=email]:focus,.wl select:focus{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent);outline:none}
 .wl .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media (max-width:520px){.wl .opts{grid-template-columns:1fr}}
-.wl .opt{display:flex;gap:8px;align-items:flex-start;font-weight:400;border:1px solid var(--line);border-radius:9px;padding:10px 12px;margin:0;cursor:pointer}
-.wl .opt input{margin-top:4px}
-.wl .consent{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:15px;color:var(--muted)}
-.wl .consent input{margin-top:4px;flex:none}
+.wl .opt{display:flex;gap:10px;align-items:center;font-weight:500;font-size:15px;border:1px solid var(--line-2);border-radius:10px;padding:11px 13px;margin:0;cursor:pointer;transition:border-color .15s,background .15s}
+.wl .opt:hover{border-color:var(--faint)}
+.wl .opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.wl .opt input{margin:0;accent-color:var(--accent);flex:none}
+.wl .consent{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:14.5px;color:var(--muted)}
+.wl .consent input{margin-top:4px;flex:none;accent-color:var(--accent)}
 .wl .hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
-.wl button{font:inherit;font-weight:600;padding:12px 20px;border-radius:10px;border:0;background:var(--accent);color:var(--accent-ink);cursor:pointer}
+.wl button{font:inherit;font-weight:600;width:100%;padding:14px 20px;border-radius:11px;border:0;background:var(--accent);color:var(--accent-ink);cursor:pointer;
+  box-shadow:0 8px 20px -8px color-mix(in srgb,var(--accent) 60%,transparent);transition:background .15s}
+.wl button:hover{background:var(--accent-hover)}
 .wl button[disabled]{opacity:.6;cursor:progress}
-.wl .msg{margin:14px 0 0;font-size:15px;min-height:1.5em}
-.wl .msg.ok{color:var(--accent)} .wl .msg.err{color:var(--warn)}
-.fine{color:var(--muted);font-size:14px;margin:12px 0 0}
+.wl .msg{margin:14px 0 0;font-size:15px;min-height:1.5em;text-align:center}
+.wl .msg.ok{color:var(--accent-text)} .wl .msg.err{color:var(--warn)}
+.fine{color:var(--faint);font-size:13.5px;margin:10px 0 0;text-align:center;line-height:1.5}
+
+/* start */
+.start .card h3{display:flex;align-items:center;gap:10px}
+.start .card h3 .ic{margin:0;width:32px;height:32px;border-radius:9px}
+.doclinks{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;align-items:center}
+.doclinks span{color:var(--faint);font-size:14px;margin-right:4px}
+.doclinks a{font-size:14px;text-decoration:none;color:var(--text);border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-weight:500}
+.doclinks a:hover{border-color:var(--line-2);color:var(--accent-text)}
+
+/* final cta */
+.final{padding:0 0 96px}
+.final-box{background:linear-gradient(135deg,var(--accent) 0%,#0b4f6c 100%);color:#fff;border-radius:24px;padding:56px 40px;text-align:center;position:relative;overflow:hidden}
+.final-box::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:40px 40px;
+  -webkit-mask-image:radial-gradient(ellipse at center,#000,transparent 75%);mask-image:radial-gradient(ellipse at center,#000,transparent 75%)}
+.final-box h2{color:#fff;margin:0 auto 12px;position:relative}
+.final-box p{color:rgba(255,255,255,.82);max-width:54ch;margin:0 auto 28px;font-size:17.5px;position:relative}
+.final-box .cta{justify-content:center;position:relative}
+.final-box .btn{background:#fff;color:#0b3b3a;border-color:transparent}
+.final-box .btn:hover{background:#eef6f5;color:#0b3b3a}
+.final-box .btn.ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.35);box-shadow:none}
+.final-box .btn.ghost:hover{background:rgba(255,255,255,.18);color:#fff}
+@media (max-width:520px){.final-box{padding:40px 20px;border-radius:18px}}
 
 /* grid children may shrink below their content; wide code scrolls inside its own box */
-.grid>*,.two>*,.demo>*{min-width:0}
+.grid>*,.two>*,.demo>*,.hero-grid>*,.wl-grid>*,.plans>*{min-width:0}
 
 /* footer */
-footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);font-size:14px}
-footer .row{display:flex;flex-wrap:wrap;gap:10px 28px;justify-content:space-between}
-footer p{margin:6px 0}
-.theme{background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:6px 10px;cursor:pointer;font:inherit;font-size:13px}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+footer{border-top:1px solid var(--line);padding:56px 0 40px;color:var(--muted);font-size:14.5px;background:var(--bg-2)}
+.fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:32px}
+@media (max-width:760px){.fgrid{grid-template-columns:1fr 1fr}.fgrid>div:first-child{grid-column:1/-1}}
+footer h4{margin:0 0 12px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text)}
+footer ul{list-style:none;margin:0;padding:0}
+footer li{margin:0 0 8px}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--text);text-decoration:underline}
+footer p{margin:8px 0;line-height:1.55}
+footer .fine-print{border-top:1px solid var(--line);margin-top:40px;padding-top:24px;display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:center;font-size:13.5px;color:var(--faint)}
+footer .fine-print p{margin:0}
+footer .fine-print a{color:var(--muted);text-decoration:underline}
+.theme{background:var(--surface);border:1px solid var(--line-2);color:var(--muted);border-radius:8px;padding:6px 12px;cursor:pointer;font:inherit;font-size:13px}
+.theme:hover{color:var(--text)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 </style>
 </head>
 <body>
@@ -165,42 +312,84 @@ footer p{margin:6px 0}
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="YouTube Intelligence Engine, top of page">
-      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="var(--accent)"/><path d="M8 22l5-7 4 4 7-10" stroke="var(--accent-ink)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--accent)"/><path d="M8 22l5-7 4 4 7-10" stroke="var(--accent-ink)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span>YouTube Intelligence Engine</span>
     </a>
     <nav class="links" aria-label="Sections">
-      <a href="#tools">Tools</a>
+      <a class="opt3" href="#tools">Tools</a>
       <a class="opt" href="#honest">Honest numbers</a>
       <a class="opt" href="#safety">Safety</a>
       <a class="opt" href="#plans">Plans</a>
       <a class="opt2" href="#developers">Developers</a>
-      <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine">GitHub</a>
+      <a class="opt2" href="https://github.com/ICOFCUCAM/youtube-intelligence-engine">GitHub</a>
+      <a class="navcta" href="#waitlist">Join<span class="hs"> the</span> waitlist</a>
     </nav>
   </div>
 </header>
 
 <main id="main">
 <div class="hero" id="top">
-  <div class="wrap">
-    <span class="eyebrow">Open source &middot; MIT</span>
-    <h1>Make your next video better with evidence, not guesswork.</h1>
-    <p class="lede">Score your hooks, fix the title and thumbnail as one pair, turn a transcript into an edit list,
-      chapters and Shorts, and read your retention graph properly. It drafts and analyses. <strong>You stay in charge of what gets published.</strong></p>
-    <div class="cta">
-      <a class="btn primary" href="#waitlist">Join the waitlist</a>
-      <a class="btn" href="#install">Use it free today</a>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><b>MIT</b> Free and open source</span>
+      <h1>Make your next video better with <em>evidence, not guesswork.</em></h1>
+      <p class="lede">Score your hooks, fix the title and thumbnail as one pair, turn a transcript into an edit list,
+        chapters and Shorts, and read your retention graph properly. It drafts and analyses. <strong>You stay in charge of what gets published.</strong></p>
+      <div class="cta">
+        <a class="btn primary" href="#waitlist">Join the waitlist <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn" href="#install"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17l6-6-6-6M12 19h8"/></svg> Use it free today</a>
+      </div>
+      <ul class="promise">
+        <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Never publishes for you</li>
+        <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Read-only access to YouTube, if you connect it at all</li>
+        <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Runs on your computer</li>
+        <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Free and open source</li>
+      </ul>
     </div>
-    <ul class="promise">
-      <li>Never publishes for you</li>
-      <li>Read-only access to YouTube, if you connect it at all</li>
-      <li>Runs on your computer</li>
-      <li>Free and open source</li>
+    <figure style="margin:0">
+      <div class="window" role="img" aria-label="Preview of a sample channel report: this week's fix is the first 15 seconds of one video, which loses 36 points of viewers in its first 30 seconds">
+        <div class="chrome"><i></i><i></i><i></i><span>yt-report &middot; Sample Channel</span></div>
+        <div class="body">
+          <div class="rep-head"><b>Channel report</b><small>10 uploads &middot; median 12,150 views</small></div>
+          <div class="fix">
+            <div class="k">This week's one fix</div>
+            <div class="t">Fix the first 15 seconds</div>
+            <p>36 points of viewers are lost in the first 30 seconds. Confirm the title's promise in the first sentence and cut any intro before it.</p>
+          </div>
+          <div class="stats">
+            <div class="stat"><div class="n good">5.05x</div><div class="l">best video vs channel median</div></div>
+            <div class="stat"><div class="n bad">36 pts</div><div class="l">lost in the opening</div></div>
+            <div class="stat"><div class="n">3</div><div class="l">titles to look at again</div></div>
+          </div>
+          <div class="rows">
+            <div><span>Why your first 30 seconds lose half&hellip;</span><span class="m">5.05x</span><span class="pill ok">90</span></div>
+            <div><span>I posted once a week for a year</span><span class="m">3.97x</span><span class="pill ok">100</span></div>
+            <div><span>The ULTIMATE guide to growing on&hellip;</span><span class="m">0.75x</span><span class="pill warn">vague</span></div>
+            <div><span>AMAZING INSANE EDITING TRICKS&hellip;</span><span class="m">0.60x</span><span class="pill warn">shouting</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="sample-note">Sample with an invented channel and invented numbers. <a href="/sample-report">Open the full sample report</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="strip" aria-label="Works with">
+  <div class="wrap">
+    <span class="lbl">Works with</span>
+    <ul>
+      <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h13"/></svg>SRT &amp; WebVTT captions</li>
+      <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 11l4 4 4-4M5 21h14"/></svg>Whisper word timings</li>
+      <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg>YouTube Studio exports</li>
+      <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg>Claude Code</li>
+      <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>Your own apps, over JSON</li>
     </ul>
   </div>
 </div>
 
 <section aria-labelledby="flow-h">
   <div class="wrap">
+    <span class="kicker">The workflow</span>
     <h2 id="flow-h">One video, from idea to what you learn from it</h2>
     <p class="sub">Twelve Claude skills cover the whole workflow, backed by seventeen command-line tools that measure instead of guessing.</p>
     <ol class="flow">
@@ -213,14 +402,15 @@ footer p{margin:6px 0}
   </div>
 </section>
 
-<section aria-labelledby="demo-h">
+<section aria-labelledby="demo-h" style="padding-top:0">
   <div class="wrap">
+    <span class="kicker">Real output</span>
     <h2 id="demo-h">What it actually tells you</h2>
     <p class="sub">Real output from the tools, run on the sample files that ship with the project.</p>
     <div class="demo">
       <figure style="margin:0">
         <div class="term" role="img" aria-label="Terminal output of yt-title linting a title and thumbnail pair">
-          <div class="bar"><i></i><i></i><i></i>&nbsp;title and thumbnail check</div>
+          <div class="bar"><i></i><i></i><i></i><em>title and thumbnail check</em></div>
 <pre><span class="c">$ yt-title --title "The ULTIMATE guide to growing on YouTube" \
            --thumb "ULTIMATE GUIDE"</span>
 
@@ -239,7 +429,7 @@ footer p{margin:6px 0}
       </figure>
       <figure style="margin:0">
         <div class="term" role="img" aria-label="Terminal output of yt-deadair listing cuts with timecodes">
-          <div class="bar"><i></i><i></i><i></i>&nbsp;edit list from a transcript</div>
+          <div class="bar"><i></i><i></i><i></i><em>edit list from a transcript</em></div>
 <pre><span class="c">$ yt-deadair talk.srt</span>
 
   talk.srt   90.00s in, 24 cues, dead-air floor 0.45s
@@ -259,60 +449,87 @@ footer p{margin:6px 0}
   </div>
 </section>
 
-<section id="tools" aria-labelledby="tools-h">
+<section id="tools" aria-labelledby="tools-h" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="wrap">
+    <span class="kicker">The toolkit</span>
     <h2 id="tools-h">The tools</h2>
     <p class="sub">Each runs from the command line, from a Claude skill, or over a local API. No account, no sign-up.</p>
-    <div class="grid">
-      <div class="card"><h3>Hook score</h3><p>Five properties of an opening line, weighted toward its weakest. A prompt to look again, not a forecast.</p><span class="tag">yt-hookscore</span></div>
-      <div class="card"><h3>Title + thumbnail lint</h3><p>Desktop and mobile truncation, shouting, vague words, repeated text, and claims you'd have to prove.</p><span class="tag">yt-title</span></div>
-      <div class="card"><h3>Edit list</h3><p>Dead air, filler and retakes with timecodes. Uses word timings when your transcript has them.</p><span class="tag">yt-deadair</span></div>
-      <div class="card"><h3>Chapters</h3><p>Drafted from your pauses and topic shifts, checked against YouTube's rules so they actually appear.</p><span class="tag">yt-chapters</span></div>
-      <div class="card"><h3>Shorts finder</h3><p>20&ndash;55 second moments that stand on their own, for you to re-hook and cut.</p><span class="tag">yt-shorts</span></div>
-      <div class="card"><h3>Retention reader</h3><p>Hook leak, cliffs and slide from your Studio export, with what you were saying at each drop.</p><span class="tag">yt-retention</span></div>
-      <div class="card"><h3>Outlier research</h3><p>Videos ranked by how far they beat their own channel's median, not by channel size.</p><span class="tag">yt-swipe</span></div>
-      <div class="card"><h3>What made viewers leave</h3><p>Across all your videos: the kinds of sentences (sponsor reads, tangents, subscribe asks) that come right before people leave.</p><span class="tag">yt-moments</span></div>
-      <div class="card"><h3>Other languages</h3><p>Translate the title, description and captions without breaking links, promo codes, chapters or caption timing.</p><span class="tag">yt-localize</span></div>
-      <div class="card"><h3>Comment triage</h3><p>Questions turned into video ideas, scams and impersonators flagged with reasons, and what to pin. It never replies or deletes for you.</p><span class="tag">yt-comments</span></div>
-      <div class="card"><h3>Fact guard</h3><p>Every number, "studies show" and result claim in your draft that you can't back up, plus the words you never use.</p><span class="tag">yt-claims</span></div>
-      <div class="card"><h3>Pre-upload check</h3><p>One command before you upload: opening, title and thumbnail, edit, description, chapters and search, ending in a clear go or fix.</p><span class="tag">yt-check</span></div>
-      <div class="card"><h3>Channel report</h3><p>Every recent upload checked, what's working, and one fix for the week. <a href="/sample-report">See a sample</a>.</p><span class="tag">yt-report</span></div>
-      <div class="card"><h3>Skills for Claude</h3><p>Script, package, edit, Shorts, SEO, plan, comments, chapters, retention, research, audit and other languages, all in your voice.</p><span class="tag">/yt-script &hellip; /yt-audit</span></div>
+    <div class="groups">
+      <div class="group">
+        <h3 class="gh">Research and write</h3>
+        <div class="grid g3">
+          <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 13l2-2 2 2 2-3"/></svg></div><h3>Outlier research</h3><p>Videos ranked by how far they beat their own channel's median, not by channel size.</p><span class="tag">yt-swipe</span></div>
+          <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></div><h3>Hook score</h3><p>Five properties of an opening line, weighted toward its weakest. A prompt to look again, not a forecast.</p><span class="tag">yt-hookscore</span></div>
+          <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Fact guard</h3><p>Every number, "studies show" and result claim in your draft that you can't back up, plus the words you never use.</p><span class="tag">yt-claims</span></div>
+        </div>
+      </div>
+      <div class="group">
+        <h3 class="gh">Package and edit</h3>
+        <div class="grid g3">
+          <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10h6M7 14h10"/></svg></div><h3>Title + thumbnail lint</h3><p>Desktop and mobile truncation, shouting, vague words, repeated text, and claims you'd have to prove.</p><span class="tag">yt-title</span></div>
+          <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.1 15.9M14.5 14.5L20 20M8.1 8.1L12 12"/></svg></div><h3>Edit list</h3><p>Dead air, filler and retakes with timecodes. Uses word timings when your transcript has them.</p><span class="tag">yt-deadair</span></div>
+          <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></div><h3>Chapters</h3><p>Drafted from your pauses and topic shifts, checked against YouTube's rules so they actually appear.</p><span class="tag">yt-chapters</span></div>
+          <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div><h3>Shorts finder</h3><p>20&ndash;55 second moments that stand on their own, for you to re-hook and cut.</p><span class="tag">yt-shorts</span></div>
+          <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg></div><h3>Other languages</h3><p>Translate the title, description and captions without breaking links, promo codes, chapters or caption timing.</p><span class="tag">yt-localize</span></div>
+          <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg></div><h3>Pre-upload check</h3><p>One command before you upload: opening, title and thumbnail, edit, description, chapters and search, ending in a clear go or fix.</p><span class="tag">yt-check</span></div>
+        </div>
+      </div>
+      <div class="group">
+        <h3 class="gh">Learn from what you published</h3>
+        <div class="grid g3">
+          <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5c4 0 5 3 7 7s4 7 11 7"/><path d="M3 21h18"/></svg></div><h3>Retention reader</h3><p>Hook leak, cliffs and slide from your Studio export, with what you were saying at each drop.</p><span class="tag">yt-retention</span></div>
+          <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3h4M12 3v3M12 21a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM12 9v4l2 2"/></svg></div><h3>What made viewers leave</h3><p>Across all your videos: the kinds of sentences (sponsor reads, tangents, subscribe asks) that come right before people leave.</p><span class="tag">yt-moments</span></div>
+          <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12z"/></svg></div><h3>Comment triage</h3><p>Questions turned into video ideas, scams and impersonators flagged with reasons, and what to pin. It never replies or deletes for you.</p><span class="tag">yt-comments</span></div>
+        </div>
+      </div>
+      <div class="group">
+        <h3 class="gh">Across the whole workflow</h3>
+        <div class="grid g3">
+          <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></div><h3>Channel report</h3><p>Every recent upload checked, what's working, and one fix for the week. <a href="/sample-report">See a sample</a>.</p><span class="tag">yt-report</span></div>
+          <div class="card wide"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg></div><h3>Skills for Claude</h3><p>Script, package, edit, Shorts, SEO, plan, comments, chapters, retention, research, audit and other languages, all in your voice.</p><span class="tag">/yt-script &hellip; /yt-audit</span></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="honest" aria-labelledby="honest-h">
+<section id="honest" class="band" aria-labelledby="honest-h">
   <div class="wrap">
+    <span class="kicker">Honest numbers</span>
     <h2 id="honest-h">What the numbers mean, and what they don't</h2>
     <p class="sub">We'd rather you trust the tools a little less and use them well.</p>
     <div class="two">
-      <div class="note"><b>Scores are heuristics</b><p>The hook and title scores come from word patterns. They don't predict views, and no tool here claims to.</p></div>
-      <div class="note"><b>Retention depends on context</b><p>Small view counts, video age, format and audience all change the curve. The report says so every time.</p></div>
-      <div class="note"><b>Edits need a listen</b><p>A transcript can't tell a dramatic pause from dead air. That's why short pauses are flagged instead of silently cut.</p></div>
-      <div class="note"><b>Measured, with limits stated</b><p>Accuracy is measured on labelled test transcripts, and the published results say plainly that these are synthetic, not real recordings.</p></div>
+      <div class="note"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg></div><div><b>Scores are heuristics</b><p>The hook and title scores come from word patterns. They don't predict views, and no tool here claims to.</p></div></div>
+      <div class="note"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5c4 0 5 3 7 7s4 7 11 7"/></svg></div><div><b>Retention depends on context</b><p>Small view counts, video age, format and audience all change the curve. The report says so every time.</p></div></div>
+      <div class="note"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10v4M7 7v10M11 4v16M15 8v8M19 11v2"/></svg></div><div><b>Edits need a listen</b><p>A transcript can't tell a dramatic pause from dead air. That's why short pauses are flagged instead of silently cut.</p></div></div>
+      <div class="note"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6L4 19a1.5 1.5 0 0 0 1.3 2h13.4a1.5 1.5 0 0 0 1.3-2L14 9V3"/></svg></div><div><b>Measured, with limits stated</b><p>Accuracy is measured on labelled test transcripts, and the published results say plainly that these are synthetic, not real recordings.</p></div></div>
     </div>
   </div>
 </section>
 
-<section id="safety" class="safe" aria-labelledby="safety-h">
+<section id="safety" class="band safe" aria-labelledby="safety-h">
   <div class="wrap">
+    <div class="divider"></div>
+    <span class="kicker">Safety by design</span>
     <h2 id="safety-h">Built so it can't run your channel behind your back</h2>
     <p class="sub">Everything here drafts or analyses. Acting on it is always your decision.</p>
     <div class="two">
-      <div class="note"><b>No publishing, replying or deleting</b><p>There is no code that writes to YouTube. Replies to comments are drafts you post yourself.</p></div>
-      <div class="note"><b>Read-only, if you connect at all</b><p>The optional YouTube connection asks only for read-only permission and refuses anything more.</p></div>
-      <div class="note"><b>Your files stay with you</b><p>The tools run locally on files you choose. Keys and sign-in tokens come from your environment and are never printed.</p></div>
-      <div class="note"><b>Approved edits only</b><p>An edit list can only be handed to a video engine after a person approves it, and any change after approval is caught.</p></div>
+      <div class="note"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></div><div><b>No publishing, replying or deleting</b><p>There is no code that writes to YouTube. Replies to comments are drafts you post yourself.</p></div></div>
+      <div class="note"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div><div><b>Read-only, if you connect at all</b><p>The optional YouTube connection asks only for read-only permission and refuses anything more.</p></div></div>
+      <div class="note"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><div><b>Your files stay with you</b><p>The tools run locally on files you choose. Keys and sign-in tokens come from your environment and are never printed.</p></div></div>
+      <div class="note"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div><div><b>Approved edits only</b><p>An edit list can only be handed to a video engine after a person approves it, and any change after approval is caught.</p></div></div>
     </div>
   </div>
 </section>
 
 <section id="plans" aria-labelledby="plans-h">
   <div class="wrap">
-    <h2 id="plans-h">Where this is going</h2>
-    <p class="sub">The tools are free and open source today. We're deciding what to build on top of them, and you can help choose.</p>
-    <p class="banner"><strong>Nothing here is on sale.</strong> The paid plans below are ideas with planned prices that we're testing. Joining the waitlist is free and commits you to nothing.</p>
+    <div class="head-c">
+      <span class="kicker">Plans</span>
+      <h2 id="plans-h">Where this is going</h2>
+      <p class="sub">The tools are free and open source today. We're deciding what to build on top of them, and you can help choose.</p>
+    </div>
+    <p class="banner"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span><strong>Nothing here is on sale.</strong> The paid plans below are ideas with planned prices that we're testing. Joining the waitlist is free and commits you to nothing.</span></p>
     <div class="plans">
       <div class="plan now">
         <h3>Open source</h3><p class="status">Available now</p>
@@ -323,7 +540,7 @@ footer p{margin:6px 0}
         <h3>Creator</h3><p class="status">Planned</p>
         <p class="price">$19</p><p class="per">per month, planned</p>
         <ul><li>Connect your channel (read-only)</li><li>A weekly report on every upload: hook, packaging, retention cliffs</li><li>See whether your changes helped</li></ul>
-        <p style="margin:14px 0 0;font-size:15px"><a href="/sample-report">See a sample report &rarr;</a></p>
+        <p style="margin:auto 0 0;padding-top:14px;font-size:15px"><a href="/sample-report">See a sample report &rarr;</a></p>
       </div>
       <div class="plan">
         <h3>Shorts</h3><p class="status">Planned</p>
@@ -339,11 +556,19 @@ footer p{margin:6px 0}
   </div>
 </section>
 
-<section id="waitlist" aria-labelledby="waitlist-h">
-  <div class="wrap">
-    <h2 id="waitlist-h">Join the waitlist</h2>
-    <p class="sub">Tell us which one you'd use first. We'll build the one most people ask for, and email you when it's ready.</p>
-    <form class="wl" id="wl" novalidate>
+<section id="waitlist" aria-labelledby="waitlist-h" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap wl-grid">
+    <div class="wl-pitch">
+      <span class="kicker">Waitlist</span>
+      <h2 id="waitlist-h">Join the waitlist</h2>
+      <p class="sub">Tell us which one you'd use first. We'll build the one most people ask for, and email you when it's ready.</p>
+      <ul class="checks">
+        <li><span class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></span><div><b>Free, and commits you to nothing</b><span>No card, no account. Leave whenever you like.</span></div></li>
+        <li><span class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg></span><div><b>Your answer decides what's built</b><span>The plan most people choose is the one we make first.</span></div></li>
+        <li><span class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><div><b>Only what the form shows</b><span>No tracking, no selling. Read the <a href="/privacy">privacy notice</a>.</span></div></li>
+      </ul>
+    </div>
+<form class="wl" id="wl" novalidate>
       <div class="row">
         <label for="wl-email">Email</label>
         <input id="wl-email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com">
@@ -392,54 +617,84 @@ footer p{margin:6px 0}
   </div>
 </section>
 
-<section id="install" aria-labelledby="install-h">
+<section id="install" class="start" aria-labelledby="install-h">
   <div class="wrap">
-    <h2 id="install-h">Get started</h2>
+    <span class="kicker">Get started</span>
+    <h2 id="install-h">Get started in a minute</h2>
     <p class="sub">Python 3.10 or newer. No other dependencies.</p>
     <div class="two">
-      <div class="card"><h3>As command-line tools</h3>
+      <div class="card"><h3><span class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17l6-6-6-6M12 19h8"/></svg></span>As command-line tools</h3>
 <pre class="code">pip install git+https://github.com/ICOFCUCAM/youtube-intelligence-engine
 yt-title --title "Your title" --thumb "THUMB TEXT"</pre></div>
-      <div class="card"><h3>As Claude Code skills</h3>
+      <div class="card"><h3><span class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg></span>As Claude Code skills</h3>
 <pre class="code">/plugin marketplace add ICOFCUCAM/youtube-intelligence-engine
 /plugin install youtube-intelligence</pre>
-        <p style="margin-top:10px">Then fill in <span class="mono">templates/voice.md</span> so every draft sounds like you.</p></div>
+        <p style="margin-top:12px">Then fill in <span class="mono">templates/voice.md</span> so every draft sounds like you.</p></div>
     </div>
   </div>
 </section>
 
-<section id="developers" aria-labelledby="dev-h">
+<section id="developers" aria-labelledby="dev-h" style="padding-top:0">
   <div class="wrap">
+    <span class="kicker">Developers</span>
     <h2 id="dev-h">For developers and partners</h2>
     <p class="sub">An independent intelligence layer you can call from your own studio or video engine.</p>
     <div class="grid fit">
-      <div class="card"><h3>Local HTTP API</h3><p>Every tool as JSON over HTTP, with an OpenAPI 3.1 description. Loopback-only unless you set a token.</p>
+      <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg></div><h3>Local HTTP API</h3><p>Every tool as JSON over HTTP, with an OpenAPI 3.1 description. Loopback-only unless you set a token.</p>
 <pre class="code">yt-serve
 <span class="d"># GET /v1/openapi.json</span></pre></div>
-      <div class="card"><h3>Approved handoff</h3><p>Approval records and a versioned production instruction (with a published JSON Schema) for a video engine to execute.</p>
+      <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Approved handoff</h3><p>Approval records and a versioned production instruction (with a published JSON Schema) for a video engine to execute.</p>
 <pre class="code">yt-handoff approve ...
 yt-handoff instruction ...</pre></div>
-      <div class="card"><h3>Python library</h3><p>Pure, deterministic functions underneath everything, plus an evaluation harness that scores them against labels.</p>
+      <div class="card"><div class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 22V12M21 7l-9 5-9-5"/></svg></div><h3>Python library</h3><p>Pure, deterministic functions underneath everything, plus an evaluation harness that scores them against labels.</p>
 <pre class="code">from youtube_intelligence.editing import deadair</pre></div>
     </div>
-    <p class="caption" style="margin-top:18px">Docs: <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/docs/ARCHITECTURE.md">architecture</a> &middot;
-      <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/docs/API_DESIGN.md">API</a> &middot;
-      <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/docs/SECURITY.md">security</a> &middot;
-      <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/docs/EVALUATION.md">evaluation</a></p>
+    <div class="doclinks"><span>Docs</span>
+      <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/docs/ARCHITECTURE.md">Architecture</a>
+      <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/docs/API_DESIGN.md">API</a>
+      <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/docs/SECURITY.md">Security</a>
+      <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/docs/EVALUATION.md">Evaluation</a>
+      <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/docs/AUDIT.md">Audit</a>
+    </div>
   </div>
 </section>
+
+<div class="final">
+  <div class="wrap">
+    <div class="final-box">
+      <h2>Your next upload, checked before it ships</h2>
+      <p>Use the free tools today, and tell us which plan you'd want built next.</p>
+      <div class="cta">
+        <a class="btn" href="#waitlist">Join the waitlist</a>
+        <a class="btn ghost" href="https://github.com/ICOFCUCAM/youtube-intelligence-engine">View on GitHub</a>
+      </div>
+    </div>
+  </div>
+</div>
 </main>
 
 <footer>
   <div class="wrap">
-    <div class="row">
+    <div class="fgrid">
       <div>
-        <p><strong>YouTube Intelligence Engine</strong> by ICOFCUCAM. MIT licence.</p>
-        <p>Built on <a href="https://github.com/Jakeschincariol/youtube-agent-skill">youtube-agent-skill</a> by Jake Schincariol (MIT). See <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/UPSTREAM.md">what came from where</a>.</p>
-        <p>Not affiliated with, endorsed by or sponsored by YouTube or Google. YouTube is a trademark of Google LLC.</p>
-        <p><a href="/privacy">Privacy notice</a></p>
+        <a class="brand" href="#top" aria-label="YouTube Intelligence Engine, back to top">
+          <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--accent)"/><path d="M8 22l5-7 4 4 7-10" stroke="var(--accent-ink)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>YouTube Intelligence Engine</span>
+        </a>
+        <p style="margin-top:14px;max-width:44ch">By ICOFCUCAM. MIT licence. Built on <a href="https://github.com/Jakeschincariol/youtube-agent-skill" style="text-decoration:underline">youtube-agent-skill</a> by Jake Schincariol (MIT). See <a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/UPSTREAM.md" style="text-decoration:underline">what came from where</a>.</p>
       </div>
-      <div><button class="theme" type="button" id="theme" aria-label="Switch colour theme">Theme: auto</button></div>
+      <div>
+        <h4>Product</h4>
+        <ul><li><a href="#tools">Tools</a></li><li><a href="#plans">Plans</a></li><li><a href="/sample-report">Sample report</a></li><li><a href="#waitlist">Waitlist</a></li></ul>
+      </div>
+      <div>
+        <h4>Project</h4>
+        <ul><li><a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine">GitHub</a></li><li><a href="#developers">Developers</a></li><li><a href="https://github.com/ICOFCUCAM/youtube-intelligence-engine/blob/main/SECURITY.md">Security policy</a></li><li><a href="/privacy">Privacy notice</a></li></ul>
+      </div>
+    </div>
+    <div class="fine-print">
+      <p>Not affiliated with, endorsed by or sponsored by YouTube or Google. YouTube is a trademark of Google LLC.</p>
+      <button class="theme" type="button" id="theme" aria-label="Switch colour theme">Theme: auto</button>
     </div>
   </div>
 </footer>
