@@ -47,6 +47,41 @@ create policy "website can add signups"
   to anon
   with check (true);
 
+-- Flood brake: refuse new rows when too many arrived site-wide in the last 10 minutes, whatever
+-- the website function's own per-visitor limit missed (several instances, many addresses).
+-- PostgREST turns SQLSTATE 'PT429' into HTTP 429, which the website shows as "try again in a few
+-- minutes". 300 per 10 minutes is far above a normal launch day; raise it here if you need to.
+create index if not exists yie_waitlist_signups_created_at_idx
+  on public.yie_waitlist_signups (created_at);
+
+create or replace function public.yie_waitlist_flood_brake()
+  returns trigger
+  language plpgsql
+  security definer
+  set search_path = ''
+as $$
+declare
+  recent integer;
+begin
+  -- one counter at a time, so a burst of parallel inserts can't all slip under the limit
+  perform pg_advisory_xact_lock(hashtext('yie_waitlist_flood_brake'));
+  select count(*) into recent
+    from public.yie_waitlist_signups
+   where created_at > now() - interval '10 minutes';
+  if recent >= 300 then
+    raise sqlstate 'PT429' using message = 'waitlist is busy, try again later';
+  end if;
+  return new;
+end;
+$$;
+
+revoke all on function public.yie_waitlist_flood_brake() from public, anon, authenticated;
+
+drop trigger if exists yie_waitlist_flood_brake on public.yie_waitlist_signups;
+create trigger yie_waitlist_flood_brake
+  before insert on public.yie_waitlist_signups
+  for each row execute function public.yie_waitlist_flood_brake();
+
 comment on table public.yie_waitlist_signups is
   'YouTube Intelligence Engine waitlist. Insert-only for anon. Delete rows 12 months after the '
   'waitlist closes, or on request (see public/privacy.html).';

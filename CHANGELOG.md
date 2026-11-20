@@ -91,6 +91,12 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
   invented, scripted demo set (`examples/moments/`) it recovers the scripted costs within 0.1
   points, and shows its blind spot: the commonest kind of sentence sets the baseline, so it cannot
   stand out (the scripted signpost benefit is not found).
+- Waitlist abuse protection: the function accepts only same-origin posts, limits each address to
+  8 attempts per 10 minutes (in memory, never stored), and passes on a database flood brake
+  (`supabase/waitlist.sql` trigger: over 300 sign-ups in 10 minutes -> HTTP 429). Privacy notice
+  says so. Still no CAPTCHA or double opt-in.
+- Landing page redesign: product preview in the hero, grouped tools with icons, dark trust band,
+  two-column waitlist, closing call to action, multi-column footer. Same content and script.
 - Waitlist: optional "Where else do you post?" (TikTok, Instagram, Facebook, LinkedIn, X,
   podcasts, or nowhere else) to measure multi-platform demand before building it. Validated by
   the function, the form and a database constraint; the SQL upgrades a table from the earlier

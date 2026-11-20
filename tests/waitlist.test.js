@@ -2,7 +2,7 @@
 "use strict";
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { handler, CONSENT_VERSION } = require("../api/waitlist.js");
+const { handler, CONSENT_VERSION, createLimiter } = require("../api/waitlist.js");
 
 const ON = { WAITLIST_ENABLED: "1", SUPABASE_URL: "https://abcdefgh.supabase.co", SUPABASE_ANON_KEY: "anon-key" };
 const GOOD = { email: "  Creator@Example.ORG ", offer: "shorts", channel_size: "1k_10k", consent: true };
@@ -15,8 +15,9 @@ function res() {
     get json() { return JSON.parse(this.body); },
   };
 }
-function req(body, { method = "POST", ctype = "application/json" } = {}) {
-  return { method, headers: { "content-type": ctype }, body };
+const SITE = { host: "yie.example.app", origin: "https://yie.example.app" };
+function req(body, { method = "POST", ctype = "application/json", headers = {} } = {}) {
+  return { method, headers: { "content-type": ctype, ...SITE, "x-forwarded-for": "203.0.113.7", ...headers }, body };
 }
 function fakeFetch(status = 201) {
   const calls = [];
@@ -26,7 +27,7 @@ function fakeFetch(status = 201) {
 }
 async function call(body, opts = {}, env = ON, status = 201) {
   const r = res(), f = fakeFetch(status), logs = [];
-  await handler(req(body, opts), r, { env, fetch: f, log: (m) => logs.push(m) });
+  await handler(req(body, opts), r, { env, fetch: f, log: (m) => logs.push(m), limiter: opts.limiter || (() => true) });
   return { r, f, logs };
 }
 
@@ -125,4 +126,54 @@ test("other platforms: optional, de-duplicated, sorted, validated", async () => 
     assert.equal(r.json.error, "invalid_platforms");
     assert.equal(f.calls.length, 0);
   }
+});
+
+test("only accepts posts from the site itself", async () => {
+  const cases = [
+    { origin: undefined },
+    { origin: "https://evil.example.com" },
+    { origin: "http://yie.example.app" },          // not https
+    { origin: "null" },
+    { origin: "https://yie.example.app.evil.com" },
+  ];
+  for (const headers of cases) {
+    const { r, f } = await call(GOOD, { headers });
+    assert.equal(r.statusCode, 403, JSON.stringify(headers));
+    assert.equal(f.calls.length, 0);
+  }
+  // Vercel's forwarded host wins over the internal Host header
+  const fwd = await call(GOOD, { headers: { host: "internal", "x-forwarded-host": "yie.example.app" } });
+  assert.equal(fwd.r.statusCode, 200);
+  // an explicitly allowed extra origin (e.g. a custom domain during a move)
+  const r = res(), f = fakeFetch();
+  await handler(req(GOOD, { headers: { origin: "https://www.example.org" } }), r,
+    { env: { ...ON, WAITLIST_ALLOWED_ORIGINS: "https://www.example.org" }, fetch: f, log() {}, limiter: () => true });
+  assert.equal(r.statusCode, 200);
+});
+
+test("per-visitor rate limit, without storing addresses", async () => {
+  const limiter = createLimiter(3, 1000);
+  const codes = [];
+  for (let i = 0; i < 5; i++) codes.push((await call(GOOD, { limiter })).r.statusCode);
+  assert.deepEqual(codes, [200, 200, 200, 429, 429]);
+  const other = await call(GOOD, { limiter, headers: { "x-forwarded-for": "198.51.100.9, 10.0.0.1" } });
+  assert.equal(other.r.statusCode, 200, "a different visitor is unaffected");
+  const limited = await call(GOOD, { limiter });
+  assert.equal(limited.r.json.error, "rate_limited");
+  assert.ok(Number(limited.r.headers["retry-after"]) > 0);
+  assert.equal(limited.f.calls.length, 0, "nothing reaches storage once limited");
+  // window resets
+  const l2 = createLimiter(1, 1000);
+  assert.equal(l2("a", 0), true); assert.equal(l2("a", 10), false); assert.equal(l2("a", 1000), true);
+  // memory is bounded
+  const l3 = createLimiter(1, 1000, 2);
+  l3("a", 0); l3("b", 0); l3("c", 0);
+  assert.equal(l3("c", 1), false, "newest key kept after eviction");
+});
+
+test("database flood brake becomes a polite 429", async () => {
+  const { r, logs } = await call(GOOD, {}, ON, 429);
+  assert.equal(r.statusCode, 429);
+  assert.equal(r.json.error, "busy");
+  assert.ok(logs.every((m) => !m.includes("example.org")), "no email in logs");
 });

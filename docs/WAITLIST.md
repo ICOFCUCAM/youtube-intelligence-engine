@@ -11,10 +11,12 @@ stores nothing.
 
 ```
 browser form --fetch POST /api/waitlist--> api/waitlist.js (Vercel function)
+                                                  | same-origin check, per-visitor limit (429),
                                                   | validates, drops bot submissions (honeypot)
                                                   v
                        Supabase REST with the project's ANON key -> public.yie_waitlist_signups
-                       (row level security: anon may INSERT only; no read, update or delete)
+                       (row level security: anon may INSERT only; no read, update or delete;
+                        flood brake: over 300 sign-ups in 10 minutes -> HTTP 429)
 ```
 
 Stored per sign-up: email (lower-cased), offer (`reports`, `shorts`, `agency`, `api`,
@@ -24,8 +26,12 @@ matching the privacy notice), and a timestamp. No IP address, user agent or cook
 gets the same "you're on the list" answer, so the form can't be used to check who signed up.
 
 Verified (tests and checks run while building):
-- `tests/waitlist.test.js` (10 Node tests, including the platform rules): closed by default, validation, honeypot, duplicates,
-  method, type and size limits, generic errors, no email in logs.
+- `tests/waitlist.test.js` (13 Node tests, including the platform rules): closed by default, validation, honeypot, duplicates,
+  method, type and size limits, generic errors, no email in logs, same-origin check, the
+  per-visitor limit (window, reset, bounded memory) and the database's 429.
+- Flood brake on the same real PostgreSQL 16: as `anon`, the 300th recent sign-up was accepted
+  and the 301st refused with SQLSTATE `PT429` and not stored; rows older than 10 minutes did not
+  count; `anon` still could not read the table or call the brake function.
 - `supabase/waitlist.sql` applied twice to a real PostgreSQL 16 database with Supabase's `anon`
   and `authenticated` roles. Anon could insert one valid row, and every other action was refused:
   duplicates, invalid offer, unnormalised email, setting `created_at`, SELECT, UPDATE, DELETE, and
@@ -58,8 +64,15 @@ To pause the waitlist at any time, set `WAITLIST_ENABLED` to `0` and redeploy.
 
 ## Not built (decide before relying on it)
 
-- **No rate limiting or CAPTCHA.** A determined bot can add junk rows. The honeypot stops simple
-  bots. If spam appears, add Cloudflare Turnstile or Vercel's firewall rules.
+- **Rate limiting is basic, and there is no CAPTCHA.** Built in:
+  - the function accepts only browser posts whose `Origin` is the site itself (403 otherwise);
+  - each address gets at most 8 attempts per 10 minutes (429). The count is kept in memory, per
+    warm Vercel instance, and never stored;
+  - the database refuses inserts once 300 sign-ups have arrived in 10 minutes, site-wide (429).
+  A determined bot rotating addresses and forging `Origin` can still add junk rows up to the
+  flood brake. If spam appears, add Cloudflare Turnstile or Vercel's firewall rules. If you serve
+  the site from a second domain, list it in `WAITLIST_ALLOWED_ORIGINS` (comma-separated, e.g.
+  `https://www.example.com`).
 - **No confirmation email (double opt-in).** Recommended before emailing the list in the EU.
 - **No automatic deletion.** The notice promises deletion within 12 months of the waitlist
   closing: put a reminder in the calendar, or schedule a `delete` in Supabase.
