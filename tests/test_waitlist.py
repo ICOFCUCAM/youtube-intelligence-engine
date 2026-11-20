@@ -49,6 +49,17 @@ def test_database_is_insert_only_for_the_website():
     assert not re.search(r"grant (select|update|delete|all)", SQL, re.I)
 
 
+def test_abuse_protection_layers_are_in_place():
+    """Same-origin check and per-visitor limit in the function; a site-wide flood brake in the
+    database that PostgREST answers as HTTP 429 (SQLSTATE PT429), which the function passes on."""
+    assert "sameOrigin(req, env)" in API and "createLimiter" in API and "r.status === 429" in API
+    assert re.search(r"create trigger yie_waitlist_flood_brake\s+before insert on public\.yie_waitlist_signups", SQL)
+    assert "raise sqlstate 'PT429'" in SQL and "security definer" in SQL and "set search_path = ''" in SQL
+    assert "revoke all on function public.yie_waitlist_flood_brake() from public, anon, authenticated" in SQL
+    # the privacy notice must say that addresses are counted in memory for rate limiting
+    assert "counts sign-up attempts per network address" in PRIVACY
+
+
 def test_privacy_page_is_self_contained_and_linked():
     assert "<script" not in PRIVACY and not re.search(r'src="http', PRIVACY)
     assert 'href="/privacy"' in PAGE

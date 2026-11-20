@@ -6,6 +6,17 @@
  * project; until then it answers 503 and stores nothing. Storage: supabase/waitlist.sql (anon may
  * only INSERT). Emails are never logged. A duplicate email gets the same answer as a new one, so
  * the endpoint cannot be used to find out who is on the list. No dependencies.
+ *
+ * Abuse protection, in layers (none needs an outside service):
+ *  1. Same-origin only: a browser POST must carry an Origin header naming this site. Stops other
+ *     websites from submitting the form on their visitors' behalf. (A script can forge it; the
+ *     next layers are for scripts.)
+ *  2. Per-visitor limit: at most RATE_MAX attempts per RATE_WINDOW_MS from one address, kept in
+ *     memory only (never stored or logged). Best effort: each warm Vercel instance counts
+ *     separately.
+ *  3. Honeypot field that people never see.
+ *  4. In the database: a flood brake that refuses new rows when too many arrived in the last few
+ *     minutes, across every instance (supabase/waitlist.sql). Answered here as 429.
  */
 
 const OFFERS = new Set(["shorts", "reports", "agency", "api", "not_sure"]);
@@ -15,6 +26,53 @@ const CONSENT_VERSION = "2026-11-v2";
 const EMAIL = /^[^@\s]{1,64}@[^@\s]+\.[^@\s]{2,63}$/;
 const SUPABASE_HOST = /^https:\/\/[a-z0-9-]+\.supabase\.co$/;
 const MAX_BODY = 4096;
+const RATE_MAX = 8;
+const RATE_WINDOW_MS = 10 * 60 * 1000;
+
+/** Fixed-window counter per key, in memory. Keys are client addresses; nothing is persisted. */
+function createLimiter(max = RATE_MAX, windowMs = RATE_WINDOW_MS, maxKeys = 10000) {
+  const hits = new Map();
+  return function allow(key, now = Date.now()) {
+    let h = hits.get(key);
+    if (!h || now - h.start >= windowMs) {
+      if (hits.size >= maxKeys) {
+        for (const [k, v] of hits) if (now - v.start >= windowMs) hits.delete(k);
+        if (hits.size >= maxKeys) hits.delete(hits.keys().next().value);
+      }
+      h = { start: now, n: 0 };
+      hits.set(key, h);
+    }
+    h.n += 1;
+    return h.n <= max;
+  };
+}
+const defaultLimiter = createLimiter();
+
+function header(req, name) {
+  const v = req.headers && req.headers[name];
+  return Array.isArray(v) ? String(v[0] || "") : String(v || "");
+}
+
+function clientKey(req) {
+  const fwd = header(req, "x-forwarded-for").split(",")[0].trim();
+  return fwd || header(req, "x-real-ip").trim() || (req.socket && req.socket.remoteAddress) || "unknown";
+}
+
+/** True when the request's Origin names the host it was sent to (or an allowed extra origin). */
+function sameOrigin(req, env) {
+  const origin = header(req, "origin").trim();
+  if (!origin) return false;
+  let o;
+  try {
+    o = new URL(origin);
+  } catch (e) {
+    return false;
+  }
+  const extra = String(env.WAITLIST_ALLOWED_ORIGINS || "").split(",").map((x) => x.trim()).filter(Boolean);
+  if (extra.includes(o.origin)) return true;
+  const host = (header(req, "x-forwarded-host") || header(req, "host")).split(",")[0].trim().toLowerCase();
+  return o.protocol === "https:" && host !== "" && o.host.toLowerCase() === host;
+}
 
 function send(res, status, body) {
   res.statusCode = status;
@@ -31,6 +89,7 @@ async function handler(req, res, deps = {}) {
   const env = deps.env || process.env;
   const doFetch = deps.fetch || globalThis.fetch;
   const log = deps.log || ((m) => console.error(m));
+  const allow = deps.limiter || defaultLimiter;
 
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -43,6 +102,13 @@ async function handler(req, res, deps = {}) {
   if (!SUPABASE_HOST.test(base)) {
     log("waitlist: SUPABASE_URL is not an https://<ref>.supabase.co address");
     return send(res, 503, { error: "waitlist_closed", message: "The waitlist is not open yet." });
+  }
+  if (!sameOrigin(req, env)) {
+    return send(res, 403, { error: "forbidden", message: "Please use the form on the website." });
+  }
+  if (!allow(clientKey(req))) {
+    res.setHeader("Retry-After", String(Math.ceil(RATE_WINDOW_MS / 1000)));
+    return send(res, 429, { error: "rate_limited", message: "Too many attempts. Please try again in a few minutes." });
   }
   const ctype = String((req.headers && req.headers["content-type"]) || "").split(";")[0].trim().toLowerCase();
   if (ctype !== "application/json") {
@@ -113,6 +179,11 @@ async function handler(req, res, deps = {}) {
   }
   // 201 = added; 409 = already on the list. Same answer either way (no email enumeration).
   if (r.status === 201 || r.status === 409) return send(res, 200, { ok: true });
+  // 429 = the database's flood brake (supabase/waitlist.sql): too many sign-ups site-wide just now.
+  if (r.status === 429) {
+    log("waitlist: database flood brake engaged");
+    return send(res, 429, { error: "busy", message: "Lots of sign-ups right now. Please try again in a few minutes." });
+  }
   log(`waitlist: storage answered HTTP ${r.status}`);
   return send(res, 502, { error: "unavailable", message: "Something went wrong. Please try again later." });
 }
@@ -120,3 +191,4 @@ async function handler(req, res, deps = {}) {
 module.exports = (req, res) => handler(req, res);
 module.exports.handler = handler;
 module.exports.CONSENT_VERSION = CONSENT_VERSION;
+module.exports.createLimiter = createLimiter;
