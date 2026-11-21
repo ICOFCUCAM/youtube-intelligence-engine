@@ -7,7 +7,7 @@ written last; tell us so it can be fixed.
 ## Verdict
 
 The engine is real, tested working software: 17 commands, 12 Claude skills, a local HTTP API
-and a landing page. Everything is checked offline: 499 Python tests and 10 Node tests pass (500 and 13 after the 2026-11-20 waitlist protections), and CI
+and a landing page. Everything is checked offline: 499 Python tests and 10 Node tests pass (501 and 21 after the 2026-11-21 waitlist protections), and CI
 is green on Python 3.10 to 3.14.
 
 The main gap is evidence. **Apart from the upstream tools' reference outputs, no tool has been
@@ -96,7 +96,7 @@ the component has met the real system or real data.
 | The product name contains "YouTube" | YouTube's brand rules restrict it in a commercial product | Owner |
 | Vercel project created with the "Python" preset | May stop the waitlist function deploying | Owner: set the preset to "Other" |
 | Personal cloud environment `youtube-intelligence-engine` lists the wrong Vercel hosts | It was created with guessed addresses before the project name was known | Owner: fix to `youtube-intelligence-engine-site.vercel.app` or delete |
-| Waitlist has no CAPTCHA, no double opt-in, manual deletion (basic rate limiting added 2026-11-20: same-origin, per-visitor, database flood brake) | Spam, EU expectations | Before opening it |
+| Waitlist protections built but never run live: rate limits (2026-11-20), proof-of-work anti-spam, double opt-in by email and scheduled deletion (2026-11-21) | Untested with real Resend, Supabase and pg_cron | When opening it |
 | `yt-serve` has no TLS or rate limiting of its own | Not safe to expose directly | Before deploying it |
 | Heuristic tools are uncalibrated on real data | Thresholds (1.5 s review, 90 s chapters, 25-point hook leak) are assumptions | Needs real labelled data |
 

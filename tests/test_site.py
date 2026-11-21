@@ -105,6 +105,14 @@ def test_csp_script_hash_matches_the_inline_script():
     want = "'sha256-" + base64.b64encode(hashlib.sha256(scripts[0].encode()).digest()).decode() + "'"
     hdrs = {h["key"]: h["value"] for h in _vercel()["headers"][0]["headers"]}
     csp = hdrs["Content-Security-Policy"]
-    assert f"script-src {want}" in csp, "update vercel.json: the inline script changed"
+    assert f"script-src {want}" in csp, "run scripts/update_csp_hash.py: the inline script changed"
+    # every other page's inline script is allowed too (and nothing else)
+    import glob
+    allowed = re.search(r"script-src ([^;]*)", csp).group(1).split()
+    expected = []
+    for page in sorted(glob.glob(os.path.join(ROOT, "public", "*.html"))):
+        for sc in re.findall(r"<script>(.*?)</script>", open(page, encoding="utf-8").read(), re.S):
+            expected.append("'sha256-" + base64.b64encode(hashlib.sha256(sc.encode()).digest()).decode() + "'")
+    assert sorted(set(allowed)) == sorted(set(expected)), "run scripts/update_csp_hash.py"
     assert "default-src 'none'" in csp and "frame-ancestors 'none'" in csp and "unsafe-eval" not in csp
     assert hdrs["X-Content-Type-Options"] == "nosniff" and hdrs["X-Frame-Options"] == "DENY"

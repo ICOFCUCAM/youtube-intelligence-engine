@@ -612,7 +612,7 @@ footer .fine-print a{color:var(--muted);text-decoration:underline}
       </div>
       <button type="submit">Join the waitlist</button>
       <p class="msg" id="wl-msg" role="status" aria-live="polite"></p>
-      <p class="fine">We store your email, your choice, the optional channel size and platforms, and when you agreed. No tracking, no selling, no other use.</p>
+      <p class="fine">We email you a link first; nothing is saved until you confirm. Then we store your email, your choice, the optional channel size and platforms, and when you agreed. No tracking, no selling, deleted after 12 months.</p>
     </form>
   </div>
 </section>
@@ -726,25 +726,53 @@ yt-handoff instruction ...</pre></div>
       });
     });
   });
+  function zeros(b) {
+    for (var i = 0, n = 0; i < b.length; i++) { if (b[i] === 0) { n += 8; continue; } return n + Math.clz32(b[i]) - 24; }
+    return n;
+  }
+  // Anti-spam without a third-party CAPTCHA: find a number that makes the hash start with zeros.
+  function solve(ch, email, bits) {
+    var enc = new TextEncoder(), start = 0, batch = 512;
+    function round() {
+      var ps = [];
+      for (var i = start; i < start + batch; i++) ps.push(crypto.subtle.digest("SHA-256", enc.encode(ch + ":" + email + ":" + i)));
+      return Promise.all(ps).then(function (hs) {
+        for (var j = 0; j < hs.length; j++) if (zeros(new Uint8Array(hs[j])) >= bits) return String(start + j);
+        start += batch;
+        return round();
+      });
+    }
+    return round();
+  }
+  function answer(r) {
+    return r.json().catch(function () { return {}; }).then(function (d) { return { status: r.status, d: d }; });
+  }
   f.addEventListener("submit", function (ev) {
     ev.preventDefault();
     var email = f.email.value.trim(), offer = f.querySelector("input[name=offer]:checked");
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)) { say("Please enter a valid email address.", "err"); f.email.focus(); return; }
     if (!offer) { say("Please choose which one you would use first.", "err"); return; }
     if (!f.consent.checked) { say("Please tick the box to agree to be emailed about the waitlist.", "err"); return; }
-    var btn = f.querySelector("button"); btn.disabled = true; say("Sending...");
-    fetch("/api/waitlist", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: email, offer: offer.value, channel_size: f.channel_size.value,
-                             other_platforms: Array.prototype.filter.call(plats, function (o) { return o.checked; })
-                               .map(function (o) { return o.value; }),
-                             consent: true, website: f.website.value })
-    }).then(function (r) {
-      return r.json().catch(function () { return {}; }).then(function (d) { return { status: r.status, d: d }; });
+    if (!window.crypto || !crypto.subtle || !window.TextEncoder) { say("This browser can't run the anti-spam check. Please try another browser.", "err"); return; }
+    var btn = f.querySelector("button"); btn.disabled = true; say("Checking you're not a bot...");
+    var closed = "The waitlist isn't open yet. Please check back soon - nothing was saved.";
+    fetch("/api/waitlist", { headers: { "Accept": "application/json" } }).then(answer).then(function (c) {
+      if (c.status !== 200) return c;
+      return solve(c.d.challenge, email.toLowerCase(), c.d.bits).then(function (nonce) {
+        say("Sending...");
+        return fetch("/api/waitlist", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email, offer: offer.value, channel_size: f.channel_size.value,
+                                 other_platforms: Array.prototype.filter.call(plats, function (o) { return o.checked; })
+                                   .map(function (o) { return o.value; }),
+                                 consent: true, website: f.website.value, challenge: c.d.challenge, nonce: nonce })
+        }).then(answer);
+      });
     }).then(function (x) {
-      if (x.status === 200) { f.reset(); say("You're on the list. Thank you - we'll email you when it's ready.", "ok"); }
-      else if (x.status === 503) { say("The waitlist isn't open yet. Please check back soon - nothing was saved.", "err"); }
+      if (x.status === 200 && x.d.confirm) { f.reset(); say("Almost there: we've emailed a link to " + email + ". Open it within 48 hours to confirm your place.", "ok"); }
+      else if (x.status === 200) { f.reset(); say("You're on the list. Thank you - we'll email you when it's ready.", "ok"); }
+      else if (x.status === 503) { say(closed, "err"); }
       else { say((x.d && x.d.message) || "Something went wrong. Please try again later.", "err"); }
     }).catch(function () {
       say("Couldn't reach the server. Please try again later.", "err");

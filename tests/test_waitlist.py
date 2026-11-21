@@ -45,7 +45,7 @@ def test_consent_version_matches_privacy_notice():
 def test_database_is_insert_only_for_the_website():
     assert "enable row level security" in SQL
     assert "revoke all on public.yie_waitlist_signups from anon, authenticated" in SQL
-    assert re.search(r"grant insert \(email, offer, channel_size, other_platforms, consent_version\) on public\.yie_waitlist_signups to anon;", SQL)
+    assert re.search(r"grant insert \(email, offer, channel_size, other_platforms, consent_version, confirmed_at\)\s+on public\.yie_waitlist_signups to anon;", SQL)
     assert not re.search(r"grant (select|update|delete|all)", SQL, re.I)
 
 
@@ -58,6 +58,24 @@ def test_abuse_protection_layers_are_in_place():
     assert "revoke all on function public.yie_waitlist_flood_brake() from public, anon, authenticated" in SQL
     # the privacy notice must say that addresses are counted in memory for rate limiting
     assert "counts sign-up attempts per network address" in PRIVACY
+
+
+def test_double_opt_in_proof_of_work_and_deletion_are_wired_up():
+    confirm = open(os.path.join(ROOT, "public", "confirm.html"), encoding="utf-8").read()
+    # the emailed link lands on /confirm, which posts the token back; the token stays in the fragment
+    assert "/confirm#t=" in API and "JSON.stringify({ confirm: token })" in confirm
+    assert "history.replaceState" in confirm and "<script src" not in confirm
+    # the form solves the server's challenge with the same hash input the server checks
+    assert '`${challenge}:${email}:${nonce}`' in API
+    assert 'ch + ":" + email + ":" + i' in PAGE and "email.toLowerCase()" in PAGE
+    assert "challenge: c.d.challenge, nonce: nonce" in PAGE
+    # closed unless the secret (and, for double opt-in, the email provider) is configured
+    assert "WAITLIST_SECRET must be at least 32 characters" in API and "RESEND_API_KEY" in API
+    # deletion: owner-only functions, documented schedule, and the notice promises it
+    for fn in ("yie_waitlist_purge(interval)", "yie_waitlist_forget(text)"):
+        assert f"revoke all on function public.{fn} from public, anon, authenticated" in SQL
+    assert "cron.schedule('yie-waitlist-purge'" in SQL
+    assert "deleted automatically 12 months" in PRIVACY and "Confirming by email" in PRIVACY
 
 
 def test_privacy_page_is_self_contained_and_linked():
