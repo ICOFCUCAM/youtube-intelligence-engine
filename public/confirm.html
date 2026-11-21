@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confirm your place - YouTube Intelligence Engine</title>
+<meta name="description" content="Confirm your place on the YouTube Intelligence Engine waitlist.">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f766e'/%3E%3Cpath d='M8 22l5-7 4 4 7-10' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#fbfbf9;--surface:#fff;--text:#0e141b;--muted:#56606c;--line:#e4e6e8;--accent:#0f766e;--accent-hover:#0b5f58;--accent-ink:#fff;--accent-soft:#e3f3f0;--warn:#a15c07}
+@media (prefers-color-scheme: dark){:root{--bg:#0a0e12;--surface:#121820;--text:#e9edf1;--muted:#a2acb7;--line:#212a34;--accent:#3cc9ae;--accent-hover:#5fd4bd;--accent-ink:#06120f;--accent-soft:#11302b;--warn:#e7b45a}}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--text);
+  font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;padding:24px 16px}
+main{width:100%;max-width:480px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:36px 28px;text-align:center;
+  box-shadow:0 24px 48px -20px rgba(16,24,40,.25)}
+.mark{display:inline-grid;place-items:center;width:52px;height:52px;border-radius:14px;background:var(--accent-soft);color:var(--accent);margin-bottom:12px}
+h1{font-size:26px;letter-spacing:-.02em;line-height:1.2;margin:0 0 10px}
+p{color:var(--muted);margin:0 0 22px}
+button{font:inherit;font-weight:600;width:100%;padding:14px 20px;border-radius:11px;border:0;background:var(--accent);color:var(--accent-ink);cursor:pointer}
+button:hover{background:var(--accent-hover)}
+button[disabled]{opacity:.6;cursor:progress}
+button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.msg{min-height:1.6em;margin:16px 0 0;font-size:15px}
+.msg.ok{color:var(--accent);font-weight:600}.msg.err{color:var(--warn)}
+.back{display:inline-block;margin-top:22px;font-size:14px;color:var(--muted)}
+[hidden]{display:none}
+</style>
+</head>
+<body>
+<main>
+  <div class="mark" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg></div>
+  <h1 id="title">Confirm your place on the waitlist</h1>
+  <p id="lead">Press the button to confirm it was you who signed up. Only then is your sign-up saved.</p>
+  <button type="button" id="go">Confirm my place</button>
+  <p class="msg" id="msg" role="status" aria-live="polite"></p>
+  <a class="back" href="/">&larr; YouTube Intelligence Engine</a> &middot; <a class="back" href="/privacy">Privacy notice</a>
+</main>
+<script>
+(function () {
+  var m = /[#&]t=([A-Za-z0-9_.-]+)/.exec(location.hash), go = document.getElementById("go"),
+      msg = document.getElementById("msg"), lead = document.getElementById("lead");
+  function say(t, k) { msg.textContent = t; msg.className = "msg " + (k || ""); }
+  if (!m) { go.hidden = true; lead.textContent = "This link is incomplete. Open the link from the email again, or sign up again on the home page."; return; }
+  var token = m[1];
+  try { history.replaceState(null, "", location.pathname); } catch (e) {}
+  go.addEventListener("click", function () {
+    go.disabled = true; say("Confirming...");
+    fetch("/api/waitlist", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ confirm: token }) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { status: r.status, d: d }; }); })
+      .then(function (x) {
+        if (x.status === 200) { go.hidden = true; document.getElementById("title").textContent = "You're on the list"; lead.textContent = "Thank you. We'll email you when it's ready."; say("Confirmed.", "ok"); }
+        else if (x.status === 503) { say("The waitlist isn't open right now. Nothing was saved.", "err"); }
+        else { say((x.d && x.d.message) || "Something went wrong. Please try again later.", "err"); }
+      })
+      .catch(function () { say("Couldn't reach the server. Please try again later.", "err"); })
+      .then(function () { go.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>

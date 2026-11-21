@@ -91,6 +91,14 @@ All notable changes are recorded here. Upstream baseline: youtube-agent-skill
   invented, scripted demo set (`examples/moments/`) it recovers the scripted costs within 0.1
   points, and shows its blind spot: the commonest kind of sentence sets the baseline, so it cannot
   stand out (the scripted signpost benefit is not found).
+- Waitlist double opt-in, anti-spam and deletion: sign-ups are emailed a confirmation link (via
+  Resend) and stored only once confirmed on the new `/confirm` page; the link carries the signed
+  sign-up, so unconfirmed sign-ups are never stored. A self-hosted proof-of-work check (17 bits,
+  no third-party CAPTCHA) and a per-email limit guard the form. `supabase/waitlist.sql` adds
+  `confirmed_at`, owner-only `yie_waitlist_purge()` / `yie_waitlist_forget()` and a pg_cron
+  schedule for 12-month deletion. New settings: `WAITLIST_SECRET`, `RESEND_API_KEY`,
+  `WAITLIST_FROM_EMAIL` (optional `WAITLIST_POW_BITS`, `WAITLIST_SINGLE_OPT_IN`). Privacy notice
+  and consent version are now 2026-11-v3. The CSP allows each page's inline script by hash.
 - Waitlist abuse protection: the function accepts only same-origin posts, limits each address to
   8 attempts per 10 minutes (in memory, never stored), and passes on a database flood brake
   (`supabase/waitlist.sql` trigger: over 300 sign-ups in 10 minutes -> HTTP 429). Privacy notice
